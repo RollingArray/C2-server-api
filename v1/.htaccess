@@ -1,0 +1,46 @@
+RewriteEngine On
+#user management server
+RewriteRule   ^user/test/?$ 												index.php?route=test [NC]
+
+#user
+RewriteRule   ^user/sign/up/?$ 												index.php?route=signUp [NC]
+RewriteRule   ^user/activate/?$ 											index.php?route=activateUserAccount [NC]
+RewriteRule   ^user/activate/code/resend/?$ 	    						index.php?route=resendActivationCode [NC]
+RewriteRule   ^user/password/reset/code/?$ 									index.php?route=generatePasswordResetCode [NC]
+RewriteRule   ^user/verify/identity?$ 										index.php?route=verifyIdentity [NC]
+RewriteRule   ^user/update/password/?$ 										index.php?route=updatePassword [NC]
+RewriteRule   ^user/sign/in/?$ 												index.php?route=signIn [NC]
+RewriteRule   ^user/details/?$ 												index.php?route=getSignedInUserDetails [NC]
+RewriteRule   ^user/profile/update/?$ 										index.php?route=updateUserProfile [NC]
+RewriteRule   ^user/device/register/?$ 										index.php?route=registerNewUserDevice [NC]  
+RewriteRule   ^mass/user/activate/code/resend/?$ 							index.php?route=massInactiveSendSignUpVerificationCode [NC]
+
+RewriteRule   ^user/logout/?$ 												index.php?route=logout [NC]
+RewriteRule   ^user/search/?$ 												index.php?route=searchUserDetailsBySearchText [NC]
+
+#project
+RewriteRule   ^user/projects/?$ 											index.php?route=userProjects [NC]
+RewriteRule   ^user/project/crud/?$ 										index.php?route=userProjectCrud [NC]
+RewriteRule   ^project/members/?$ 										    index.php?route=projectMembers [NC]
+RewriteRule   ^project/details/?$ 										    index.php?route=projectDetails [NC]
+
+
+
+#member
+RewriteRule   ^project/member/crud/?$ 	    								index.php?route=projectMemberCrud [NC]
+
+#sprint
+RewriteRule   ^project/sprints/?$ 			                                index.php?route=projectSprintAll [NC]
+RewriteRule   ^project/sprint/crud/?$ 			                            index.php?route=sprintCrud [NC]
+
+
+RewriteRule   ^email/track/update/(.*?)/?$                          index.php?route=emailTrackUpdate [NC]
+
+
+
+
+
+
+
+
+RewriteRule   ^boiler/?$ 			                                        boilerPlate.php [NC]
