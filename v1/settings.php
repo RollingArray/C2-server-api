@@ -89,6 +89,11 @@ $settings = [
 		'sprint_start_date' => '/^\d{4}[-]\d{2}[-]\d{2}$/',
 		'sprint_end_date' => '/^\d{4}[-]\d{2}[-]\d{2}$/',
 		'sprint_status' => '/(ACTIVE|CLOSED|FUTURE)/',
+
+		//goal
+		'goal_id' => '/^[a-zA-Z0-9]{10,50}/',
+		'goal_name' => '/([a-zA-Z]{3,30}\s*)+/',
+		'goal_description' => '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{5,400}$/',
         
 	],
 	'errorValidationMessage' => [
@@ -126,6 +131,11 @@ $settings = [
 		'sprint_start_date' => 'Invalid sprint start date',
 		'sprint_end_date' => 'Invalid sprint end date',
 		'sprint_status' => 'Invalid sprint status',
+
+		//goal
+		'goal_id' => 'Invalid goal id',
+		'goal_name' => 'Invalid goal name',
+		'goal_description' => 'Invalid goal description',
 	],
 	'errorMessage' => [
 		//user
@@ -167,6 +177,12 @@ $settings = [
 		'FAIL_SPRINT_CREATE' => 'Sprint could not be created, please try again',
 		'FAIL_SPRINT_UPDATE' => 'Sprint could not be updated, please try again',
 		'FAIL_SPRINT_DELETE' => 'Sprint could not be deleted, please try again',
+
+		//goal
+		'GOAL_EXIST' => 'Goal already exist with same name for this project, please give a new name',
+		'FAIL_GOAL_CREATE' => 'Goal could not be created, please try again',
+		'FAIL_GOAL_UPDATE' => 'Goal could not be updated, please try again',
+		'FAIL_GOAL_DELETE' => 'Goal could not be deleted, please try again',
 		
 	],
 	'successMessage' => [
@@ -193,6 +209,11 @@ $settings = [
 		'SUCCESS_SPRINT_CREATE' => 'Sprint created successfully. You might want to you may want to attach this sprint against goal activities for a member',
 		'SUCCESS_SPRINT_UPDATE' => 'Sprint updated successfully.',
 		'SUCCESS_SPRINT_DELETE' => 'Sprint deleted successfully.',
+
+		//goal
+		'SUCCESS_GOAL_CREATE' => 'Goal created successfully. You might want to attach this goal against an activity to achieve this goal for a assignee',
+		'SUCCESS_GOAL_UPDATE' => 'Goal updated successfully.',
+		'SUCCESS_GOAL_DELETE' => 'Goal deleted successfully.',
 	],
 ];
 ?>

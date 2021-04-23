@@ -334,9 +334,10 @@
         }
 
         //sprint
+        
 
         //getAllMembers
-        public function getAllMembers ($DBAccessLib, $passedData)
+        public function getAllSprints ($DBAccessLib, $passedData)
         {
             $rows = array();
             $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
@@ -349,6 +350,31 @@
         public function getAllSprintsForProject ($DBAccessLib, $passedData)
         {
             $rows = $DBAccessLib->getAllSprintsForProject($passedData);
+            $tempRows = array();
+            
+            foreach ($rows as $eachData)
+            {
+                $tempRows[] = $this->generateKeyValueStructure($eachData);
+            }
+
+            return $this->generateServiceReturnDataStructure($tempRows);
+        }
+
+        //goal
+        //getAllGoals
+        public function getAllGoals ($DBAccessLib, $passedData)
+        {
+            $rows = array();
+            $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+            $rows['projectGoals'] = $this->getAllGoalsForProject($DBAccessLib, $passedData);
+            
+            return $this->generateKeyValueStructure($rows);
+        }
+
+        //getAllGoalsForProject
+        public function getAllGoalsForProject ($DBAccessLib, $passedData)
+        {
+            $rows = $DBAccessLib->getAllGoalsForProject($passedData);
             $tempRows = array();
             
             foreach ($rows as $eachData)

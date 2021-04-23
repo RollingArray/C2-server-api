@@ -321,9 +321,9 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_check_if_user_can_crud(?, ?)";
 
         $data = array(
-                        $passedData['project_id'],
-                        $passedData['user_id']
-                    );
+            $passedData['project_id'],
+            $passedData['user_id']
+        );
 
         return parent::getOneRecord($query, $data);
     }
@@ -334,8 +334,8 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_get_project_name_by_project_id(?)";
 
         $data = array(
-                        $passedData['project_id']
-                    );
+            $passedData['project_id']
+        );
 
         return parent::getOneRecord($query, $data);
     }
@@ -358,11 +358,11 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_insert_new_project(?,?,?,?)";
 
         $data = array(
-                        $passedData['user_id'],
-                        $passedData['project_name'],
-                        $passedData['project_id'],
-                        $passedData['project_description']
-                    );
+            $passedData['user_id'],
+            $passedData['project_name'],
+            $passedData['project_id'],
+            $passedData['project_description']
+        );
 
         return parent::executeStatement($query, $data);
     }
@@ -373,11 +373,11 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_update_project(?,?,?,?)";
 
         $data = array(
-                        $passedData['user_id'],
-                        $passedData['project_name'],
-                        $passedData['project_description'],
-                        $passedData['project_id']
-                    );
+            $passedData['user_id'],
+            $passedData['project_name'],
+            $passedData['project_description'],
+            $passedData['project_id']
+        );
 
         return parent::executeStatement($query, $data);
     }
@@ -388,10 +388,10 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_delete_project(?,?,?)";
 
         $data = array(
-                        $passedData['user_id'],            
-                        $passedData['project_id'],
-                        $passedData['project_name'],
-                    );
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['project_name'],
+        );
 
         return parent::executeStatement($query, $data);
     }
@@ -423,8 +423,8 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_get_user_type_for_user_type_id(?)";
 
         $data = array(
-                        $passedData['user_type_id']
-                    );
+            $passedData['user_type_id']
+        );
 
         return parent::getOneRecord($query, $data);
     }
@@ -435,9 +435,9 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_get_user_type_for_user_and_project_id(?, ?)";
 
         $data = array(
-                        $passedData['user_id'],
-                        $passedData['project_id']
-                    );
+            $passedData['user_id'],
+            $passedData['project_id']
+        );
 
         return parent::getOneRecord($query, $data);
     }
@@ -448,8 +448,8 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_get_member_count_for_project(?)";
 
         $data = array(
-                        $passedData['project_id']
-                    );
+            $passedData['project_id']
+        );
 
         return parent::getOneRecord($query, $data);
     }
@@ -461,9 +461,9 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_if_member_already_same_project(?, ?)";
 
         $data = array(
-                        $passedData['user_id'],
-                        $passedData['project_id']
-                    );
+            $passedData['user_id'],
+            $passedData['project_id']
+        );
 
         return parent::ifRecordExist($query, $data);
     }
@@ -475,9 +475,9 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_if_member_already_same_project(?, ?)";
 
         $data = array(
-                        $passedData['added_user_id'],
-                        $passedData['project_id']
-                    );
+            $passedData['added_user_id'],
+            $passedData['project_id']
+        );
 
         return parent::ifRecordExist($query, $data);
     }
@@ -488,9 +488,9 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_get_project_member_association(?, ?)";
 
         $data = array(
-                        $passedData['user_id'],
-                        $passedData['project_id']
-                    );
+            $passedData['user_id'],
+            $passedData['project_id']
+        );
 
         return parent::ifRecordExist($query, $data);
     }
@@ -501,11 +501,11 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_attach_project_to_member(?, ?, ?, ?)";
 
         $data = array(
-                        $passedData['user_id'],
-                        $passedData['project_id'],
-                        $passedData['added_user_id'],
-                        $passedData['project_user_type_id'],
-                    );
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['added_user_id'],
+            $passedData['project_user_type_id'],
+        );
 
         return parent::executeStatement($query, $data);
     }
@@ -516,11 +516,11 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_update_project_member_access(?, ?, ?, ?)";
 
         $data = array(
-                        $passedData['user_id'],
-                        $passedData['added_user_id'],
-                        $passedData['project_id'],
-                        $passedData['project_user_type_id'],
-                    );
+            $passedData['user_id'],
+            $passedData['added_user_id'],
+            $passedData['project_id'],
+            $passedData['project_user_type_id'],
+        );
 
         return parent::executeStatement($query, $data);
     }
@@ -531,150 +531,228 @@ class DBAccessLib extends BaseDatabaseAPI
         $query = "CALL sp_delete_project_member(?, ?, ?)";
 
         $data = array(
-                        $passedData['user_id'],
-                        $passedData['project_id'],
-                        $passedData['added_user_id']
-                    );
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['added_user_id']
+        );
 
         return parent::executeStatement($query, $data);
     }
 
     //getAllProjectAdministrators
-    public function getAllProjectAdministrators($passedData){
+    public function getAllProjectAdministrators($passedData)
+    {
         $query = "CALL sp_get_all_project_administrators(?)";
 
-          $data = array(
-                          $passedData['project_id']
-                      );
-                    
+        $data = array(
+            $passedData['project_id']
+        );
 
-          return parent::getAllRecords($query, $data);
-      }
 
-      //getAllProjectMembers
-      public function getAllProjectMembers($passedData){
+        return parent::getAllRecords($query, $data);
+    }
+
+    //getAllProjectMembers
+    public function getAllProjectMembers($passedData)
+    {
         $query = "CALL sp_get_all_project_members(?)";
 
-          $data = array(
-                          $passedData['project_id']
-                      );
+        $data = array(
+            $passedData['project_id']
+        );
 
-          return parent::getAllRecords($query, $data);
-      }
+        return parent::getAllRecords($query, $data);
+    }
 
-      //getAllProjectUsers
-    public function getAllProjectUsers($passedData){
+    //getAllProjectUsers
+    public function getAllProjectUsers($passedData)
+    {
         $query = "CALL sp_get_all_project_users(?)";
 
-          $data = array(
-                          $passedData['project_id']
-                      );
-                    
+        $data = array(
+            $passedData['project_id']
+        );
 
-          return parent::getAllRecords($query, $data);
-      }
 
-      // sprint
-        //updateSprint
-        function updateSprint($passedData)
-        {
+        return parent::getAllRecords($query, $data);
+    }
 
-            $query = "CALL sp_update_sprint(?, ?, ?, ?, ?, ?, ?)";
+    // sprint
+    //updateSprint
+    function updateSprint($passedData)
+    {
 
-            $data = array(
-                            $passedData['user_id'],
-                            $passedData['project_id'],
-                            $passedData['sprint_id'],
-                            $passedData['sprint_name'],
-                            $passedData['sprint_start_date'],
-                            $passedData['sprint_end_date'],
-                            $passedData['sprint_status'],
-                        );
+        $query = "CALL sp_update_sprint(?, ?, ?, ?, ?, ?, ?)";
 
-            return parent::executeStatement($query, $data);
-        }
+        $data = array(
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['sprint_id'],
+            $passedData['sprint_name'],
+            $passedData['sprint_start_date'],
+            $passedData['sprint_end_date'],
+            $passedData['sprint_status'],
+        );
 
-        //deleteSprint
-        function deleteSprint($passedData)
-        {
+        return parent::executeStatement($query, $data);
+    }
 
-            $query = "CALL sp_delete_sprint(?, ?, ?, ?)";
+    //deleteSprint
+    function deleteSprint($passedData)
+    {
 
-            $data = array(
-                            $passedData['user_id'],
-                            $passedData['project_id'],
-                            $passedData['sprint_id'],
-                        );
+        $query = "CALL sp_delete_sprint(?, ?, ?, ?)";
 
-            return parent::executeStatement($query, $data);
-        }
+        $data = array(
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['sprint_id'],
+        );
 
-        //ifSprintAlreadyCreatedForSameProject
-        public function ifSprintAlreadyCreatedForSameProject($passedData)
-        {
-            $query = "CALL sp_if_sprint_already_created_for_same_project(?, ?)";
+        return parent::executeStatement($query, $data);
+    }
 
-            $data = array(
-                            $passedData['sprint_name'],
-                            $passedData['project_id']
-                        );
+    //ifSprintAlreadyCreatedForSameProject
+    public function ifSprintAlreadyCreatedForSameProject($passedData)
+    {
+        $query = "CALL sp_if_sprint_already_created_for_same_project(?, ?)";
 
-            return parent::ifRecordExist($query, $data);
-        }
+        $data = array(
+            $passedData['sprint_name'],
+            $passedData['project_id']
+        );
 
-        //getSprintCountForProject
-        public function getSprintCountForProject($passedData)
-        {
-            $query = "CALL sp_get_sprint_count_for_project(?)";
+        return parent::ifRecordExist($query, $data);
+    }
 
-            $data = array(
-                            $passedData['project_id']
-                        );
+    //getSprintCountForProject
+    public function getSprintCountForProject($passedData)
+    {
+        $query = "CALL sp_get_sprint_count_for_project(?)";
 
-            return parent::getOneRecord($query, $data);
-        }
+        $data = array(
+            $passedData['project_id']
+        );
 
-        //insertNewSprint
-        function insertNewSprint($passedData)
-        {
+        return parent::getOneRecord($query, $data);
+    }
 
-            $query = "CALL sp_insert_new_sprint(?,?,?,?,?,?,?)";
+    //insertNewSprint
+    function insertNewSprint($passedData)
+    {
 
-            $data = array(
-                            $passedData['user_id'],
-                            $passedData['project_id'],
-                            $passedData['sprint_id'],
-                            $passedData['sprint_name'],
-                            $passedData['sprint_start_date'],
-                            $passedData['sprint_end_date'],
-                            $passedData['sprint_status']
-                        );
+        $query = "CALL sp_insert_new_sprint(?,?,?,?,?,?,?)";
 
-            return parent::executeStatement($query, $data);
-        }
+        $data = array(
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['sprint_id'],
+            $passedData['sprint_name'],
+            $passedData['sprint_start_date'],
+            $passedData['sprint_end_date'],
+            $passedData['sprint_status']
+        );
 
-        //getNoSprintIdForProject
-        function getNoSprintIdForProject($passedData)
-        {
-            $query = "CALL sp_get_no_sprint_id_for_project(?)";
+        return parent::executeStatement($query, $data);
+    }
 
-            $data = array(
-                            $passedData['project_id']
-                        );
+    //getNoSprintIdForProject
+    function getNoSprintIdForProject($passedData)
+    {
+        $query = "CALL sp_get_no_sprint_id_for_project(?)";
 
-            //echo $query;
-            return parent::getOneRecord($query, $data);
-        }
+        $data = array(
+            $passedData['project_id']
+        );
 
-        //getAllSprintsForProject
-        function getAllSprintsForProject($passedData)
-        {
-            $query = "CALL sp_get_all_sprints_for_project(?)";
+        //echo $query;
+        return parent::getOneRecord($query, $data);
+    }
 
-            $data = array(
-                            $passedData['project_id']
-                        );
+    //getAllSprintsForProject
+    function getAllSprintsForProject($passedData)
+    {
+        $query = "CALL sp_get_all_sprints_for_project(?)";
 
-            return parent::getAllRecords($query, $data);
-        }
+        $data = array(
+            $passedData['project_id']
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
+    //goal
+    //getAllGoalsForProject
+    function getAllGoalsForProject($passedData)
+    {
+        $query = "CALL sp_get_all_goals(?)";
+
+        $data = array(
+            $passedData['project_id']
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
+    //ifGoalsAlreadyCreatedForSameProject
+    public function ifGoalAlreadyCreatedForSameProject($passedData)
+    {
+        $query = "CALL sp_if_goal_already_created_for_same_project(?, ?)";
+
+        $data = array(
+            $passedData['goal_name'],
+            $passedData['project_id']
+        );
+
+        return parent::ifRecordExist($query, $data);
+    }
+
+    //updateGoals
+    function updateGoal($passedData)
+    {
+
+        $query = "CALL sp_update_goal(?, ?, ?, ?, ?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['goal_id'],
+            $passedData['goal_name'],
+            $passedData['goal_description']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //deleteGoals
+    function deleteGoal($passedData)
+    {
+
+        $query = "CALL sp_delete_goal(?, ?, ?, ?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['goal_id'],
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //insertNewGoals
+    function insertNewGoal($passedData)
+    {
+
+        $query = "CALL sp_insert_new_goal(?,?,?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['goal_id'],
+            $passedData['goal_name'],
+            $passedData['goal_description']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
 }

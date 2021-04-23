@@ -2,7 +2,7 @@
 
 namespace C2;
 
-class SprintController extends BaseAPI
+class GoalController extends BaseAPI
 {
     protected $User;
     protected $DBAccessLib;
@@ -24,40 +24,36 @@ class SprintController extends BaseAPI
         $this->EmailLib = new Email\EmailLib($settings);
     }
 
-    //sprintCrud
-    public function sprintCrud()
+    //goalCrud
+    public function goalCrud()
     {
         $responseData = null;
 
         $postData = parent::getPostData();
         $user_id = parent::sanitizeInput($postData->userId);
         $project_id = parent::sanitizeInput($postData->projectId);
-        $sprint_name = parent::sanitizeInput($postData->sprintName);
-        $sprint_start_date = parent::sanitizeInput($postData->sprintStartDate);
-        $sprint_end_date = parent::sanitizeInput($postData->sprintEndDate);
-        $sprint_status = 'ACTIVE';
+        $goal_name = parent::sanitizeInput($postData->goalName);
+        $goal_description = parent::sanitizeInput($postData->goalDescription);
         
         $operation_type = parent::sanitizeInput($postData->operationType);
         $token = parent::getAuthorizationSessionObject();
 
-        $sprint_id = null;
-        if(property_exists($postData, 'sprintId'))
+        $goal_id = null;
+        if(property_exists($postData, 'goalId'))
         {
-            $sprint_id = parent::sanitizeInput($postData->sprintId);
+            $goal_id = parent::sanitizeInput($postData->goalId);
         }
         else
         {
-            $sprint_id = $this->UtilityLib->generateId('');
+            $goal_id = $this->UtilityLib->generateId('');
         }
 
         $passedData = array(
                 "user_id"=>$user_id,
                 "project_id"=>$project_id,
-                "sprint_id"=>$sprint_id,
-                "sprint_name"=>$sprint_name,
-                "sprint_start_date"=>$sprint_start_date,
-                "sprint_end_date"=>$sprint_end_date,
-                "sprint_status"=>$sprint_status,
+                "goal_id"=>$goal_id,
+                "goal_name"=>$goal_name,
+                "goal_description"=>$goal_description,
             );
 
         //check If User Can do the operation
@@ -74,32 +70,32 @@ class SprintController extends BaseAPI
             if ($activeUser)
             {
                  //check access
-                if($checkIfUserCanCRUD['crudSprint'])
+                if($checkIfUserCanCRUD['crudGoal'])
                 {
                     //create
                     if($operation_type == 'create')
                     {
-                        //if sprint with same name already exist
-                        $ifSprintAlreadyCreatedForSameProject = $this->DBAccessLib->ifSprintAlreadyCreatedForSameProject($passedData);
+                        //if goal with same name already exist
+                        $ifGoalAlreadyCreatedForSameProject = $this->DBAccessLib->ifGoalAlreadyCreatedForSameProject($passedData);
 
-                        if($ifSprintAlreadyCreatedForSameProject)
+                        if($ifGoalAlreadyCreatedForSameProject)
                         {
-                            $responseData = $this->MessageLib->errorMessageFormat('SPRINT_EXIST', $this->settings['errorMessage']['SPRINT_EXIST']);
+                            $responseData = $this->MessageLib->errorMessageFormat('GOAL_EXIST', $this->settings['errorMessage']['GOAL_EXIST']);
                         }
                         else
                         {
-                            //insert new sprint
-                            $insertNewSprint = $this->DBAccessLib->insertNewSprint($passedData);
+                            //insert new goal
+                            $insertNewGoal = $this->DBAccessLib->insertNewGoal($passedData);
 
-                            if($insertNewSprint)
+                            if($insertNewGoal)
                             {
                                 //all date are store, pass back to client
-                                $message = $this->settings['successMessage']['SUCCESS_SPRINT_CREATE'];
+                                $message = $this->settings['successMessage']['SUCCESS_GOAL_CREATE'];
                                 $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
                             }
                             else
                             {
-                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_SPRINT_CREATE', $this->settings['errorMessage']['FAIL_SPRINT_CREATE']);
+                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_GOAL_CREATE', $this->settings['errorMessage']['FAIL_GOAL_CREATE']);
                             }
                         }
                     }
@@ -108,85 +104,41 @@ class SprintController extends BaseAPI
                     else if($operation_type == 'edit')
                     {
                         //update spint details
-                        $updateSprint = $this->DBAccessLib->updateSprint($passedData);
-                        if($updateSprint)
+                        $updateGoal = $this->DBAccessLib->updateGoal($passedData);
+                        if($updateGoal)
                         {
-                            $message = $this->settings['successMessage']['SUCCESS_SPRINT_UPDATE'];
+                            $message = $this->settings['successMessage']['SUCCESS_GOAL_UPDATE'];
                             $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
                         }
                         else
                         {
-                            $responseData = $this->MessageLib->errorMessageFormat('FAIL_SPRINT_UPDATE', $this->settings['errorMessage']['FAIL_SPRINT_UPDATE']);
+                            $responseData = $this->MessageLib->errorMessageFormat('FAIL_GOAL_UPDATE', $this->settings['errorMessage']['FAIL_GOAL_UPDATE']);
                         }
 
-                    }
-
-                    //start
-                    else if($operation_type == 'start')
-                    {
-                        //if active or future sprint alredy exist
-                        $ifActiveOrFutureSprintAlreadyExistForSameProject = $this->DBAccessLib->ifActiveOrFutureSprintAlreadyExistForSameProject($passedData);
-
-                        if($ifActiveOrFutureSprintAlreadyExistForSameProject)
-                        {
-                            $responseData = $this->MessageLib->errorMessageFormat('ACTIVE_FUTURE_SPRINT_EXIST', $this->settings['errorMessage']['ACTIVE_FUTURE_SPRINT_EXIST']);
-                        }
-                        else
-                        {
-                            //update spint details
-                            $updateSprint = $this->DBAccessLib->updateSprint($passedData);
-                            if($updateSprint)
-                            {
-                                $message = $this->settings['successMessage']['SUCCESS_SPRINT_START'];
-                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
-                            }
-                            else
-                            {
-                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_SPRINT_UPDATE', $this->settings['errorMessage']['FAIL_SPRINT_UPDATE']);
-                            }
-                        }
-
-                    }
-
-                    //end
-                    else if($operation_type == 'end')
-                    {
-                        //update spint details
-                        $updateSprint = $this->DBAccessLib->updateSprint($passedData);
-                        if($updateSprint)
-                        {
-                            //send message to client
-                            $message = $this->settings['successMessage']['SUCCESS_SPRINT_CLOSE'];
-                            $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
-                        }
-                        else
-                        {
-                            $responseData = $this->MessageLib->errorMessageFormat('FAIL_SPRINT_CLOSE', $this->settings['errorMessage']['FAIL_SPRINT_CLOSE']);
-                        }
                     }
 
                     //delete
                     else if($operation_type == 'delete')
                     {
-                        //if active or future sprint alredy exist
-                        $ifTaskPresentForSprint = $this->DBAccessLib->ifTaskPresentForSprint($passedData);
+                        //if active or future goal alredy exist
+                        $ifTaskPresentForGoal = $this->DBAccessLib->ifTaskPresentForGoal($passedData);
 
-                        if($ifTaskPresentForSprint)
+                        if($ifTaskPresentForGoal)
                         {
-                            $responseData = $this->MessageLib->errorMessageFormat('TASK_SPRINT_ALLOCIATION', $this->settings['errorMessage']['TASK_SPRINT_ALLOCIATION']);
+                            $responseData = $this->MessageLib->errorMessageFormat('TASK_GOAL_ALLOCATION', $this->settings['errorMessage']['TASK_GOAL_ALLOCATION']);
                         }
                         else
                         {
                             //delete spint details
-                            $deleteSprint = $this->DBAccessLib->deleteSprint($passedData);
-                            if($deleteSprint)
+                            $deleteGoal = $this->DBAccessLib->deleteGoal($passedData);
+                            if($deleteGoal)
                             {
-                                $message = $this->settings['successMessage']['SUCCESS_SPRINT_DELETE'];
+                                $message = $this->settings['successMessage']['SUCCESS_GOAL_DELETE'];
                                 $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
                             }
                             else
                             {
-                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_SPRINT_DELETE', $this->settings['errorMessage']['FAIL_SPRINT_DELETE']);
+                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_GOAL_DELETE', $this->settings['errorMessage']['FAIL_GOAL_DELETE']);
                             }
                         }
 
@@ -210,8 +162,8 @@ class SprintController extends BaseAPI
         echo json_encode($responseData);
     }
 
-    //projectSprintAll
-    public function projectSprintAll()
+    //projectGoalAll
+    public function projectGoalAll()
     {
         $responseData = array();
         $tempRows = array();
@@ -240,7 +192,7 @@ class SprintController extends BaseAPI
 
                 if($ifProjectAccessToMember)
                 {
-                    $tempRows = $this->UtilityLib->getAllSprints($this->DBAccessLib, $passedData);
+                    $tempRows = $this->UtilityLib->getAllGoals($this->DBAccessLib, $passedData);
 
                     //get user details
                     $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);

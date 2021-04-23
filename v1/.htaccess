@@ -33,14 +33,11 @@ RewriteRule   ^project/member/crud/?$ 	    								index.php?route=projectMember
 RewriteRule   ^project/sprints/?$ 			                                index.php?route=projectSprintAll [NC]
 RewriteRule   ^project/sprint/crud/?$ 			                            index.php?route=sprintCrud [NC]
 
-
-RewriteRule   ^email/track/update/(.*?)/?$                          index.php?route=emailTrackUpdate [NC]
-
-
-
+#goal
+RewriteRule   ^project/goals/?$ 			                                index.php?route=projectGoalAll [NC]
+RewriteRule   ^project/goal/crud/?$ 			                            index.php?route=goalCrud [NC]
 
 
-
-
+RewriteRule   ^email/track/update/(.*?)/?$                                  index.php?route=emailTrackUpdate [NC]
 
 RewriteRule   ^boiler/?$ 			                                        boilerPlate.php [NC]

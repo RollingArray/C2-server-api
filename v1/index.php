@@ -22,11 +22,13 @@ require_once __DIR__.'/app/lib/JWTLib.class.php';
 require_once __DIR__.'/app/controllers/UserController.php';
 require_once __DIR__.'/app/controllers/ProjectController.php';
 require_once __DIR__.'/app/controllers/SprintController.php';
+require_once __DIR__.'/app/controllers/GoalController.php';
 
 //instances
 $userController = new C2\UserController($settings);
 $projectController = new C2\ProjectController($settings);
 $sprintController= new C2\SprintController($settings);
+$goalController= new C2\GoalController($settings);
 
 //route
 switch($_GET['route'])
@@ -142,6 +144,19 @@ switch($_GET['route'])
     case 'sprintCrud':
     {
         $sprintController->sprintCrud();
+    }
+    break;
+
+    //goal
+    case 'projectGoalAll':
+    {
+        $goalController->projectGoalAll();
+    }
+    break;
+
+    case 'goalCrud':
+    {
+        $goalController->goalCrud();
     }
     break;
 
