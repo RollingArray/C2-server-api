@@ -1,6 +1,6 @@
 <?php
 //php error reporting, 1 to emable, 0 to disable
-error_reporting(~0); ini_set('display_errors', 0);
+error_reporting(~0); ini_set('display_errors', 1);
 //error_reporting(~0); ini_set('display_errors', 1);
 require_once __DIR__.'/vendor/autoload.php';
 
@@ -23,12 +23,14 @@ require_once __DIR__.'/app/controllers/UserController.php';
 require_once __DIR__.'/app/controllers/ProjectController.php';
 require_once __DIR__.'/app/controllers/SprintController.php';
 require_once __DIR__.'/app/controllers/GoalController.php';
+require_once __DIR__.'/app/controllers/ActivityController.php';
 
 //instances
 $userController = new C2\UserController($settings);
 $projectController = new C2\ProjectController($settings);
 $sprintController= new C2\SprintController($settings);
 $goalController= new C2\GoalController($settings);
+$activityController= new C2\ActivityController($settings);
 
 //route
 switch($_GET['route'])
@@ -159,6 +161,20 @@ switch($_GET['route'])
         $goalController->goalCrud();
     }
     break;
+
+    //activity
+    case 'projectActivity':
+    {
+        $activityController->goalActivityAll();
+    }
+    break;
+
+    case 'activityCrud':
+    {
+        $activityController->activityCrud();
+    }
+    break;
+
 
     default:
         //

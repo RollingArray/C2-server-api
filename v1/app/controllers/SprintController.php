@@ -121,59 +121,15 @@ class SprintController extends BaseAPI
 
                     }
 
-                    //start
-                    else if($operation_type == 'start')
-                    {
-                        //if active or future sprint alredy exist
-                        $ifActiveOrFutureSprintAlreadyExistForSameProject = $this->DBAccessLib->ifActiveOrFutureSprintAlreadyExistForSameProject($passedData);
-
-                        if($ifActiveOrFutureSprintAlreadyExistForSameProject)
-                        {
-                            $responseData = $this->MessageLib->errorMessageFormat('ACTIVE_FUTURE_SPRINT_EXIST', $this->settings['errorMessage']['ACTIVE_FUTURE_SPRINT_EXIST']);
-                        }
-                        else
-                        {
-                            //update spint details
-                            $updateSprint = $this->DBAccessLib->updateSprint($passedData);
-                            if($updateSprint)
-                            {
-                                $message = $this->settings['successMessage']['SUCCESS_SPRINT_START'];
-                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
-                            }
-                            else
-                            {
-                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_SPRINT_UPDATE', $this->settings['errorMessage']['FAIL_SPRINT_UPDATE']);
-                            }
-                        }
-
-                    }
-
-                    //end
-                    else if($operation_type == 'end')
-                    {
-                        //update spint details
-                        $updateSprint = $this->DBAccessLib->updateSprint($passedData);
-                        if($updateSprint)
-                        {
-                            //send message to client
-                            $message = $this->settings['successMessage']['SUCCESS_SPRINT_CLOSE'];
-                            $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
-                        }
-                        else
-                        {
-                            $responseData = $this->MessageLib->errorMessageFormat('FAIL_SPRINT_CLOSE', $this->settings['errorMessage']['FAIL_SPRINT_CLOSE']);
-                        }
-                    }
-
                     //delete
                     else if($operation_type == 'delete')
                     {
-                        //if active or future sprint alredy exist
-                        $ifTaskPresentForSprint = $this->DBAccessLib->ifTaskPresentForSprint($passedData);
+                        //if active or future sprint already exist
+                        $ifActivityPresentForSprint = $this->DBAccessLib->ifActivityPresentForSprint($passedData);
 
-                        if($ifTaskPresentForSprint)
+                        if($ifActivityPresentForSprint)
                         {
-                            $responseData = $this->MessageLib->errorMessageFormat('TASK_SPRINT_ALLOCIATION', $this->settings['errorMessage']['TASK_SPRINT_ALLOCIATION']);
+                            $responseData = $this->MessageLib->errorMessageFormat('ACTIVITY_SPRINT_ASSOCIATION', $this->settings['errorMessage']['ACTIVITY_SPRINT_ASSOCIATION']);
                         }
                         else
                         {

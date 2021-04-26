@@ -103,29 +103,38 @@ class GoalController extends BaseAPI
                     //edit
                     else if($operation_type == 'edit')
                     {
-                        //update spint details
-                        $updateGoal = $this->DBAccessLib->updateGoal($passedData);
-                        if($updateGoal)
+                        //if goal with same name already exist
+                        $ifGoalAlreadyCreatedForSameProject = $this->DBAccessLib->ifGoalAlreadyCreatedForSameProject($passedData);
+
+                        if($ifGoalAlreadyCreatedForSameProject)
                         {
-                            $message = $this->settings['successMessage']['SUCCESS_GOAL_UPDATE'];
-                            $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                            $responseData = $this->MessageLib->errorMessageFormat('GOAL_EXIST', $this->settings['errorMessage']['GOAL_EXIST']);
                         }
                         else
                         {
-                            $responseData = $this->MessageLib->errorMessageFormat('FAIL_GOAL_UPDATE', $this->settings['errorMessage']['FAIL_GOAL_UPDATE']);
+                            //update spint details
+                            $updateGoal = $this->DBAccessLib->updateGoal($passedData);
+                            if($updateGoal)
+                            {
+                                $message = $this->settings['successMessage']['SUCCESS_GOAL_UPDATE'];
+                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                            }
+                            else
+                            {
+                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_GOAL_UPDATE', $this->settings['errorMessage']['FAIL_GOAL_UPDATE']);
+                            }
                         }
-
                     }
 
                     //delete
                     else if($operation_type == 'delete')
                     {
                         //if active or future goal alredy exist
-                        $ifTaskPresentForGoal = $this->DBAccessLib->ifTaskPresentForGoal($passedData);
+                        $ifTaskPresentForGoal = $this->DBAccessLib->ifActivityPresentForGoal($passedData);
 
                         if($ifTaskPresentForGoal)
                         {
-                            $responseData = $this->MessageLib->errorMessageFormat('TASK_GOAL_ALLOCATION', $this->settings['errorMessage']['TASK_GOAL_ALLOCATION']);
+                            $responseData = $this->MessageLib->errorMessageFormat('ACTIVITY_GOAL_ASSOCIATION', $this->settings['errorMessage']['ACTIVITY_GOAL_ASSOCIATION']);
                         }
                         else
                         {

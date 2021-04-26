@@ -94,7 +94,19 @@ $settings = [
 		'goal_id' => '/^[a-zA-Z0-9]{10,50}/',
 		'goal_name' => '/([a-zA-Z]{3,30}\s*)+/',
 		'goal_description' => '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{5,400}$/',
-        
+
+		//activity
+		'activity_id' => '/^[a-zA-Z0-9]{10,50}/',
+		'activity_name'=> '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{5,400}$/',
+		'weight' => '/^[0-9]*$/',
+		'activity_measurement_type' => '/(NUM|BOOL)/',
+		'criteria_poor_value' => '/^[0-9]*$/',
+		'criteria_improvement_value' => '/^[0-9]*$/',
+		'criteria_expectation_value' => '/^[0-9]*$/',
+		'criteria_exceed_value' => '/^[0-9]*$/',
+		'criteria_outstanding_value' => '/^[0-9]*$/',
+		'characteristics_higher_better' => '/(0|1)/',
+		'activity_result_type' => '/^[a-zA-Z0-9 \[\]()-^\/_\-\n]{5,50}$/',
 	],
 	'errorValidationMessage' => [
 		'user_id' => 'Invalid user id',
@@ -136,6 +148,19 @@ $settings = [
 		'goal_id' => 'Invalid goal id',
 		'goal_name' => 'Invalid goal name',
 		'goal_description' => 'Invalid goal description',
+
+		//activity
+		'activity_id'=> 'Invalid activity id',
+		'activity_name'=> 'Invalid measurement purpose',
+		'weight'=> 'Invalid weight value',
+		'activity_measurement_type' => 'Invalid activity type measurement type',
+		'criteria_poor_value' => 'Invalid measurement criteria poor value',
+		'criteria_improvement_value' => 'Invalid measurement criteria improvement value',
+		'criteria_expectation_value' => 'Invalid measurement criteria expectation value',
+		'criteria_exceed_value' => 'Invalid measurement criteria exceed value',
+		'criteria_outstanding_value' => 'Invalid measurement criteria outstanding value',
+		'characteristics_higher_better' => 'Invalid characteristics higher better value',
+		'activity_result_type' => 'Invalid activity result type',
 	],
 	'errorMessage' => [
 		//user
@@ -183,6 +208,15 @@ $settings = [
 		'FAIL_GOAL_CREATE' => 'Goal could not be created, please try again',
 		'FAIL_GOAL_UPDATE' => 'Goal could not be updated, please try again',
 		'FAIL_GOAL_DELETE' => 'Goal could not be deleted, please try again',
+
+		//activity
+		'ACTIVITY_EXIST' => 'Activity already exist with same name, please give a new name',
+		'ACTIVITY_LOCKED' => 'This activity is already locked',
+		'FAIL_ACTIVITY_CREATE' => 'Activity could not be created, please try again',
+		'FAIL_ACTIVITY_UPDATE' => 'Activity could not be updated, please try again',
+		'FAIL_ACTIVITY_DELETE' => 'Activity could not be deleted, please try again',
+		'ACTIVITY_SPRINT_ASSOCIATION' => 'There are activities associated with this sprint, sprint can not be deleted',
+		'ACTIVITY_GOAL_ASSOCIATION' => 'There are activities associated with this goal, goal can not be deleted',
 		
 	],
 	'successMessage' => [
@@ -214,6 +248,11 @@ $settings = [
 		'SUCCESS_GOAL_CREATE' => 'Goal created successfully. You might want to attach this goal against an activity to achieve this goal for a assignee',
 		'SUCCESS_GOAL_UPDATE' => 'Goal updated successfully.',
 		'SUCCESS_GOAL_DELETE' => 'Goal deleted successfully.',
+
+		//activity
+		'SUCCESS_ACTIVITY_CREATE' => 'Activity created successfully. You might want to reviews to review this',
+		'SUCCESS_ACTIVITY_UPDATE' => 'Activity updated successfully.',
+		'SUCCESS_ACTIVITY_DELETE' => 'Activity deleted successfully.',
 	],
 ];
 ?>

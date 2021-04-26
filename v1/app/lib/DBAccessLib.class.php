@@ -681,6 +681,18 @@ class DBAccessLib extends BaseDatabaseAPI
         return parent::getAllRecords($query, $data);
     }
 
+    //ifActivityPresentForSprint
+    public function ifActivityPresentForSprint($passedData)
+    {
+        $query = "CALL sp_if_activity_present_for_sprint(?)";
+
+        $data = array(
+            $passedData['sprint_id']
+        );
+
+        return parent::ifRecordExist($query, $data);
+    }
+
     //goal
     //getAllGoalsForProject
     function getAllGoalsForProject($passedData)
@@ -751,6 +763,130 @@ class DBAccessLib extends BaseDatabaseAPI
             $passedData['goal_id'],
             $passedData['goal_name'],
             $passedData['goal_description']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //ifActivityPresentForGoal
+    public function ifActivityPresentForGoal($passedData)
+    {
+        $query = "CALL sp_if_activity_present_for_goal(?)";
+
+        $data = array(
+            $passedData['goal_id']
+        );
+
+        return parent::ifRecordExist($query, $data);
+    }
+
+    //activity
+
+    //ifActivityAlreadyCreatedForProject
+    public function ifActivityAlreadyCreatedForProject($passedData)
+    {
+        $query = "CALL sp_if_activity_already_created_for_project(?, ?, ?, ?)";
+
+        $data = array(
+            $passedData['activity_name'],
+            $passedData['project_id'],
+            $passedData['sprint_id'],
+            $passedData['assignee_user_id']
+        );
+
+        return parent::ifRecordExist($query, $data);
+    }
+
+    //insertActivity
+    function insertActivity($passedData)
+    {
+        $query = "CALL sp_insert_activity(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_id'],
+            $passedData['project_id'],
+            $passedData['sprint_id'],
+            $passedData['goal_id'],
+            $passedData['assignee_user_id'],
+            $passedData['activity_name'],
+            $passedData['weight'],
+            $passedData['activity_measurement_type'],
+            $passedData['activity_result_type'],
+            $passedData['criteria_poor_value'],
+            $passedData['criteria_improvement_value'],
+            $passedData['criteria_expectation_value'],
+            $passedData['criteria_exceed_value'],
+            $passedData['criteria_outstanding_value'],
+            $passedData['characteristics_higher_better'],
+        );
+        return parent::executeStatement($query, $data);
+    }
+
+    //updateActivity
+    function updateActivity($passedData)
+    {
+
+        $query = "CALL sp_update_activity(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_id'],
+            $passedData['project_id'],
+            $passedData['sprint_id'],
+            $passedData['assignee_user_id'],
+            $passedData['activity_name'],
+            $passedData['weight'],
+            $passedData['activity_measurement_type'],
+            $passedData['activity_result_type'],
+            $passedData['criteria_poor_value'],
+            $passedData['criteria_improvement_value'],
+            $passedData['criteria_expectation_value'],
+            $passedData['criteria_exceed_value'],
+            $passedData['criteria_outstanding_value'],
+            $passedData['characteristics_higher_better'],
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //deleteActivity
+    function deleteActivity($passedData)
+    {
+
+        $query = "CALL sp_delete_activity(?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_id'],
+            $passedData['project_id']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //ifActivityAlreadyLocked
+    public function ifActivityAlreadyLocked($passedData)
+    {
+        $query = "CALL sp_if_activity_already_locked(?)";
+
+        $data = array(
+            $passedData['activity_id']
+        );
+
+        return parent::ifRecordExist($query, $data);
+    }
+
+    //lockActivity
+    function lockActivity($passedData)
+    {
+
+        $query = "CALL sp_lock_activity(?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_id'],
+            $passedData['activity_locked']
         );
 
         return parent::executeStatement($query, $data);

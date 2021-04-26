@@ -37,6 +37,9 @@ RewriteRule   ^project/sprint/crud/?$ 			                            index.php?r
 RewriteRule   ^project/goals/?$ 			                                index.php?route=projectGoalAll [NC]
 RewriteRule   ^project/goal/crud/?$ 			                            index.php?route=goalCrud [NC]
 
+#activity
+RewriteRule   ^goal/activity/?$ 			                                index.php?route=goalActivityAll [NC]
+RewriteRule   ^goal/activity/crud/?$ 			                            index.php?route=activityCrud [NC]
 
 RewriteRule   ^email/track/update/(.*?)/?$                                  index.php?route=emailTrackUpdate [NC]
 
