@@ -601,7 +601,7 @@ class DBAccessLib extends BaseDatabaseAPI
     function deleteSprint($passedData)
     {
 
-        $query = "CALL sp_delete_sprint(?, ?, ?, ?)";
+        $query = "CALL sp_delete_sprint(?, ?, ?)";
 
         $data = array(
             $passedData['user_id'],
