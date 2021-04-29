@@ -287,6 +287,20 @@
             return $this->generateKeyValueStructure($rows);
         }
 
+
+        public function getProjectRaw ($DBAccessLib, $passedData)
+        {
+            $rows = array();
+            $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+            $rows['projectMembers'] = $this->getAllProjectMembers($DBAccessLib, $passedData);
+            $rows['projectSprints'] = $this->getAllSprintsForProject($DBAccessLib, $passedData);
+            $rows['projectGoals'] = $this->getAllGoalsForProject($DBAccessLib, $passedData);
+
+            return $this->generateKeyValueStructure($rows);
+        }
+
+        
+
         //getAllProjectUsers
         public function getAllProjectUsers($DBAccessLib, $passedData)
         {
@@ -384,5 +398,16 @@
 
             return $this->generateServiceReturnDataStructure($tempRows);
         }
+
+        //getAllActivities
+        public function getAllActivities ($DBAccessLib, $passedData)
+        {
+            $rows = array();
+            $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+            //$rows['projectGoals'] = $this->getAllGoalsForProject($DBAccessLib, $passedData);
+            
+            return $this->generateKeyValueStructure($rows);
+        }
+
     }
 ?>

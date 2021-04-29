@@ -36,7 +36,7 @@ class ActivityController extends BaseAPI
         $goal_id = parent::sanitizeInput($postData->goalId);
         $assignee_user_id = parent::sanitizeInput($postData->assigneeUserId);
         $activity_name = parent::sanitizeInput($postData->activityName);
-        $weight = parent::sanitizeInput($postData->weight);
+        $activity_weight = parent::sanitizeInput($postData->activityWeight);
         $activity_measurement_type = parent::sanitizeInput($postData->activityMeasurementType);
         $activity_result_type = parent::sanitizeInput($postData->activityResultType);
         $criteria_poor_value = parent::sanitizeInput($postData->criteriaPoorValue);
@@ -66,7 +66,7 @@ class ActivityController extends BaseAPI
                 "goal_id" => $goal_id,
                 "assignee_user_id" => $assignee_user_id,
                 "activity_name" => $activity_name,
-                "weight" => $weight,
+                "activity_weight" => $activity_weight,
                 "activity_measurement_type" => $activity_measurement_type,
                 "activity_result_type" => $activity_result_type,
                 "criteria_poor_value" => $criteria_poor_value,
@@ -229,7 +229,7 @@ class ActivityController extends BaseAPI
 
                 if($ifProjectAccessToMember)
                 {
-                    $tempRows = $this->UtilityLib->getAllActivitys($this->DBAccessLib, $passedData);
+                    $tempRows = $this->UtilityLib->getAllActivities($this->DBAccessLib, $passedData);
 
                     //get user details
                     $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);

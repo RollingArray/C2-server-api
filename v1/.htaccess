@@ -23,7 +23,7 @@ RewriteRule   ^user/projects/?$ 											index.php?route=userProjects [NC]
 RewriteRule   ^user/project/crud/?$ 										index.php?route=userProjectCrud [NC]
 RewriteRule   ^project/members/?$ 										    index.php?route=projectMembers [NC]
 RewriteRule   ^project/details/?$ 										    index.php?route=projectDetails [NC]
-
+RewriteRule   ^project/raw/?$ 										        index.php?route=projectRaw [NC]
 
 
 #member
@@ -38,7 +38,7 @@ RewriteRule   ^project/goals/?$ 			                                index.php?rou
 RewriteRule   ^project/goal/crud/?$ 			                            index.php?route=goalCrud [NC]
 
 #activity
-RewriteRule   ^goal/activity/?$ 			                                index.php?route=goalActivityAll [NC]
+RewriteRule   ^goal/activities/?$ 			                                index.php?route=goalActivityAll [NC]
 RewriteRule   ^goal/activity/crud/?$ 			                            index.php?route=activityCrud [NC]
 
 RewriteRule   ^email/track/update/(.*?)/?$                                  index.php?route=emailTrackUpdate [NC]

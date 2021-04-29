@@ -129,6 +129,13 @@ switch($_GET['route'])
         $projectController->projectDetails();
     }
     break;
+    case 'projectRaw':
+    {
+        $projectController->projectRaw();
+    }
+    break;
+
+    
 
     // case 'userProjectLogBook':
     // {
@@ -163,7 +170,7 @@ switch($_GET['route'])
     break;
 
     //activity
-    case 'projectActivity':
+    case 'goalActivityAll':
     {
         $activityController->goalActivityAll();
     }

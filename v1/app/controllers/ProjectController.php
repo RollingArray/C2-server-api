@@ -314,6 +314,58 @@ class ProjectController extends BaseAPI
         echo json_encode($responseData);
     }
 
+    //projectRaw
+    public function projectRaw()
+    {
+        $responseData = array();
+
+        //get post gata
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $token = parent::getAuthorizationSessionObject();
+        
+        //
+        $passedData = array(
+                "user_id"=>$user_id,
+                "project_id"=>$project_id
+            );
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if($validator['success'])
+        {
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            //activeUser
+            if($activeUser)
+            {
+                $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
+
+                if($ifProjectAccessToMember)
+                {
+                    $getProjectRaw = $this->UtilityLib->getProjectRaw($this->DBAccessLib, $passedData);
+                    $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $getProjectRaw);
+                }
+                else
+                {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
+                }
+            }
+            else
+            {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        }
+        else
+        {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
+    }
+
     //projectMemberCrud
     public function projectMemberCrud()
     {

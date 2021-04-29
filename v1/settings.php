@@ -98,7 +98,7 @@ $settings = [
 		//activity
 		'activity_id' => '/^[a-zA-Z0-9]{10,50}/',
 		'activity_name'=> '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{5,400}$/',
-		'weight' => '/^[0-9]*$/',
+		'activity_weight' => '/^[0-9]*$/',
 		'activity_measurement_type' => '/(NUM|BOOL)/',
 		'criteria_poor_value' => '/^[0-9]*$/',
 		'criteria_improvement_value' => '/^[0-9]*$/',
@@ -152,7 +152,7 @@ $settings = [
 		//activity
 		'activity_id'=> 'Invalid activity id',
 		'activity_name'=> 'Invalid measurement purpose',
-		'weight'=> 'Invalid weight value',
+		'activity_weight'=> 'Invalid weight value',
 		'activity_measurement_type' => 'Invalid activity type measurement type',
 		'criteria_poor_value' => 'Invalid measurement criteria poor value',
 		'criteria_improvement_value' => 'Invalid measurement criteria improvement value',
