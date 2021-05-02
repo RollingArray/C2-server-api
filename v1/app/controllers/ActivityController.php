@@ -13,7 +13,8 @@ class ActivityController extends BaseAPI
     protected $JWTLib;
     protected $EmailLib;
 
-    public function __construct($settings) {
+    public function __construct($settings)
+    {
         parent::__construct($settings);
         $this->DBAccessLib = new Database\DBAccessLib($settings); // create a new object, class db()
         $this->UtilityLib = new Utility\UtilityLib($settings);
@@ -45,37 +46,41 @@ class ActivityController extends BaseAPI
         $criteria_exceed_value = parent::sanitizeInput($postData->criteriaExceedValue);
         $criteria_outstanding_value = parent::sanitizeInput($postData->criteriaOutstandingValue);
         $characteristics_higher_better = parent::sanitizeInput($postData->characteristicsHigherBetter);
-        
+
         $operation_type = parent::sanitizeInput($postData->operationType);
         $token = parent::getAuthorizationSessionObject();
 
-        if(property_exists($postData, 'activityId'))
-        {
+        if (property_exists($postData, 'activityId')) {
             $activity_id = parent::sanitizeInput($postData->activityId);
-        }
-        else
-        {
+        } else {
             $activity_id = $this->UtilityLib->generateId('');
         }
 
+        if (property_exists($postData, 'activityWeightDelta')) {
+            $activity_weight_delta = parent::sanitizeInput($postData->activityWeightDelta);
+        } else {
+            $activity_weight_delta = 0;
+        }
+
         $passedData = array(
-                "user_id" => $user_id,    
-                "activity_id" => $activity_id,
-                "project_id" => $project_id,
-                "sprint_id" => $sprint_id,
-                "goal_id" => $goal_id,
-                "assignee_user_id" => $assignee_user_id,
-                "activity_name" => $activity_name,
-                "activity_weight" => $activity_weight,
-                "activity_measurement_type" => $activity_measurement_type,
-                "activity_result_type" => $activity_result_type,
-                "criteria_poor_value" => $criteria_poor_value,
-                "criteria_improvement_value" => $criteria_improvement_value,
-                "criteria_expectation_value" => $criteria_expectation_value,
-                "criteria_exceed_value" => $criteria_exceed_value,
-                "criteria_outstanding_value" => $criteria_outstanding_value,
-                "characteristics_higher_better" => $characteristics_higher_better
-            );
+            "user_id" => $user_id,
+            "activity_id" => $activity_id,
+            "project_id" => $project_id,
+            "sprint_id" => $sprint_id,
+            "goal_id" => $goal_id,
+            "assignee_user_id" => $assignee_user_id,
+            "activity_name" => $activity_name,
+            "activity_weight" => $activity_weight,
+            "activity_weight_delta" => $activity_weight_delta,
+            "activity_measurement_type" => $activity_measurement_type,
+            "activity_result_type" => $activity_result_type,
+            "criteria_poor_value" => $criteria_poor_value,
+            "criteria_improvement_value" => $criteria_improvement_value,
+            "criteria_expectation_value" => $criteria_expectation_value,
+            "criteria_exceed_value" => $criteria_exceed_value,
+            "criteria_outstanding_value" => $criteria_outstanding_value,
+            "characteristics_higher_better" => $characteristics_higher_better
+        );
 
         //check If User Can do the operation
         $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
@@ -83,72 +88,59 @@ class ActivityController extends BaseAPI
         $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
 
         //if input validated
-        if($validator['success'])
-        {
+        if ($validator['success']) {
             // is user present
             $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
 
-            if ($activeUser)
-            {
-                 //check access
-                if($checkIfUserCanCRUD['crudActivity'])
-                {
-                    
-                    //create
-                    if($operation_type == 'create')
-                    {
-                        
-                        $ifActivityAlreadyCreatedForProject = $this->DBAccessLib->ifActivityAlreadyCreatedForProject($passedData);
-                        if($ifActivityAlreadyCreatedForProject)
-                        {
-                            $responseData = $this->MessageLib->errorMessageFormat('ACTIVITY_EXIST', $this->settings['errorMessage']['ACTIVITY_EXIST']);
-                        }
-                        else
-                        {
-                            $insertActivity = $this->DBAccessLib->insertActivity($passedData);
+            if ($activeUser) {
+                //check access
+                if ($checkIfUserCanCRUD['crudActivity']) {
 
-                            //create new
-                            if($insertActivity)
-                            {
-                                $message = $this->settings['successMessage']['SUCCESS_ACTIVITY_CREATE'];
-                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
-                            }
-                            else
-                            {
-                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_ACTIVITY_CREATE', $this->settings['errorMessage']['FAIL_ACTIVITY_CREATE']);
+                    //create
+                    if ($operation_type == 'create') {
+
+                        $ifActivityAlreadyCreatedForProject = $this->DBAccessLib->ifActivityAlreadyCreatedForProject($passedData);
+                        if ($ifActivityAlreadyCreatedForProject) {
+                            $responseData = $this->MessageLib->errorMessageFormat('ACTIVITY_EXIST', $this->settings['errorMessage']['ACTIVITY_EXIST']);
+                        } else {
+                            $ifUserActivityWeighExceedForSprint = $this->UtilityLib->ifUserActivityWeighExceedForSprint($this->DBAccessLib, $passedData, $operation_type);
+
+                            if ($ifUserActivityWeighExceedForSprint) {
+                                $responseData = $this->MessageLib->errorMessageFormat('WEIGHT_EXCEED', $this->settings['errorMessage']['WEIGHT_EXCEED']);
+                            } else {
+                                $insertActivity = $this->DBAccessLib->insertActivity($passedData);
+
+                                //create new
+                                if ($insertActivity) {
+                                    $message = $this->settings['successMessage']['SUCCESS_ACTIVITY_CREATE'];
+                                    $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                                } else {
+                                    $responseData = $this->MessageLib->errorMessageFormat('FAIL_ACTIVITY_CREATE', $this->settings['errorMessage']['FAIL_ACTIVITY_CREATE']);
+                                }
                             }
                         }
                     }
 
                     //edit
-                    else if($operation_type == 'edit')
-                    {
-                        // if activity already created for project
-                        $ifActivityAlreadyCreatedForProject = $this->DBAccessLib->ifActivityAlreadyCreatedForProject($passedData);
-                        if($ifActivityAlreadyCreatedForProject)
-                        {
-                            $responseData = $this->MessageLib->errorMessageFormat('ACTIVITY_EXIST', $this->settings['errorMessage']['ACTIVITY_EXIST']);
-                        }
-                        else
-                        {
-                            //if activity already locked
-                            $ifActivityAlreadyLocked = $this->DBAccessLib->ifActivityAlreadyLocked($passedData);
-                            
-                            if($ifActivityAlreadyLocked)
-                            {
-                                $responseData = $this->MessageLib->errorMessageFormat('ACTIVITY_LOCKED', $this->settings['errorMessage']['ACTIVITY_LOCKED']);
-                            }
-                            else{
+                    else if ($operation_type == 'edit') {
+                        //if activity already locked
+                        $ifActivityAlreadyLocked = $this->DBAccessLib->ifActivityAlreadyLocked($passedData);
+
+                        if ($ifActivityAlreadyLocked) {
+                            $responseData = $this->MessageLib->errorMessageFormat('ACTIVITY_LOCKED', $this->settings['errorMessage']['ACTIVITY_LOCKED']);
+                        } else {
+                            $ifUserActivityWeighExceedForSprint = $this->UtilityLib->ifUserActivityWeighExceedForSprint($this->DBAccessLib, $passedData, $operation_type);
+
+                            if ($ifUserActivityWeighExceedForSprint) {
+                                $responseData = $this->MessageLib->errorMessageFormat('WEIGHT_EXCEED', $this->settings['errorMessage']['WEIGHT_EXCEED']);
+                            } else {
                                 $updateActivity = $this->DBAccessLib->updateActivity($passedData);
 
                                 //update
-                                if($updateActivity)
-                                {
+                                if ($updateActivity) {
                                     $message = $this->settings['successMessage']['SUCCESS_ACTIVITY_UPDATE'];
                                     $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
-                                }
-                                else
-                                {
+                                } else {
                                     $responseData = $this->MessageLib->errorMessageFormat('FAIL_ACTIVITY_UPDATE', $this->settings['errorMessage']['FAIL_ACTIVITY_UPDATE']);
                                 }
                             }
@@ -156,43 +148,31 @@ class ActivityController extends BaseAPI
                     }
 
                     //delete
-                    else if($operation_type == 'delete')
-                    {
+                    else if ($operation_type == 'delete') {
                         //if activity already locked
                         $ifActivityAlreadyLocked = $this->DBAccessLib->ifActivityAlreadyLocked($passedData);
-                            
-                        if($ifActivityAlreadyLocked)
-                        {
+
+                        if ($ifActivityAlreadyLocked) {
                             $responseData = $this->MessageLib->errorMessageFormat('ACTIVITY_LOCKED', $this->settings['errorMessage']['ACTIVITY_LOCKED']);
-                        }
-                        else{
+                        } else {
                             $updateActivity = $this->DBAccessLib->deleteActivity($passedData);
 
                             //update
-                            if($updateActivity)
-                            {
+                            if ($updateActivity) {
                                 $message = $this->settings['successMessage']['SUCCESS_ACTIVITY_DELETE'];
                                 $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
-                            }
-                            else
-                            {
+                            } else {
                                 $responseData = $this->MessageLib->errorMessageFormat('SUCCESS_ACTIVITY_DELETE', $this->settings['errorMessage']['SUCCESS_ACTIVITY_DELETE']);
                             }
                         }
                     }
-                }
-                else
-                {
+                } else {
                     $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
                 }
-            }
-            else
-            {
+            } else {
                 $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
             }
-        }
-        else
-        {
+        } else {
             $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
         }
 
@@ -208,44 +188,43 @@ class ActivityController extends BaseAPI
         $postData = parent::getPostData();
         $user_id = parent::sanitizeInput($postData->userId);
         $project_id = parent::sanitizeInput($postData->projectId);
+        $sprint_id = parent::sanitizeInput($postData->sprintId);
+        $goal_id = parent::sanitizeInput($postData->goalId);
+        $assignee_user_id = parent::sanitizeInput($postData->assigneeUserId);
+
         $token = parent::getAuthorizationSessionObject();
 
         $passedData = array(
-                "user_id" => $user_id,
-                "project_id" => $project_id
-            );
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "sprint_id" => $sprint_id,
+            "goal_id" => $goal_id,
+            "assignee_user_id" => $assignee_user_id,
+
+        );
 
         $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
 
         //if input validated
-        if($validator['success'])
-        {
+        if ($validator['success']) {
             $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
 
             //activeUser
-            if($activeUser)
-            {
+            if ($activeUser) {
                 $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
 
-                if($ifProjectAccessToMember)
-                {
+                if ($ifProjectAccessToMember) {
                     $tempRows = $this->UtilityLib->getAllActivities($this->DBAccessLib, $passedData);
 
                     //get user details
                     $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
-                }
-                else
-                {
+                } else {
                     $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
                 }
-            }
-            else
-            {
+            } else {
                 $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
             }
-        }
-        else
-        {
+        } else {
             $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
         }
 
@@ -253,7 +232,8 @@ class ActivityController extends BaseAPI
     }
 
 
-    function __destruct() {
+    function __destruct()
+    {
         //echo 'The class "', __CLASS__, '" was destroyed.<br />';
         parent::__destruct();
         unset($this->DBAccessLib);

@@ -797,6 +797,20 @@ class DBAccessLib extends BaseDatabaseAPI
         return parent::ifRecordExist($query, $data);
     }
 
+    //getUserActivityWeighForSprint
+    public function getUserActivityWeighForSprint($passedData)
+    {
+        $query = "CALL sp_get_user_activity_weight_for_sprint(?, ?, ?)";
+
+        $data = array(
+            $passedData['project_id'],
+            $passedData['sprint_id'],
+            $passedData['assignee_user_id']
+        );
+
+        return parent::getOneRecord($query, $data);
+    }
+
     //insertActivity
     function insertActivity($passedData)
     {
@@ -827,14 +841,11 @@ class DBAccessLib extends BaseDatabaseAPI
     function updateActivity($passedData)
     {
 
-        $query = "CALL sp_update_activity(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query = "CALL sp_update_activity(?,?,?,?,?,?,?,?,?,?,?,?)";
 
         $data = array(
             $passedData['user_id'],
             $passedData['activity_id'],
-            $passedData['project_id'],
-            $passedData['sprint_id'],
-            $passedData['assignee_user_id'],
             $passedData['activity_name'],
             $passedData['activity_weight'],
             $passedData['activity_measurement_type'],
@@ -891,4 +902,20 @@ class DBAccessLib extends BaseDatabaseAPI
 
         return parent::executeStatement($query, $data);
     }
+
+    //getAllActivitiesForProject
+    function getAllActivitiesForProject($passedData)
+    {
+        $query = "CALL sp_get_all_activities_for_project(?, ?, ?, ?)";
+
+        $data = array(
+            $passedData['project_id'],
+            $passedData['sprint_id'],
+            $passedData['goal_id'],
+            $passedData['assignee_user_id'],
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
 }

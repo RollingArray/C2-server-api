@@ -99,6 +99,7 @@ $settings = [
 		'activity_id' => '/^[a-zA-Z0-9]{10,50}/',
 		'activity_name'=> '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{5,400}$/',
 		'activity_weight' => '/^[0-9]*$/',
+		'activity_weight_delta' => '/^-?[0-9]\d*$/',
 		'activity_measurement_type' => '/(NUM|BOOL)/',
 		'criteria_poor_value' => '/^[0-9]*$/',
 		'criteria_improvement_value' => '/^[0-9]*$/',
@@ -106,7 +107,7 @@ $settings = [
 		'criteria_exceed_value' => '/^[0-9]*$/',
 		'criteria_outstanding_value' => '/^[0-9]*$/',
 		'characteristics_higher_better' => '/(0|1)/',
-		'activity_result_type' => '/^[a-zA-Z0-9 \[\]()-^\/_\-\n]{5,50}$/',
+		'activity_result_type' => '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{1,50}$/',
 	],
 	'errorValidationMessage' => [
 		'user_id' => 'Invalid user id',
@@ -153,6 +154,7 @@ $settings = [
 		'activity_id'=> 'Invalid activity id',
 		'activity_name'=> 'Invalid measurement purpose',
 		'activity_weight'=> 'Invalid weight value',
+		'activity_weight_delta' => 'Invalid weight delta value',
 		'activity_measurement_type' => 'Invalid activity type measurement type',
 		'criteria_poor_value' => 'Invalid measurement criteria poor value',
 		'criteria_improvement_value' => 'Invalid measurement criteria improvement value',
@@ -217,6 +219,7 @@ $settings = [
 		'FAIL_ACTIVITY_DELETE' => 'Activity could not be deleted, please try again',
 		'ACTIVITY_SPRINT_ASSOCIATION' => 'There are activities associated with this sprint, sprint can not be deleted',
 		'ACTIVITY_GOAL_ASSOCIATION' => 'There are activities associated with this goal, goal can not be deleted',
+		'WEIGHT_EXCEED' => 'Total activity weight for an assignee in a sprint can not exceed beyond 100%'
 		
 	],
 	'successMessage' => [
