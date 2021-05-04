@@ -386,8 +386,19 @@ class UtilityLib
     {
         $rows = array();
         $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+        $rows['filter'] = true;
         $rows['projectActivities'] = $this->getAllActivitiesForProject($DBAccessLib, $passedData);
 
+        return $this->generateKeyValueStructure($rows);
+    }
+
+    //getAllActivitiesWithoutFilter
+    public function getAllActivitiesWithoutFilter($DBAccessLib, $passedData)
+    {
+        $rows = array();
+        $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+        $rows['filter'] = false;
+        
         return $this->generateKeyValueStructure($rows);
     }
 

@@ -41,6 +41,9 @@ RewriteRule   ^project/goal/crud/?$ 			                            index.php?rou
 RewriteRule   ^goal/activities/?$ 			                                index.php?route=goalActivityAll [NC]
 RewriteRule   ^goal/activity/crud/?$ 			                            index.php?route=activityCrud [NC]
 
+#comment
+RewriteRule   ^activity/comment/crud/?$ 			                            index.php?route=commentCommentCrud [NC]
+
 RewriteRule   ^email/track/update/(.*?)/?$                                  index.php?route=emailTrackUpdate [NC]
 
 RewriteRule   ^boiler/?$ 			                                        boilerPlate.php [NC]

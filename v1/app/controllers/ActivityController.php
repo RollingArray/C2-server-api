@@ -188,38 +188,177 @@ class ActivityController extends BaseAPI
         $postData = parent::getPostData();
         $user_id = parent::sanitizeInput($postData->userId);
         $project_id = parent::sanitizeInput($postData->projectId);
-        $sprint_id = parent::sanitizeInput($postData->sprintId);
-        $goal_id = parent::sanitizeInput($postData->goalId);
-        $assignee_user_id = parent::sanitizeInput($postData->assigneeUserId);
-
+        
         $token = parent::getAuthorizationSessionObject();
+
+        // if filter properties exist
+        if (property_exists($postData, 'sprintId') && property_exists($postData, 'goalId') && property_exists($postData, 'assigneeUserId')) {
+            $sprint_id = parent::sanitizeInput($postData->sprintId);
+            $goal_id = parent::sanitizeInput($postData->goalId);
+            $assignee_user_id = parent::sanitizeInput($postData->assigneeUserId);
+
+            $passedData = array(
+                "user_id" => $user_id,
+                "project_id" => $project_id,
+                "sprint_id" => $sprint_id,
+                "goal_id" => $goal_id,
+                "assignee_user_id" => $assignee_user_id,
+            );
+    
+            $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+    
+            //if input validated
+            if ($validator['success']) {
+                $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+    
+                //activeUser
+                if ($activeUser) {
+                    $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
+    
+                    if ($ifProjectAccessToMember) {
+                        $tempRows = $this->UtilityLib->getAllActivities($this->DBAccessLib, $passedData);
+    
+                        //get user details
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+            }
+    
+            echo json_encode($responseData);
+
+        } 
+
+        // if filter properties does not exist
+        else {
+            $passedData = array(
+                "user_id" => $user_id,
+                "project_id" => $project_id,
+            );
+    
+            $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+    
+            //if input validated
+            if ($validator['success']) {
+                $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+    
+                //activeUser
+                if ($activeUser) {
+                    $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
+    
+                    if ($ifProjectAccessToMember) {
+                        $tempRows = $this->UtilityLib->getAllActivitiesWithoutFilter($this->DBAccessLib, $passedData);
+    
+                        //get user details
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+            }
+    
+            echo json_encode($responseData);
+        }
+    }
+
+    //commentCommentCrud
+    public function commentCommentCrud()
+    {
+        $responseData = null;
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $activity_id = parent::sanitizeInput($postData->activityId);
+        $assignee_user_id = parent::sanitizeInput($postData->assigneeUserId);
+        $comment_description = parent::sanitizeInput($postData->commentDescription);
+        
+        $operation_type = parent::sanitizeInput($postData->operationType);
+        $token = parent::getAuthorizationSessionObject();
+
+        if (property_exists($postData, 'commentId')) {
+            $comment_id = parent::sanitizeInput($postData->commentId);
+        } else {
+            $comment_id = $this->UtilityLib->generateId('');
+        }
 
         $passedData = array(
             "user_id" => $user_id,
             "project_id" => $project_id,
-            "sprint_id" => $sprint_id,
-            "goal_id" => $goal_id,
+            "activity_id" => $activity_id,
+            "comment_id" => $comment_id,
             "assignee_user_id" => $assignee_user_id,
-
+            "comment_description" => $comment_description,
         );
+
+        //check If User Can do the operation
+        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
 
         $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
 
         //if input validated
         if ($validator['success']) {
+            // is user present
             $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
 
-            //activeUser
             if ($activeUser) {
-                $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
 
-                if ($ifProjectAccessToMember) {
-                    $tempRows = $this->UtilityLib->getAllActivities($this->DBAccessLib, $passedData);
-
-                    //get user details
-                    $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                //if comment not by same user
+                if ($assignee_user_id != $user_id) {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_SAME_USER', $this->settings['errorMessage']['NO_SAME_USER']);
                 } else {
-                    $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
+                    //check access
+                    if ($checkIfUserCanCRUD['crudComment']) {
+                        //create
+                        if ($operation_type == 'create') {
+                            $insertActivityComment = $this->DBAccessLib->insertActivityComment($passedData);
+
+                            //create new
+                            if ($insertActivityComment) {
+                                $message = $this->settings['successMessage']['SUCCESS_COMMENT_ADD'];
+                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                            } else {
+                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_COMMENT_ADD', $this->settings['errorMessage']['FAIL_COMMENT_ADD']);
+                            }
+                        }
+
+                        //edit
+                        else if ($operation_type == 'edit') {
+                            $updateActivityComment = $this->DBAccessLib->updateActivityComment($passedData);
+
+                            //create new
+                            if ($updateActivityComment) {
+                                $message = $this->settings['successMessage']['SUCCESS_COMMENT_UPDATE'];
+                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                            } else {
+                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_COMMENT_UPDATE', $this->settings['errorMessage']['FAIL_COMMENT_UPDATE']);
+                            }
+                        }
+
+                        //delete
+                        else if ($operation_type == 'delete') {
+                            $deleteActivityComment = $this->DBAccessLib->deleteActivityComment($passedData);
+
+                            //create new
+                            if ($deleteActivityComment) {
+                                $message = $this->settings['successMessage']['SUCCESS_COMMENT_DELETE'];
+                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                            } else {
+                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_COMMENT_DELETE', $this->settings['errorMessage']['FAIL_COMMENT_DELETE']);
+                            }
+                        }
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                    }
                 }
             } else {
                 $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
@@ -230,7 +369,6 @@ class ActivityController extends BaseAPI
 
         echo json_encode($responseData);
     }
-
 
     function __destruct()
     {

@@ -918,4 +918,55 @@ class DBAccessLib extends BaseDatabaseAPI
         return parent::getAllRecords($query, $data);
     }
 
+    //comment
+    //insertActivityComment
+    function insertActivityComment($passedData)
+    {
+
+        $query = "CALL sp_insert_comment(?,?,?,?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['activity_id'],
+            $passedData['comment_id'],
+            $passedData['assignee_user_id'],
+            $passedData['comment_description'],
+            
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //updateActivityComment
+    function updateActivityComment($passedData)
+    {
+
+        $query = "CALL sp_update_comment(?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['comment_id'],
+            $passedData['comment_description'],
+            
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //deleteActivityComment
+    function deleteActivityComment($passedData)
+    {
+
+        $query = "CALL sp_delete_comment(?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['comment_id'],
+            
+        );
+
+        return parent::executeStatement($query, $data);
+    }
 }

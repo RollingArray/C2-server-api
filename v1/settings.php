@@ -108,6 +108,10 @@ $settings = [
 		'criteria_outstanding_value' => '/^[0-9]*$/',
 		'characteristics_higher_better' => '/(0|1)/',
 		'activity_result_type' => '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{1,50}$/',
+
+		//comment
+		'comment_id' => '/^[a-zA-Z0-9]{10,50}/',
+		'comment_description' => '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{5,1000}$/',
 	],
 	'errorValidationMessage' => [
 		'user_id' => 'Invalid user id',
@@ -163,6 +167,10 @@ $settings = [
 		'criteria_outstanding_value' => 'Invalid measurement criteria outstanding value',
 		'characteristics_higher_better' => 'Invalid characteristics higher better value',
 		'activity_result_type' => 'Invalid activity result type',
+
+		//comment
+		'comment_id' => 'Invalid comment id',
+		'comment_description' => 'Invalid comment description'
 	],
 	'errorMessage' => [
 		//user
@@ -219,7 +227,13 @@ $settings = [
 		'FAIL_ACTIVITY_DELETE' => 'Activity could not be deleted, please try again',
 		'ACTIVITY_SPRINT_ASSOCIATION' => 'There are activities associated with this sprint, sprint can not be deleted',
 		'ACTIVITY_GOAL_ASSOCIATION' => 'There are activities associated with this goal, goal can not be deleted',
-		'WEIGHT_EXCEED' => 'Total activity weight for an assignee in a sprint can not exceed beyond 100%'
+		'WEIGHT_EXCEED' => 'Total activity weight for an assignee in a sprint can not exceed beyond 100%',
+
+		//goal
+		'NO_SAME_USER' => 'Comments can be submitted by only assignee',
+		'FAIL_COMMENT_ADD' => 'Comment could not be added, please try again',
+		'FAIL_COMMENT_UPDATE' => 'Comment could not be updated, please try again',
+		'FAIL_COMMENT_DELETE' => 'Comment could not be deleted, please try again',
 		
 	],
 	'successMessage' => [
@@ -256,6 +270,11 @@ $settings = [
 		'SUCCESS_ACTIVITY_CREATE' => 'Activity created successfully. You might want to reviews to review this',
 		'SUCCESS_ACTIVITY_UPDATE' => 'Activity updated successfully.',
 		'SUCCESS_ACTIVITY_DELETE' => 'Activity deleted successfully.',
+
+		//comment
+		'SUCCESS_COMMENT_ADD' => 'Comment added successfully',
+		'SUCCESS_COMMENT_UPDATE' => 'Comment updated successfully.',
+		'SUCCESS_COMMENT_DELETE' => 'Comment deleted successfully.',
 	],
 ];
 ?>

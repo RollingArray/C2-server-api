@@ -182,6 +182,14 @@ switch($_GET['route'])
     }
     break;
 
+    //comment
+    
+    case 'commentCommentCrud':
+        {
+            $activityController->commentCommentCrud();
+        }
+        break;
+
 
     default:
         //
