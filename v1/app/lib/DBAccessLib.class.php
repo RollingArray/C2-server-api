@@ -539,26 +539,14 @@ class DBAccessLib extends BaseDatabaseAPI
         return parent::executeStatement($query, $data);
     }
 
-    //getAllProjectAdministrators
-    public function getAllProjectAdministrators($passedData)
+    //getAllProjectUsersByType
+    public function getAllProjectUsersByType($passedData, $memberType)
     {
-        $query = "CALL sp_get_all_project_administrators(?)";
+        $query = "CALL sp_get_all_project_users_by_type(?, ?)";
 
         $data = array(
-            $passedData['project_id']
-        );
-
-
-        return parent::getAllRecords($query, $data);
-    }
-
-    //getAllProjectMembers
-    public function getAllProjectMembers($passedData)
-    {
-        $query = "CALL sp_get_all_project_members(?)";
-
-        $data = array(
-            $passedData['project_id']
+            $passedData['project_id'],
+            $memberType
         );
 
         return parent::getAllRecords($query, $data);

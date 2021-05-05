@@ -206,6 +206,11 @@ $settings = [
 		'FAIL_PROJECT_DELETE' => 'Project could not delete, please try again',
 		'PROJECT_MEMBER_EXIST' => 'Looks like the member you are trying to add to the project already exist',
 		'NO_PROJECT_ACCESS_TO_MEMBER' => 'You do not have access to this project',
+		'FAIL_MEMBER_CREATE' => 'User could not be added, please try again',
+		'FAIL_MEMBER_UPDATE_DELETE_ACCESS' => 'You cant update of delete yourself',
+		'FAIL_MEMBER_UPDATE' => 'User role could not be updated, please try again',
+		'PROJECT_MEMBER_TASK_EXIST' => 'We found activity logs for this user, user can not be deleted',
+		'FAIL_MEMBER_DELETE'  => 'User could not be deleted, please try again',
 		
 		//sprint
 		'SPRINT_EXIST' => 'Sprint already exist with same name for this project, please give a new name',
@@ -255,6 +260,9 @@ $settings = [
 		'SUCCESS_PROJECT_CREATE' => 'Project created successfully',
 		'SUCCESS_PROJECT_UPDATED' => 'Project details updated successfully',
 		'SUCCESS_PROJECT_DELETE' => 'Project deleted successfully',
+		'SUCCESS_MEMBER_CREATE' => 'User has been added to the project successfully',
+		'SUCCESS_MEMBER_UPDATE' => 'User role has been updated successfully',
+		'SUCCESS_MEMBER_DELETE' => 'User deleted successfully form the project',
 		
 		//sprint
 		'SUCCESS_SPRINT_CREATE' => 'Sprint created successfully. You might want to you may want to attach this sprint against goal activities for a member',

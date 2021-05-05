@@ -268,8 +268,9 @@ class UtilityLib
     {
         $rows = array();
         $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
-        $rows['projectAdministrator'] = $this->getAllProjectAdministrators($DBAccessLib, $passedData);
-        $rows['projectMembers'] = $this->getAllProjectMembers($DBAccessLib, $passedData);
+        $rows['projectAdministrator'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0001');
+        $rows['projectAssignees'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0002');
+        $rows['projectReviewers'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0003');
 
         return $this->generateKeyValueStructure($rows);
     }
@@ -279,7 +280,7 @@ class UtilityLib
     {
         $rows = array();
         $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
-        $rows['projectMembers'] = $this->getAllProjectMembers($DBAccessLib, $passedData);
+        $rows['projectAssignees'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0002');
         $rows['projectSprints'] = $this->getAllSprintsForProject($DBAccessLib, $passedData);
         $rows['projectGoals'] = $this->getAllGoalsForProject($DBAccessLib, $passedData);
 
@@ -300,22 +301,10 @@ class UtilityLib
         return $this->generateServiceReturnDataStructure($tempRows);
     }
 
-    //getAllProjectAdministrators
-    public function getAllProjectAdministrators($DBAccessLib, $passedData)
+    //getAllProjectUsersByType
+    public function getAllProjectUsersByType($DBAccessLib, $passedData, $memberType)
     {
-        $rows = $DBAccessLib->getAllProjectAdministrators($passedData);
-        $tempRows = array();
-        foreach ($rows as $eachData) {
-            $tempRows[] = $this->generateKeyValueStructure($eachData);
-        }
-
-        return $this->generateServiceReturnDataStructure($tempRows);
-    }
-
-    //getAllProjectMembers
-    public function getAllProjectMembers($DBAccessLib, $passedData)
-    {
-        $rows = $DBAccessLib->getAllProjectMembers($passedData);
+        $rows = $DBAccessLib->getAllProjectUsersByType($passedData, $memberType);
         $tempRows = array();
         foreach ($rows as $eachData) {
             $tempRows[] = $this->generateKeyValueStructure($eachData);

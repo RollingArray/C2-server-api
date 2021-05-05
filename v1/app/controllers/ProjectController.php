@@ -223,6 +223,7 @@ class ProjectController extends BaseAPI
         $passedData = array(
                 "user_id"=>$user_id,
                 "project_id"=>$project_id,
+
             );
 
         $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
