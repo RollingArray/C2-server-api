@@ -957,4 +957,106 @@ class DBAccessLib extends BaseDatabaseAPI
 
         return parent::executeStatement($query, $data);
     }
+
+    //reviewer
+
+    //getActivityDetails
+    public function getActivityDetails($passedData)
+    {
+        $query = "CALL sp_get_activity_details(?)";
+
+        $data = array(
+            $passedData['activity_id']
+        );
+
+        return parent::getOneRecord($query, $data);
+    }
+
+    //getReviewDetails
+    public function getReviewDetails($passedData)
+    {
+        $query = "CALL sp_get_activity_review_details(?)";
+
+        $data = array(
+            $passedData['activity_id']
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
+    //ifAddedReviewerAlreadySameInActivity
+    public function ifAddedReviewerAlreadySameInActivity($passedData)
+    {
+        $query = "CALL sp_if_added_reviewer_already_same_in_activity(?, ?)";
+
+        $data = array(
+            $passedData['activity_id'],
+            $passedData['reviewer_user_id']
+        );
+
+        return parent::ifRecordExist($query, $data);
+    }
+
+    //ifReviewerAlreadyReviewedActivity
+    public function ifReviewerAlreadyReviewedActivity($passedData)
+    {
+        $query = "CALL sp_if_reviewer_already_reviewed_activity(?, ?)";
+
+        $data = array(
+            $passedData['activity_id'],
+            $passedData['reviewer_user_id']
+        );
+
+        return parent::getOneRecord($query, $data);
+    }
+
+    //insertActivityReviewer
+    function insertActivityReviewer($passedData)
+    {
+
+        $query = "CALL sp_insert_activity_reviewer(?,?,?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['activity_id'],
+            $passedData['activity_review_id'],
+            $passedData['reviewer_user_id']
+        );
+        
+        return parent::executeStatement($query, $data);
+    }
+
+    //updateActivityReviewer
+    function updateActivityReviewer($passedData)
+    {
+
+        $query = "CALL sp_update_activity_review(?,?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_review_id'],
+            $passedData['achieved_result_value'],
+            $passedData['reviewer_comment']
+        );
+        
+        return parent::executeStatement($query, $data);
+    }
+
+    //deleteActivityReviewer
+    function deleteActivityReviewer($passedData)
+    {
+
+        $query = "CALL sp_delete_activity_reviewer(?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['project_id'],
+            $passedData['activity_review_id']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+
 }

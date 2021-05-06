@@ -275,14 +275,48 @@ class UtilityLib
         return $this->generateKeyValueStructure($rows);
     }
 
-
-    public function getProjectRaw($DBAccessLib, $passedData)
+    public function getProjectRaw($DBAccessLib, $passedData, $rawDataKeys)
     {
         $rows = array();
-        $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
-        $rows['projectAssignees'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0002');
-        $rows['projectSprints'] = $this->getAllSprintsForProject($DBAccessLib, $passedData);
-        $rows['projectGoals'] = $this->getAllGoalsForProject($DBAccessLib, $passedData);
+        
+        foreach($rawDataKeys as $value)
+        {
+            //project basic details
+            if($value == 'projectDetails')
+            {
+                $rows['projectDetails'] = $this->getBasicProjectDetails($DBAccessLib, $passedData);
+            }
+
+            //project sprints
+            if($value == 'projectSprints')
+            {
+                $rows['projectSprints'] = $this->getAllSprintsForProject($DBAccessLib, $passedData);
+            }
+
+            //project goals
+            if($value == 'projectGoals')
+            {
+                $rows['projectGoals'] = $this->getAllGoalsForProject($DBAccessLib, $passedData);
+            }
+
+            //project administrator
+            if($value == 'projectAdministrator')
+            {
+                $rows['projectAdministrator'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0001');
+            }
+
+            //project assignees
+            if($value == 'projectAssignees')
+            {
+                $rows['projectAssignees'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0002');
+            }
+
+            //project reviewers
+            if($value == 'projectReviewers')
+            {
+                $rows['projectReviewers'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0003');
+            }
+        }
 
         return $this->generateKeyValueStructure($rows);
     }
@@ -370,6 +404,31 @@ class UtilityLib
         return $this->generateServiceReturnDataStructure($tempRows);
     }
 
+    // activity
+    //getActivityReviewDetails
+    public function getActivityReviewDetails($DBAccessLib, $passedData)
+    {
+        $rows = array();
+        $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+        $rows['activityDetails'] = $DBAccessLib->getActivityDetails($passedData);
+        $rows['reviewDetails'] = $this->getReviewDetails($DBAccessLib, $passedData);
+
+        return $this->generateKeyValueStructure($rows);
+    }
+
+    //getReviewDetails
+    public function getReviewDetails($DBAccessLib, $passedData)
+    {
+        $rows = $DBAccessLib->getReviewDetails($passedData);
+        $tempRows = array();
+
+        foreach ($rows as $eachData) {
+            $tempRows[] = $this->generateKeyValueStructure($eachData);
+        }
+
+        return $this->generateServiceReturnDataStructure($tempRows);
+    }
+
     //getAllActivities
     public function getAllActivities($DBAccessLib, $passedData)
     {
@@ -428,4 +487,6 @@ class UtilityLib
             return true;
         }
     }
+
+    //reviewer
 }

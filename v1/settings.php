@@ -112,6 +112,12 @@ $settings = [
 		//comment
 		'comment_id' => '/^[a-zA-Z0-9]{10,50}/',
 		'comment_description' => '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{5,1000}$/',
+
+		//review
+		'activity_review_id' =>  '/^[a-zA-Z0-9]{10,50}/',
+		'reviewer_user_id' => '/^[a-zA-Z0-9]{10,50}/',
+		'achieved_result_value' => '/^[0-9]*$/',
+		'reviewer_comment' => '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{5,1000}$/',
 	],
 	'errorValidationMessage' => [
 		'user_id' => 'Invalid user id',
@@ -170,7 +176,13 @@ $settings = [
 
 		//comment
 		'comment_id' => 'Invalid comment id',
-		'comment_description' => 'Invalid comment description'
+		'comment_description' => 'Invalid comment description',
+
+		//review
+		'activity_review_id' =>  'Invalid reviewer user id',
+		'reviewer_user_id' => 'Invalid reviewer user id',
+		'achieved_result_value' => 'Invalid achieved result',
+		'reviewer_comment' => 'Invalid reviewer comment',
 	],
 	'errorMessage' => [
 		//user
@@ -239,7 +251,13 @@ $settings = [
 		'FAIL_COMMENT_ADD' => 'Comment could not be added, please try again',
 		'FAIL_COMMENT_UPDATE' => 'Comment could not be updated, please try again',
 		'FAIL_COMMENT_DELETE' => 'Comment could not be deleted, please try again',
-		
+
+		//review
+		'REVIEW_EXIST' => 'Reviewer has reviewed activities, can not be deleted',
+		'FAIL_REVIEWER_ADD' => 'Reviewer could not be added, please try again',
+		'FAIL_REVIEWER_DELETE' => 'Reviewer could not be deleted, please try again',
+		'REVIEWER_EXIST' => 'The reviewer is already added',
+		'FAIL_REVIEW_ADD' => 'Review could not be addedd, please try again',
 	],
 	'successMessage' => [
 		//user
@@ -266,23 +284,28 @@ $settings = [
 		
 		//sprint
 		'SUCCESS_SPRINT_CREATE' => 'Sprint created successfully. You might want to you may want to attach this sprint against goal activities for a member',
-		'SUCCESS_SPRINT_UPDATE' => 'Sprint updated successfully.',
-		'SUCCESS_SPRINT_DELETE' => 'Sprint deleted successfully.',
+		'SUCCESS_SPRINT_UPDATE' => 'Sprint updated successfully',
+		'SUCCESS_SPRINT_DELETE' => 'Sprint deleted successfully',
 
 		//goal
 		'SUCCESS_GOAL_CREATE' => 'Goal created successfully. You might want to attach this goal against an activity to achieve this goal for a assignee',
-		'SUCCESS_GOAL_UPDATE' => 'Goal updated successfully.',
-		'SUCCESS_GOAL_DELETE' => 'Goal deleted successfully.',
+		'SUCCESS_GOAL_UPDATE' => 'Goal updated successfully',
+		'SUCCESS_GOAL_DELETE' => 'Goal deleted successfully',
 
 		//activity
 		'SUCCESS_ACTIVITY_CREATE' => 'Activity created successfully. You might want to reviews to review this',
-		'SUCCESS_ACTIVITY_UPDATE' => 'Activity updated successfully.',
-		'SUCCESS_ACTIVITY_DELETE' => 'Activity deleted successfully.',
+		'SUCCESS_ACTIVITY_UPDATE' => 'Activity updated successfully',
+		'SUCCESS_ACTIVITY_DELETE' => 'Activity deleted successfully',
 
 		//comment
 		'SUCCESS_COMMENT_ADD' => 'Comment added successfully',
-		'SUCCESS_COMMENT_UPDATE' => 'Comment updated successfully.',
-		'SUCCESS_COMMENT_DELETE' => 'Comment deleted successfully.',
+		'SUCCESS_COMMENT_UPDATE' => 'Comment updated successfully',
+		'SUCCESS_COMMENT_DELETE' => 'Comment deleted successfully',
+
+		//review
+		'SUCCESS_REVIEWER_ADD' => 'Reviewer added to this activity successfully',
+		'SUCCESS_REVIEWER_DELETE' => 'Reviewer deleted from this activity successfully',
+		'SUCCESS_REVIEW_ADD' => 'Review added successfully',
 	],
 ];
 ?>

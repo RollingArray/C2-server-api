@@ -324,6 +324,7 @@ class ProjectController extends BaseAPI
         $postData = parent::getPostData();
         $user_id = parent::sanitizeInput($postData->userId);
         $project_id = parent::sanitizeInput($postData->projectId);
+        $rawDataKeys = parent::sanitizeInput($postData->rawDataKeys);
         $token = parent::getAuthorizationSessionObject();
         
         //
@@ -346,7 +347,7 @@ class ProjectController extends BaseAPI
 
                 if($ifProjectAccessToMember)
                 {
-                    $getProjectRaw = $this->UtilityLib->getProjectRaw($this->DBAccessLib, $passedData);
+                    $getProjectRaw = $this->UtilityLib->getProjectRaw($this->DBAccessLib, $passedData, $rawDataKeys);
                     $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $getProjectRaw);
                 }
                 else

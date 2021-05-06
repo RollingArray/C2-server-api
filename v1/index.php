@@ -183,13 +183,34 @@ switch($_GET['route'])
     break;
 
     //comment
-    
-    case 'commentCommentCrud':
-        {
-            $activityController->commentCommentCrud();
-        }
-        break;
+    case 'activityCommentCrud':
+    {
+        $activityController->activityCommentCrud();
+    }
+    break;
 
+    //review
+    case 'activityReviewerCrud':
+    {
+        $activityController->activityReviewerCrud();
+    }
+    break;
+
+    case 'activityReviewDetails':
+    {
+        $activityController->activityReviewDetails();
+    }
+    break;
+
+    case 'activityReviewUpdate':
+    {
+        $activityController->activityReviewUpdate();
+    }
+    break;
+
+    
+
+    
 
     default:
         //

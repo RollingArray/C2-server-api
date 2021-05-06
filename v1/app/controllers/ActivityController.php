@@ -270,8 +270,8 @@ class ActivityController extends BaseAPI
         }
     }
 
-    //commentCommentCrud
-    public function commentCommentCrud()
+    //activityCommentCrud
+    public function activityCommentCrud()
     {
         $responseData = null;
 
@@ -370,6 +370,212 @@ class ActivityController extends BaseAPI
         echo json_encode($responseData);
     }
 
+    //activityReviewerCrud
+    public function activityReviewerCrud()
+    {
+        $responseData = null;
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $activity_id = parent::sanitizeInput($postData->activityId);
+        $reviewer_user_id = parent::sanitizeInput($postData->reviewerUserId);
+        
+        $operation_type = parent::sanitizeInput($postData->operationType);
+        $token = parent::getAuthorizationSessionObject();
+
+        if (property_exists($postData, 'activityReviewId')) {
+            $activity_review_id = parent::sanitizeInput($postData->activityReviewId);
+        } else {
+            $activity_review_id = $this->UtilityLib->generateId('');
+        }
+
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "activity_id" => $activity_id,
+            "activity_review_id" => $activity_review_id,
+            "reviewer_user_id" => $reviewer_user_id,
+        );
+
+        //check If User Can do the operation
+        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if ($validator['success']) {
+            // is user present
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            if ($activeUser) {
+
+                //check access
+                if ($checkIfUserCanCRUD['crudReviewer']) {
+                    //create
+                    if ($operation_type == 'create') {
+
+                        //ifAddedReviewerAlreadySameInActivity
+                        $ifAddedReviewerAlreadySameInActivity = $this->DBAccessLib->ifAddedReviewerAlreadySameInActivity($passedData);
+
+                        if($ifAddedReviewerAlreadySameInActivity)
+                        {
+                            $responseData = $this->MessageLib->errorMessageFormat('REVIEWER_EXIST', $this->settings['errorMessage']['REVIEWER_EXIST']);
+                        }
+                        else
+                        {
+                            $insertActivityReviewer = $this->DBAccessLib->insertActivityReviewer($passedData);
+
+                            //create new
+                            if ($insertActivityReviewer) {
+                                $message = $this->settings['successMessage']['SUCCESS_REVIEWER_ADD'];
+                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                            } else {
+                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_REVIEWER_ADD', $this->settings['errorMessage']['FAIL_REVIEWER_ADD']);
+                            }
+                        }
+                    }
+
+                    //delete
+                    else if ($operation_type == 'delete') {
+
+                        $ifReviewerAlreadyReviewedActivity = $this->DBAccessLib->ifReviewerAlreadyReviewedActivity($passedData)['achievedResultValue'];
+                        
+                        if ($ifReviewerAlreadyReviewedActivity) {
+                            $responseData = $this->MessageLib->errorMessageFormat('REVIEW_EXIST', $this->settings['errorMessage']['REVIEW_EXIST']);
+                        } 
+                        else {
+                            $deleteActivityReviewer = $this->DBAccessLib->deleteActivityReviewer($passedData);
+
+                            //create new
+                            if ($deleteActivityReviewer) {
+                                $message = $this->settings['successMessage']['SUCCESS_REVIEWER_DELETE'];
+                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                            } else {
+                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_REVIEWER_DELETE', $this->settings['errorMessage']['FAIL_REVIEWER_DELETE']);
+                            }
+                        }
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        } else {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
+    }
+
+    //activityReviewUpdate
+    public function activityReviewUpdate()
+    {
+        $responseData = null;
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $activity_id = parent::sanitizeInput($postData->activityId);
+        $reviewer_user_id = parent::sanitizeInput($postData->reviewerUserId);
+        $achieved_result_value = parent::sanitizeInput($postData->achievedResultValue);
+        $reviewer_comment = parent::sanitizeInput($postData->reviewerComment);
+        $activity_review_id = parent::sanitizeInput($postData->activityReviewId);
+        $token = parent::getAuthorizationSessionObject();
+
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "activity_id" => $activity_id,
+            "activity_review_id" => $activity_review_id,
+            "reviewer_user_id" => $reviewer_user_id,
+            "achieved_result_value" => $achieved_result_value,
+            "reviewer_comment" => $reviewer_comment
+        );
+
+        //check If User Can do the operation
+        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if ($validator['success']) {
+            // is user present
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            if ($activeUser) {
+
+                //check access
+                if ($checkIfUserCanCRUD['crudReview']) {
+                    $insertActivityReviewer = $this->DBAccessLib->updateActivityReviewer($passedData);
+
+                    //create new
+                    if ($insertActivityReviewer) {
+                        $message = $this->settings['successMessage']['SUCCESS_REVIEW_ADD'];
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('FAIL_REVIEW_ADD', $this->settings['errorMessage']['FAIL_REVIEW_ADD']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        } else {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
+    }
+
+    //activityReviewDetails
+    public function activityReviewDetails()
+    {
+        $responseData = array();
+
+        //get post gata
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $activity_id = parent::sanitizeInput($postData->activityId);
+        $token = parent::getAuthorizationSessionObject();
+
+        //
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "activity_id" => $activity_id,
+        );
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if($validator['success'])
+        {
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            //activeUser
+            if($activeUser)
+            {
+                //get user details
+                $getAllProjectsForUser = $this->UtilityLib->getActivityReviewDetails($this->DBAccessLib, $passedData);
+                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $getAllProjectsForUser);
+            }
+            else
+            {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        }
+        else
+        {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
+    }
+    
     function __destruct()
     {
         //echo 'The class "', __CLASS__, '" was destroyed.<br />';

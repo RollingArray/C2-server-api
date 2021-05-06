@@ -42,8 +42,16 @@ RewriteRule   ^goal/activities/?$ 			                                index.php?r
 RewriteRule   ^goal/activity/crud/?$ 			                            index.php?route=activityCrud [NC]
 
 #comment
-RewriteRule   ^activity/comment/crud/?$ 			                            index.php?route=commentCommentCrud [NC]
+RewriteRule   ^activity/comment/crud/?$ 			                        index.php?route=activityCommentCrud [NC]
 
+#review
+RewriteRule   ^activity/reviewer/crud/?$ 			                        index.php?route=activityReviewerCrud [NC]
+RewriteRule   ^activity/details/?$ 			                                index.php?route=activityReviewDetails [NC]
+RewriteRule   ^review/update/?$ 			                                index.php?route=activityReviewUpdate [NC]
+
+
+#email
 RewriteRule   ^email/track/update/(.*?)/?$                                  index.php?route=emailTrackUpdate [NC]
 
+#boiler
 RewriteRule   ^boiler/?$ 			                                        boilerPlate.php [NC]
