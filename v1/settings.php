@@ -112,6 +112,7 @@ $settings = [
 		//comment
 		'comment_id' => '/^[a-zA-Z0-9]{10,50}/',
 		'comment_description' => '/^[a-zA-Z0-9 \[\]()-.,;:!&@#%$^\/_\-\n]{5,1000}$/',
+		'claimed_result_value' => '/^[0-9]*$/',
 
 		//review
 		'activity_review_id' =>  '/^[a-zA-Z0-9]{10,50}/',
@@ -177,6 +178,7 @@ $settings = [
 		//comment
 		'comment_id' => 'Invalid comment id',
 		'comment_description' => 'Invalid comment description',
+		'claimed_result_value' => 'Invalid claimed result value',
 
 		//review
 		'activity_review_id' =>  'Invalid reviewer user id',

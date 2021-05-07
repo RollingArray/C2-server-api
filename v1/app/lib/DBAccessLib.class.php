@@ -911,7 +911,7 @@ class DBAccessLib extends BaseDatabaseAPI
     function insertActivityComment($passedData)
     {
 
-        $query = "CALL sp_insert_comment(?,?,?,?,?,?)";
+        $query = "CALL sp_insert_comment(?,?,?,?,?,?,?)";
 
         $data = array(
             $passedData['user_id'],
@@ -920,7 +920,7 @@ class DBAccessLib extends BaseDatabaseAPI
             $passedData['comment_id'],
             $passedData['assignee_user_id'],
             $passedData['comment_description'],
-            
+            $passedData['claimed_result_value']
         );
 
         return parent::executeStatement($query, $data);
@@ -930,13 +930,13 @@ class DBAccessLib extends BaseDatabaseAPI
     function updateActivityComment($passedData)
     {
 
-        $query = "CALL sp_update_comment(?,?,?)";
+        $query = "CALL sp_update_comment(?,?,?,?)";
 
         $data = array(
             $passedData['user_id'],
             $passedData['comment_id'],
             $passedData['comment_description'],
-            
+            $passedData['claimed_result_value']
         );
 
         return parent::executeStatement($query, $data);

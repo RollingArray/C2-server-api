@@ -280,6 +280,7 @@ class ActivityController extends BaseAPI
         $project_id = parent::sanitizeInput($postData->projectId);
         $activity_id = parent::sanitizeInput($postData->activityId);
         $assignee_user_id = parent::sanitizeInput($postData->assigneeUserId);
+        $claimed_result_value = parent::sanitizeInput($postData->claimedResultValue);
         $comment_description = parent::sanitizeInput($postData->commentDescription);
         
         $operation_type = parent::sanitizeInput($postData->operationType);
@@ -298,6 +299,7 @@ class ActivityController extends BaseAPI
             "comment_id" => $comment_id,
             "assignee_user_id" => $assignee_user_id,
             "comment_description" => $comment_description,
+            "claimed_result_value" => $claimed_result_value
         );
 
         //check If User Can do the operation
