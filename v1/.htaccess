@@ -24,6 +24,8 @@ RewriteRule   ^user/project/crud/?$ 										index.php?route=userProjectCrud [N
 RewriteRule   ^project/members/?$ 										    index.php?route=projectMembers [NC]
 RewriteRule   ^project/details/?$ 										    index.php?route=projectDetails [NC]
 RewriteRule   ^project/raw/?$ 										        index.php?route=projectRaw [NC]
+RewriteRule   ^credibility/index/?$ 										index.php?route=projectAssigneeCredibilityIndex [NC]
+RewriteRule   ^credibility/index/details/?$ 								index.php?route=projectAssigneeCredibilityIndexDetails [NC]
 
 
 #member

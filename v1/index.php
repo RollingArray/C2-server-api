@@ -134,9 +134,19 @@ switch($_GET['route'])
         $projectController->projectRaw();
     }
     break;
+    case 'projectAssigneeCredibilityIndex':
+    {
+        $projectController->projectAssigneeCredibilityIndex();
+    }
+    break;
+    case 'projectAssigneeCredibilityIndexDetails':
+    {
+        $projectController->projectAssigneeCredibilityIndexDetails();
+    }
+    break;
 
     
-
+    
     // case 'userProjectLogBook':
     // {
     //     $projectController->userProjectLogBook();

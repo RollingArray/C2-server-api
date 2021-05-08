@@ -552,6 +552,46 @@ class DBAccessLib extends BaseDatabaseAPI
         return parent::getAllRecords($query, $data);
     }
 
+    //getAllAssigneeCredibilityIndex
+    public function getAllAssigneeCredibilityIndex($passedData, $memberType)
+    {
+        $query = "CALL sp_get_all_assignee_credibility_index(?, ?)";
+
+        $data = array(
+            $passedData['project_id'],
+            $memberType
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
+    //getAssigneeCredibilityScore
+    public function getAssigneeCredibilityScore($passedData)
+    {
+        $query = "CALL sp_get_assignee_credibility_score(?, ?)";
+
+        $data = array(
+            $passedData['project_id'],
+            $passedData['assignee_user_id']
+        );
+
+        return parent::getOneRecord($query, $data);
+    }
+
+    //getAllReviewsForAssigneeForProject
+    public function getAllReviewsForAssigneeForProject($passedData)
+    {
+        $query = "CALL sp_get_all_reviews_for_assignee_for_project(?, ?)";
+
+        $data = array(
+            $passedData['project_id'],
+            $passedData['assignee_user_id']
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
+
     //getAllProjectUsers
     public function getAllProjectUsers($passedData)
     {
@@ -906,6 +946,20 @@ class DBAccessLib extends BaseDatabaseAPI
         return parent::getAllRecords($query, $data);
     }
 
+     //getActivityAssignee
+     function getActivityAssignee($passedData)
+     {
+ 
+         $query = "CALL sp_get_activity_assignee(?,?)";
+ 
+         $data = array(
+             $passedData['user_id'],
+             $passedData['activity_id']
+         );
+ 
+         return parent::getOneRecord($query, $data);
+     }
+
     //comment
     //insertActivityComment
     function insertActivityComment($passedData)
@@ -1027,22 +1081,6 @@ class DBAccessLib extends BaseDatabaseAPI
         return parent::executeStatement($query, $data);
     }
 
-    //updateActivityReviewer
-    function updateActivityReviewer($passedData)
-    {
-
-        $query = "CALL sp_update_activity_review(?,?,?,?)";
-
-        $data = array(
-            $passedData['user_id'],
-            $passedData['activity_review_id'],
-            $passedData['achieved_result_value'],
-            $passedData['reviewer_comment']
-        );
-        
-        return parent::executeStatement($query, $data);
-    }
-
     //deleteActivityReviewer
     function deleteActivityReviewer($passedData)
     {
@@ -1058,5 +1096,86 @@ class DBAccessLib extends BaseDatabaseAPI
         return parent::executeStatement($query, $data);
     }
 
+    //updateActivityReview
+    function updateActivityReview($passedData)
+    {
 
+        $query = "CALL sp_update_activity_review(?,?,?,?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_review_id'],
+            $passedData['achieved_result_value'],
+            $passedData['performance_value'],
+            $passedData['weighted_performance_value'],
+            $passedData['reviewer_comment']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //getActivityPerformanceCalculationFacts
+    public function getActivityPerformanceCalculationFacts($passedData)
+    {
+        $query = "CALL sp_get_activity_performance_calculation_facts(?)";
+
+        $data = array(
+            $passedData['activity_id'],
+        );
+
+        return parent::getOneRecord($query, $data);
+    }
+
+    //getAllReviewsForActivity
+    public function getAllReviewsForActivity($passedData)
+    {
+        $query = "CALL sp_get_all_reviews_for_activity(?)";
+
+        $data = array(
+            $passedData['activity_id'],
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
+    //updateActivityReviewPerformance
+    function updateActivityReviewPerformance($passedData)
+    {
+        $query = "CALL sp_update_activity_review_performance(?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_id'],
+            $passedData['activity_review_performance']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //updateUserCredibilityScore
+    function updateUserCredibilityScore($passedData)
+    {
+        $query = "CALL sp_update_user_credibility_score(?,?,?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['assignee_user_id'],
+            $passedData['project_id'],
+            $passedData['user_credibility_score']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //getAllActivityPerformanceForAssignee
+    function getAllActivityPerformanceForAssignee($passedData)
+    {
+        $query = "CALL sp_get_all_activity_performance_for_assignee(?)";
+
+        $data = array(
+            $passedData['assignee_user_id'],
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
 }

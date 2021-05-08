@@ -275,6 +275,42 @@ class UtilityLib
         return $this->generateKeyValueStructure($rows);
     }
 
+    
+    //getAllAssigneeCredibilityIndexForProject
+    public function getAllAssigneeCredibilityIndexForProject($DBAccessLib, $passedData)
+    {
+        $rows = array();
+        $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+        $rows['projectAssignees'] = $this->getAllAssigneeCredibilityIndex($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0002');
+        
+        return $this->generateKeyValueStructure($rows);
+    }
+
+    //getAssigneeCredibilityIndexDetails
+    public function getAssigneeCredibilityIndexDetails($DBAccessLib, $passedData)
+    {
+        $rows = array();
+        $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+        $rows['credibilityScoreDetails'] = $DBAccessLib->getAssigneeCredibilityScore($passedData);
+        $rows['projectReviewDetails'] = $this->getAllReviewsForAssigneeForProject($DBAccessLib,$passedData);
+        return $this->generateKeyValueStructure($rows);
+    }
+
+    //getAllReviewsForAssigneeForProject
+    public function getAllReviewsForAssigneeForProject($DBAccessLib, $passedData)
+    {
+        $rows = $DBAccessLib->getAllReviewsForAssigneeForProject($passedData);
+        $tempRows = array();
+        foreach ($rows as $eachData) {
+            $tempRows[] = $this->generateKeyValueStructure($eachData);
+        }
+
+        return $this->generateServiceReturnDataStructure($tempRows);
+    }
+
+
+
+
     public function getProjectRaw($DBAccessLib, $passedData, $rawDataKeys)
     {
         $rows = array();
@@ -339,6 +375,18 @@ class UtilityLib
     public function getAllProjectUsersByType($DBAccessLib, $passedData, $memberType)
     {
         $rows = $DBAccessLib->getAllProjectUsersByType($passedData, $memberType);
+        $tempRows = array();
+        foreach ($rows as $eachData) {
+            $tempRows[] = $this->generateKeyValueStructure($eachData);
+        }
+
+        return $this->generateServiceReturnDataStructure($tempRows);
+    }
+
+    //getAllAssigneeCredibilityIndex
+    public function getAllAssigneeCredibilityIndex($DBAccessLib, $passedData, $memberType)
+    {
+        $rows = $DBAccessLib->getAllAssigneeCredibilityIndex($passedData, $memberType);
         $tempRows = array();
         foreach ($rows as $eachData) {
             $tempRows[] = $this->generateKeyValueStructure($eachData);
@@ -488,5 +536,148 @@ class UtilityLib
         }
     }
 
-    //reviewer
+    //review
+    //updateActivityReview
+    public function updateActivityReview($DBAccessLib, $passedData)
+    {
+        $rows = $DBAccessLib->getActivityPerformanceCalculationFacts($passedData);
+        $activityWeight = $rows['activityWeight'];
+        $characteristicsHigherBetter = $rows['characteristicsHigherBetter'];
+        $criteriaPoorValue = $rows['criteriaPoorValue'];
+        $criteriaOutstandingValue = $rows['criteriaOutstandingValue'];
+        $achievedResultValue = $passedData['achieved_result_value'];
+
+        $top = 0;
+        $bottom = 0;
+        if($characteristicsHigherBetter == 1){
+            $top = ((int)$achievedResultValue - $criteriaPoorValue);  
+            $bottom = ((int)$criteriaOutstandingValue - (int)$criteriaPoorValue); 
+        }
+        else{
+            $top = ((int)$criteriaPoorValue - (int)$achievedResultValue); 
+            $bottom = ((int)$criteriaPoorValue - (int)$criteriaOutstandingValue); 
+        }
+
+        //performance in %
+        $performance = ($top / $bottom);
+        $performanceInPercentage = $performance * 100;
+        
+        //weighted performance in %
+        $weightedPerformances = $performanceInPercentage * (int)$activityWeight;
+        $weightedPerformancesPercentage = $weightedPerformances / 100;
+        
+        $data = array(
+            "user_id" => $passedData['user_id'],
+            "project_id" => $passedData['project_id'],
+            "activity_id" => $passedData['activity_id'],
+            "activity_review_id" => $passedData['activity_review_id'],
+            "reviewer_user_id" => $passedData['reviewer_user_id'],
+            "achieved_result_value" => $passedData['achieved_result_value'],
+            "performance_value" => round($performanceInPercentage, 2),
+            "weighted_performance_value" => round($weightedPerformancesPercentage,2),
+            "reviewer_comment" => $passedData['reviewer_comment'],
+        );
+        $updateActivityReview =  $DBAccessLib->updateActivityReview($data);
+
+        if($updateActivityReview){
+            $updateActivityReviewPerformance = $this->updateActivityReviewPerformance($DBAccessLib, $passedData);
+
+            if($updateActivityReviewPerformance){
+                return $this->updateUserCredibilityScore($DBAccessLib, $passedData);
+            }
+        }
+    }
+    
+    /**
+     * update activity review performance
+     *
+     * @param  mixed $DBAccessLib
+     * @param  mixed $passedData
+     * @return void
+     */
+    public function updateActivityReviewPerformance($DBAccessLib, $passedData)
+    {
+        $rows = $DBAccessLib->getAllReviewsForActivity($passedData);
+        $weightedPerformancesPercentage = array();
+
+        foreach ($rows as $eachData) {
+            $weightedPerformancesPercentage[] = $eachData['weightedPerformanceValue'];
+        }
+
+        $numberOfElements = sizeof($weightedPerformancesPercentage); 
+        $activityReviewPerformance = $this->findMedian($weightedPerformancesPercentage, $numberOfElements);
+
+        $data = array(
+            "user_id" => $passedData['user_id'],
+            "activity_id" => $passedData['activity_id'],
+            "activity_review_performance" => $activityReviewPerformance
+        );
+        return $DBAccessLib->updateActivityReviewPerformance($data);
+    }
+
+    /**
+     * update user credibility score
+     *
+     * @param  mixed $DBAccessLib
+     * @param  mixed $passedData
+     * @return void
+     */
+    public function updateUserCredibilityScore($DBAccessLib, $passedData)
+    {
+        //get all activityA for assignee
+        $activityAssignee = $DBAccessLib->getActivityAssignee($passedData);
+        $assigneeUserId = $activityAssignee['assigneeUserId'];
+        $projectId = $passedData['project_id'];
+
+        //get all activities performance for assignee
+        $data = array(
+            "assignee_user_id" => $assigneeUserId
+        );
+        $rows = $DBAccessLib->getAllActivityPerformanceForAssignee($data);
+
+        // calculate credibility score
+        $allWight = 0;
+		$allTotalWeightedPerformancesMean = 0;
+
+        foreach ($rows as $eachData) {
+            $activityWeight = $eachData['activityWeight'];
+            $activityReviewPerformance = $eachData['activityReviewPerformance'];
+
+            if($activityReviewPerformance != null){
+                $allWight = $allWight + $activityWeight;
+			    $allTotalWeightedPerformancesMean = $allTotalWeightedPerformancesMean + $activityReviewPerformance;
+            }
+        }
+
+        //user credibility - percentage
+		$userCredibilityScore = ($allTotalWeightedPerformancesMean / $allWight) * 100;
+
+        $data = array(
+            "user_id" => $passedData['user_id'],
+            "assignee_user_id" => $assigneeUserId,
+            "project_id" => $projectId,
+            "user_credibility_score" => $userCredibilityScore
+        );
+        return $DBAccessLib->updateUserCredibilityScore($data);
+    }
+
+    /**
+     * find median
+     *
+     * @param  mixed $elements
+     * @param  mixed $numberOfElements
+     * @return void
+     */
+    function findMedian(&$elements, $numberOfElements) 
+        { 
+            // First we sort the array 
+            sort($elements); 
+        
+            // check for even case 
+            if ($numberOfElements % 2 != 0) 
+            return (double)$elements[$numberOfElements / 2]; 
+            
+            return (double)($elements[($numberOfElements - 1) / 2] + 
+                            $elements[$numberOfElements / 2]) / 2.0; 
+        } 
 }

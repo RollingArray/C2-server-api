@@ -510,10 +510,13 @@ class ActivityController extends BaseAPI
 
                 //check access
                 if ($checkIfUserCanCRUD['crudReview']) {
-                    $insertActivityReviewer = $this->DBAccessLib->updateActivityReviewer($passedData);
+
+                    //$insertActivityReviewer = $this->DBAccessLib->updateActivityReviewer($passedData);
+                    $updateActivityReview = $this->UtilityLib->updateActivityReview($this->DBAccessLib, $passedData);
 
                     //create new
-                    if ($insertActivityReviewer) {
+                    if ($updateActivityReview) {
+                        $updateActivityReviewPerformance = $this->UtilityLib->updateActivityReviewPerformance($this->DBAccessLib, $passedData); 
                         $message = $this->settings['successMessage']['SUCCESS_REVIEW_ADD'];
                         $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
                     } else {
