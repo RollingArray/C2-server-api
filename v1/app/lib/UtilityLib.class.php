@@ -488,6 +488,26 @@ class UtilityLib
         return $this->generateKeyValueStructure($rows);
     }
 
+    //getAllMyActivities
+    public function getAllMyActivities($DBAccessLib, $passedData)
+    {
+        $rows = array();
+        $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+        $rows['projectActivities'] = $this->getMyActivitiesForProject($DBAccessLib, $passedData);
+
+        return $this->generateKeyValueStructure($rows);
+    }
+
+    //getAllMyReviews
+    public function getAllMyReviews($DBAccessLib, $passedData)
+    {
+        $rows = array();
+        $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+        $rows['projectActivities'] = $this->getMyReviewsForProject($DBAccessLib, $passedData);
+
+        return $this->generateKeyValueStructure($rows);
+    }
+
     //getAllActivitiesWithoutFilter
     public function getAllActivitiesWithoutFilter($DBAccessLib, $passedData)
     {
@@ -510,6 +530,34 @@ class UtilityLib
 
         return $this->generateServiceReturnDataStructure($tempRows);
     }
+
+    //getMyReviewsForProject
+    public function getMyReviewsForProject($DBAccessLib, $passedData)
+    {
+        $rows = $DBAccessLib->getMyReviewsForProject($passedData);
+        $tempRows = array();
+
+        foreach ($rows as $eachData) {
+            $tempRows[] = $this->generateKeyValueStructure($eachData);
+        }
+
+        return $this->generateServiceReturnDataStructure($tempRows);
+    }
+
+    //getMyActivitiesForProject
+    public function getMyActivitiesForProject($DBAccessLib, $passedData)
+    {
+        $rows = $DBAccessLib->getMyActivitiesForProject($passedData);
+        $tempRows = array();
+
+        foreach ($rows as $eachData) {
+            $tempRows[] = $this->generateKeyValueStructure($eachData);
+        }
+
+        return $this->generateServiceReturnDataStructure($tempRows);
+    }
+
+    
 
     //ifUserActivityWeighExceedForSprint
     public function ifUserActivityWeighExceedForSprint($DBAccessLib, $passedData, $operation_type)

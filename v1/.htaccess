@@ -42,6 +42,10 @@ RewriteRule   ^project/goal/crud/?$ 			                            index.php?rou
 #activity
 RewriteRule   ^goal/activities/?$ 			                                index.php?route=goalActivityAll [NC]
 RewriteRule   ^goal/activity/crud/?$ 			                            index.php?route=activityCrud [NC]
+RewriteRule   ^project/my/activities/?$ 			                        index.php?route=allMyActivities [NC]
+RewriteRule   ^project/my/reviews/?$ 			                        index.php?route=allMyReviews [NC]
+
+
 
 #comment
 RewriteRule   ^activity/comment/crud/?$ 			                        index.php?route=activityCommentCrud [NC]

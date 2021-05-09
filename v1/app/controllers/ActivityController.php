@@ -270,6 +270,98 @@ class ActivityController extends BaseAPI
         }
     }
 
+    //allMyActivities
+    public function allMyActivities()
+    {
+        $responseData = array();
+        $tempRows = array();
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $assignee_user_id = parent::sanitizeInput($postData->assigneeUserId);
+        $token = parent::getAuthorizationSessionObject();
+
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "assignee_user_id" => $assignee_user_id,
+        );
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+    
+            //if input validated
+            if ($validator['success']) {
+                $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+    
+                //activeUser
+                if ($activeUser) {
+                    $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
+    
+                    if ($ifProjectAccessToMember) {
+                        $tempRows = $this->UtilityLib->getAllMyActivities($this->DBAccessLib, $passedData);
+    
+                        //get user details
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+            }
+    
+            echo json_encode($responseData);
+    }
+
+    //allMyReviews
+    public function allMyReviews()
+    {
+        $responseData = array();
+        $tempRows = array();
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $reviewer_user_id = parent::sanitizeInput($postData->reviewerUserId);
+        $token = parent::getAuthorizationSessionObject();
+
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "reviewer_user_id" => $reviewer_user_id,
+        );
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+    
+            //if input validated
+            if ($validator['success']) {
+                $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+    
+                //activeUser
+                if ($activeUser) {
+                    $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
+    
+                    if ($ifProjectAccessToMember) {
+                        $tempRows = $this->UtilityLib->getAllMyReviews($this->DBAccessLib, $passedData);
+    
+                        //get user details
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+            }
+    
+            echo json_encode($responseData);
+    }
+
     //activityCommentCrud
     public function activityCommentCrud()
     {

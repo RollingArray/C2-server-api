@@ -417,6 +417,19 @@ class DBAccessLib extends BaseDatabaseAPI
     }
 
     //project member
+    //spIfMemberAssociatedToAnyActivityForProject
+    public function spIfMemberAssociatedToAnyActivityForProject($passedData)
+    {
+        $query = "CALL sp_if_member_associated_to_any_activity_for_project(?,?)";
+
+        $data = array(
+            $passedData['project_id'],
+            $passedData['added_user_id']
+        );
+
+        return parent::ifRecordExist($query, $data);
+    }
+
     //getUserTypeForUserTypeId
     public function getUserTypeForUserTypeId($passedData)
     {
@@ -941,6 +954,32 @@ class DBAccessLib extends BaseDatabaseAPI
             $passedData['sprint_id'],
             $passedData['goal_id'],
             $passedData['assignee_user_id'],
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
+    //getMyActivitiesForProject
+    function getMyActivitiesForProject($passedData)
+    {
+        $query = "CALL sp_get_my_activities_for_project(?, ?)";
+
+        $data = array(
+            $passedData['project_id'],
+            $passedData['assignee_user_id'],
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
+    //getMyReviewsForProject
+    function getMyReviewsForProject($passedData)
+    {
+        $query = "CALL sp_get_my_reviews_for_project(?, ?)";
+
+        $data = array(
+            $passedData['project_id'],
+            $passedData['reviewer_user_id'],
         );
 
         return parent::getAllRecords($query, $data);

@@ -223,7 +223,7 @@ $settings = [
 		'FAIL_MEMBER_CREATE' => 'User could not be added, please try again',
 		'FAIL_MEMBER_UPDATE_DELETE_ACCESS' => 'You cant update of delete yourself',
 		'FAIL_MEMBER_UPDATE' => 'User role could not be updated, please try again',
-		'PROJECT_MEMBER_TASK_EXIST' => 'We found activity logs for this user, user can not be deleted',
+		'PROJECT_MEMBER_TASK_EXIST' => 'We found activities for this user, user can not be deleted',
 		'FAIL_MEMBER_DELETE'  => 'User could not be deleted, please try again',
 		
 		//sprint

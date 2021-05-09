@@ -180,6 +180,18 @@ switch($_GET['route'])
     break;
 
     //activity
+    case 'allMyActivities':
+        {
+            $activityController->allMyActivities();
+        }
+    break;
+
+    case 'allMyReviews':
+        {
+            $activityController->allMyReviews();
+        }
+        break;
+
     case 'goalActivityAll':
     {
         $activityController->goalActivityAll();

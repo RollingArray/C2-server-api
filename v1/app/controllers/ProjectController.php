@@ -563,8 +563,9 @@ class ProjectController extends BaseAPI
                             //delete member
                             else if($operation_type == 'delete')
                             {
-                                $ifMemberAssociatedToAnyTaskForProject = $this->DBAccessLib->ifMemberAssociatedToAnyTaskForProject($passedData);
-                                if($ifMemberAssociatedToAnyTaskForProject)
+                                $spIfMemberAssociatedToAnyActivityForProject = $this->DBAccessLib->spIfMemberAssociatedToAnyActivityForProject($passedData);
+
+                                if($spIfMemberAssociatedToAnyActivityForProject)
                                 {
                                     $responseData = $this->MessageLib->errorMessageFormat('PROJECT_MEMBER_TASK_EXIST', $this->settings['errorMessage']['PROJECT_MEMBER_TASK_EXIST']);
                                 }
