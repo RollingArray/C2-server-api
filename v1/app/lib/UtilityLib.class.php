@@ -260,7 +260,22 @@ class UtilityLib
     public function getAllProjectsForUser($DBAccessLib, $passedData)
     {
         $rows = $DBAccessLib->getAllProjectsForUser($passedData);
-        return $this->generateServiceReturnDataStructure($rows);
+        $rows = $DBAccessLib->getAllProjectsForUser($passedData);
+        $tempRows = array();
+        foreach ($rows as $eachData) {
+            $passedData = array(
+                "user_id"=>$passedData['user_id'],
+                "project_id"=>$eachData['projectId'],
+            );
+            $eachData['projectAdministrator'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0001');
+            $eachData['projectAssignees'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0002');
+            $eachData['projectReviewers'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0003');
+
+            $tempRows[] = $this->generateKeyValueStructure($eachData);
+
+        }
+
+        return $this->generateServiceReturnDataStructure($tempRows);
     }
 
     //getAllMembersForProject

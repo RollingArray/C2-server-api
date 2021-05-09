@@ -54,8 +54,6 @@ class ProjectController extends BaseAPI
                 "project_description"=>$project_description
             );
 
-        //check If User Can do the operation
-        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
         $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
 
         //if input validated
@@ -109,6 +107,9 @@ class ProjectController extends BaseAPI
                 //edit project
                 else if($operation_type == 'edit')
                 {
+                    //check If User Can do the operation
+                    $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+        
                     //check access
                     if($checkIfUserCanCRUD['crudProject'])
                     {
@@ -132,6 +133,9 @@ class ProjectController extends BaseAPI
                 //delete project
                 else if($operation_type == 'delete')
                 {
+                    //check If User Can do the operation
+                    $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+        
                     //check access
                     if($checkIfUserCanCRUD['crudProject'])
                     {

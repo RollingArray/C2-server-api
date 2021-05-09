@@ -54,7 +54,6 @@ $settings = [
 		//user
 		'user_id' => '/^[a-zA-Z0-9]{10,50}/',
 		'added_user_id' => '/^[a-zA-Z0-9]{10,50}/',
-		'added_user_id' => '/^[a-zA-Z0-9]{10,50}/',
 		'assignee_user_id' => '/^[a-zA-Z0-9]{10,50}/',
 		'filter_user_id' => '/^[a-zA-Z0-9]{10,50}/',
 		'searchable_user_id' => '/^[a-zA-Z0-9]{30,50}/',
