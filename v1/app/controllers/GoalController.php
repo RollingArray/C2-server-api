@@ -201,10 +201,21 @@ class GoalController extends BaseAPI
 
                 if($ifProjectAccessToMember)
                 {
-                    $tempRows = $this->UtilityLib->getAllGoals($this->DBAccessLib, $passedData);
+                    //check If User Can do the operation
+                    $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+            
+                    //check access
+                    if($checkIfUserCanCRUD['viewGoal'])
+                    {
+                        $tempRows = $this->UtilityLib->getAllGoals($this->DBAccessLib, $passedData);
 
-                    //get user details
-                    $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                        //get user details
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                    }
+                    else
+                    {
+                        $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                    }
                 }
                 else
                 {

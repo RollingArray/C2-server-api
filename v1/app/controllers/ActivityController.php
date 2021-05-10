@@ -215,18 +215,33 @@ class ActivityController extends BaseAPI
                 if ($activeUser) {
                     $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
     
-                    if ($ifProjectAccessToMember) {
-                        $tempRows = $this->UtilityLib->getAllActivities($this->DBAccessLib, $passedData);
+                    if ($ifProjectAccessToMember) 
+                    {
+                        //check If User Can do the operation
+                        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+                
+                        //check access
+                        if($checkIfUserCanCRUD['viewActivity'])
+                        {
+                            $tempRows = $this->UtilityLib->getAllActivities($this->DBAccessLib, $passedData);
     
-                        //get user details
-                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
-                    } else {
+                            //get user details
+                            $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                        }
+                        else
+                        {
+                            $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                        }
+                    } 
+                    else {
                         $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
                     }
-                } else {
+                } 
+                else {
                     $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
                 }
-            } else {
+            } 
+            else {
                 $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
             }
     
@@ -252,10 +267,23 @@ class ActivityController extends BaseAPI
                     $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
     
                     if ($ifProjectAccessToMember) {
-                        $tempRows = $this->UtilityLib->getAllActivitiesWithoutFilter($this->DBAccessLib, $passedData);
+
+                        //check If User Can do the operation
+                        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+                
+                        if($checkIfUserCanCRUD['viewActivity'])
+                        {
+                            $tempRows = $this->UtilityLib->getAllActivitiesWithoutFilter($this->DBAccessLib, $passedData);
     
-                        //get user details
-                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                            //get user details
+                            $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                        }
+                        else
+                        {
+                            $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                        }
+
+                        
                     } else {
                         $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
                     }

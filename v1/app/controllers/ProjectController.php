@@ -298,9 +298,20 @@ class ProjectController extends BaseAPI
 
                 if($ifProjectAccessToMember)
                 {
-                    //get user details
-                    $getAllProjectsForUser = $this->UtilityLib->getAllAssigneeCredibilityIndexForProject($this->DBAccessLib, $passedData);
-                    $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $getAllProjectsForUser);
+                    //check If User Can do the operation
+                    $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+            
+                    //check access
+                    if($checkIfUserCanCRUD['viewCredibility'])
+                    {
+                        //get user details
+                        $getAllProjectsForUser = $this->UtilityLib->getAllAssigneeCredibilityIndexForProject($this->DBAccessLib, $passedData);
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $getAllProjectsForUser);
+                    }
+                    else
+                    {
+                        $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                    }
                 }
                 else
                 {
@@ -354,9 +365,20 @@ class ProjectController extends BaseAPI
 
                 if($ifProjectAccessToMember)
                 {
-                    //get user details
-                    $getAllProjectsForUser = $this->UtilityLib->getAssigneeCredibilityIndexDetails($this->DBAccessLib, $passedData);
-                    $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $getAllProjectsForUser);
+                    //check If User Can do the operation
+                    $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+            
+                    //check access
+                    if($checkIfUserCanCRUD['viewCredibility'])
+                    {
+                        //get user details
+                        $getAllProjectsForUser = $this->UtilityLib->getAssigneeCredibilityIndexDetails($this->DBAccessLib, $passedData);
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $getAllProjectsForUser);
+                    }
+                    else
+                    {
+                        $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                    }
                 }
                 else
                 {

@@ -219,6 +219,7 @@ $settings = [
 		'FAIL_PROJECT_DELETE' => 'Project could not delete, please try again',
 		'PROJECT_MEMBER_EXIST' => 'Looks like the member you are trying to add to the project already exist',
 		'NO_PROJECT_ACCESS_TO_MEMBER' => 'You do not have access to this project',
+		'NO_SECTION_ACCESS_TO_MEMBER' => 'You do not have access to this',
 		'FAIL_MEMBER_CREATE' => 'User could not be added, please try again',
 		'FAIL_MEMBER_UPDATE_DELETE_ACCESS' => 'You cant update of delete yourself',
 		'FAIL_MEMBER_UPDATE' => 'User role could not be updated, please try again',
