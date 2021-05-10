@@ -2,7 +2,7 @@
 
 namespace C2\Email;
 
-require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 class EmailLib
 {
@@ -17,13 +17,12 @@ class EmailLib
 		$this->settings = $settings;
 
 		$smtp_host_ip = gethostbyname($this->settings['email']['smtp_host_ip']);
-		
+
 		$this->transport = (new \Swift_SmtpTransport($smtp_host_ip, $this->settings['email']['port']))
 			->setUsername($this->settings['email']['smtp_username'])
 			->setPassword($this->settings['email']['smtp_password']);
-		
-		$this->mailer = new \Swift_Mailer($this->transport);
-  ;
+
+		$this->mailer = new \Swift_Mailer($this->transport);;
 	}
 
 	//__destruct
@@ -38,7 +37,7 @@ class EmailLib
 		return uniqid('TRACKID_');
 	}
 
-	
+
 	private function sendEmail($DBAccessLib, $subject, $passedEmailData, $passedData)
 	{
 		$insertNewEmailTrack = $DBAccessLib->insertNewEmailTrack($passedEmailData);
@@ -57,198 +56,132 @@ class EmailLib
 	{
 		$date = date("l jS \of F Y");
 		$htmlTemplate = '
-    <img src="https://rollingarray.co.in/grapeCommunity/live/api/v1/email/track/update/' . $passedData['email_track_id'] . '" width="1" height="1" />
-    <div class="">
-      <div class="aHl"></div>
-      <div id=":19g" tabindex="-1"></div>
-      <div id=":195" class="ii gt">
-        <div id=":194" class="a3s aXjCH ">
-          <div
-            style="font-family:roboto,sans-serif;border:1px solid #e0e0e0;background-color:white;max-width:600px;margin:0 auto">
-            <div style="background-color:#484b4d;padding:24px 0"><img
-                style="margin:auto;display:block;"
-                src="https://rollingarray.co.in/grapeCommunity/live/api/img/gc_email_header.png"
-                class="CToWUd"></div>
-            <table style="width:100%;background-color:#880e4f" cellpadding="0" cellspacing="0">
-              <tbody>
-                <tr>
-                  <td style="padding:24px">
-                    <div style="font-size:20px;line-height:24px;color:white">' . $passedData['email_header'] . '</div>
-                  </td>
-                </tr>
-                <tr></tr>
-              </tbody>
-            </table>
-            <div style="margin-bottom:24px;padding:24px 24px 0 24px">
-              <table style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0" cellpadding="0"
-                cellspacing="0" width="100%">
-                <tbody>
-                  <tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
-                    <td
-                      style="font-family:Helvetica,Arial,sans-serif;font-size:12px;vertical-align:top;margin:0;padding:0 0 0px;float:right"
-                      valign="top">
-                      ' . $date . '
-                    </td>
-                  </tr>
-                  <tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
-                    <td
-                      style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px"
-                      valign="top">
-                      Dear <strong
-                        style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">' . $passedData['user_full_name'] . '
-                      </strong>
-                    </td>
-                  </tr>
-                  <tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
-                    <td
-                      style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px"
-                      valign="top">
-                      ' . $passedData['email_content'] . '
-                      <br><br>
-                    </td>
-                  </tr>
-                  <tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
-                    <td
-                      style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px"
-                      valign="top"><b>
-                        Regards<br>
-                        Team ' . $this->settings['email']['app_name'] . '</b>
-                    </td>
-                  </tr>
-                  <tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
-                    <td
-                      style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px;font-style:italic"
-                      valign="top">
-					  ' . $this->settings['email']['app_name'] . ' - ' . $this->settings['email']['app_tag_line'] . '
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div style="background-color:#d7d8da;padding:20px">
-              <table style="width:100%" cellpadding="0" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td colspan="3">
-                      <div style="font-family:Helvetica,Arial,sans-serif; font-size:20px;line-height:24px; text-align: center; padding:20px">
-                        Connect from your favorite space
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <a href="https://apps.apple.com/in/app/grape-community/id1507586381" target="_blank">
-                        <img style="height:50px; display: block; margin-left: auto; margin-right: auto;"
-                        src="https://rollingarray.co.in/grapeCommunity/images/btn-app-store.png"
-                        class="CToWUd">
-                      </a>
-                    </td>
-                    <td>
-                      <a href="https://play.google.com/store/apps/details?id=in.co.rollingarray.grapeCommunity" target="_blank">
-                        <img style="height:50px; display: block; margin-left: auto; margin-right: auto;"
-                          src="https://rollingarray.co.in/grapeCommunity/images/btn-googleplay-app-store.png"
-                          class="CToWUd">
-                      </a>
-                    </td>
-                    <td>
-                      <a href="https://rollingarray.co.in/grapeCommunity/live/app/" target="_blank">
-                        <img style="height:50px; display: block; margin-left: auto; margin-right: auto;"
-                          src="https://rollingarray.co.in/grapeCommunity/images/btn-web-app.png"
-                          class="CToWUd" align="center">
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div style="background-color:#e0e0e0;height:1px;width:100%"></div>
-            <div style="background-color:#e0e0e0;height:1px;width:100%"></div>
-            <div style="background-color:#eceff1;padding:24px;font-size:12px;line-height:16px">
-              <div>You are receiving this notification because you have registered with <span style="color:#56C2E1"> <a
-                style="text-decoration:none;color:#039be5" href="https://rollingarray.co.in/grapeCommunity/"
-                target="_blank">' . $this->settings['email']['app_name'] . '</a></span></div>
-              <div style="margin-top:24px">Thanks for using ' . $this->settings['email']['app_name'] . ' !</div>
-            </div>
-            <div style="background-color:#b11659;padding:20px 0 ; width: 100%;">
-              <table style="width:20%; display: block; margin-left: auto; margin-right: auto;" cellpadding="0" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td width="20%">
-                      <a href="https://www.facebook.com/Grape-Community-108189540864029" target="_blank">
-                        <img style="height:30px; display: block; margin-left: auto; margin-right: auto;"
-                        src="https://rollingarray.co.in/grapeCommunity/images/social_facebook.png"
-                        class="CToWUd">
-                      </a>
-                    </td>
-                    <td width="20%">
-                      <a href="https://www.youtube.com/channel/UCx3YmGw8Ziwx81vGrldaMXw" target="_blank">
-                        <img style="height:30px; display: block; margin-left: auto; margin-right: auto;"
-                          src="https://rollingarray.co.in/grapeCommunity/images/social_youtube.png"
-                          class="CToWUd">
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div style="background-color:#b11659;padding:20px">
-              <table style="width:100%; text-align: center;" cellpadding="0" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td>
-                      <a style="font-size:12px; text-decoration:underline;color:#fff" href="https://rollingarray.co.in/grapeCommunity/" target="_blank">
-                        Home
-                      </a>
-                      &nbsp; | &nbsp;
-                      <a style="font-size:12px; text-decoration:underline;color:#fff" href="https://rollingarray.co.in/grapeCommunity/features/" target="_blank">
-                        Features
-                      </a>
-                      &nbsp; | &nbsp;
-                      <a style="font-size:12px; text-decoration:underline;color:#fff" href="https://rollingarray.co.in/grapeCommunity/terms-conditions/" target="_blank">
-                        Terms & Condition
-                      </a>
-                      &nbsp; |  &nbsp;
-                      <a style="font-size:12px; text-decoration:underline;color:#fff" href="https://rollingarray.co.in/grapeCommunity/privacy-policy/" target="_blank">
-                        Privacy Policy
-                      </a>
-                      &nbsp; |  &nbsp;
-                      <a style="font-size:12px; text-decoration:underline;color:#fff" href="https://rollingarray.co.in/grapeCommunity/contact/" target="_blank">
-                        Contact
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div style="background-color:#b11659;padding:34px">
-              <table style="width:100%" cellpadding="0" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td>
-                      <a href="https://rollingarray.co.in/" target="_blank">
-                        <img style="height:34px;max-height:34px;min-height:34px"
-                        src="https://rollingarray.co.in/images/ra_brand_icon_email.png"
-                        class="CToWUd">
-                      </a>
-                      </td>
-                    <td>
-                      <div style="font-size:10px;line-height:14px;font-weight:400;text-align:right"><a
-                          style="color:#d6dde1;text-decoration:none">&copy; ' . date("Y") . ' RollingArray<br>Bangalore, India. </a></div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="yj6qo"></div>
-      </div>
-      <div id=":19l" class="ii gt" style="display:none">
-        <div id=":19k" class="a3s aXjCH undefined"></div>
-      </div>
-      <div class="hi"></div>
-    </div>
-  ';
+			<div class="">
+			<div class="aHl"></div>
+			<div id=":19g" tabindex="-1"></div>
+			<div id=":195" class="ii gt">
+			<div id=":194" class="a3s aXjCH ">
+				<div
+				style="font-family:roboto,sans-serif;border:1px solid #e0e0e0;background-color:white;max-width:600px;margin:0 auto">
+				<div style="background-color:#323433;padding:24px 0"><img
+					style="margin:auto;display:block;"
+					src="https://c2.api.rollingarray.co.in/img/app_email_header.svg"
+					class="CToWUd"></div>
+				<table style="width:100%;background-color:#ffa000" cellpadding="0" cellspacing="0">
+					<tbody>
+					<tr>
+						<td style="padding:24px">
+						<div style="font-size:20px;line-height:24px;color:#323433">' . $passedData['email_header'] . '</div>
+						</td>
+					</tr>
+					<tr></tr>
+					</tbody>
+				</table>
+				<div style="margin-bottom:24px;padding:24px 24px 0 24px">
+					<table style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0" cellpadding="0"
+					cellspacing="0" width="100%">
+					<tbody>
+						<tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
+						<td
+							style="font-family:Helvetica,Arial,sans-serif;font-size:12px;vertical-align:top;margin:0;padding:0 0 0px;float:right"
+							valign="top">
+							' . $date . '
+						</td>
+						</tr>
+						<tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
+						<td
+							style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px"
+							valign="top">
+							Dear <strong
+							style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">' . $passedData['user_full_name'] . '
+							</strong>
+						</td>
+						</tr>
+						<tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
+						<td
+							style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px"
+							valign="top">
+							' . $passedData['email_content'] . '
+							<br><br>
+						</td>
+						</tr>
+						<tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
+						<td
+							style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px"
+							valign="top"><b>
+							Regards<br>
+							Team ' . $this->settings['email']['app_name'] . '</b>
+						</td>
+						</tr>
+						<tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
+						<td
+							style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px;font-style:italic"
+							valign="top">
+							' . $this->settings['email']['app_name'] . ' - ' . $this->settings['email']['app_tag_line'] . '
+						</td>
+						</tr>
+					</tbody>
+					</table>
+				</div>
+				<div style="background-color:#d7d8da;padding:20px">
+					<table style="width:100%" cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr>
+						<td>
+							<div style="font-family:Helvetica,Arial,sans-serif; font-size:20px;line-height:24px; text-align: center; padding:20px">
+							Connect from your favorite space
+							</div>
+						</td>
+						</tr>
+						<tr>
+						<td>
+							<a href="https://c2.rollingarray.co.in" target="_blank">
+							<img style="height:60px; display: block; margin-left: auto; margin-right: auto;"
+							src="https://c2.api.rollingarray.co.in/img/devices.svg"
+							class="CToWUd">
+							</a>
+						</td>
+						</tr>
+					</tbody>
+					</table>
+				</div>
+				<div style="background-color:#e0e0e0;height:1px;width:100%"></div>
+				<div style="background-color:#e0e0e0;height:1px;width:100%"></div>
+				<div style="background-color:#eceff1;padding:24px;font-size:12px;line-height:16px">
+					<div>You are receiving this notification because you have registered with <span style="color:#56C2E1"> <a
+					style="text-decoration:none;color:#039be5" href="https://c2.rollingarray.co.in/"
+					target="_blank">' . $this->settings['email']['app_name'] . '</a></span></div>
+					<div style="margin-top:24px">Thanks for using ' . $this->settings['email']['app_name'] . ' !</div>
+				</div>
+				<div style="background-color:#323433;padding:34px">
+					<table style="width:100%" cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr>
+						<td>
+							<a href="https://rollingarray.co.in/" target="_blank">
+							<img style="height:34px;max-height:34px;min-height:34px"
+							src="https://rollingarray.co.in/images/ra_brand_icon_email.png"
+							class="CToWUd">
+							</a>
+							</td>
+						<td>
+							<div style="font-size:10px;line-height:14px;font-weight:400;text-align:right"><a
+								style="color:#d6dde1;text-decoration:none">&copy; ' . date("Y") . ' RollingArray<br>Bangalore, India. </a></div>
+						</td>
+						</tr>
+					</tbody>
+					</table>
+				</div>
+				</div>
+			</div>
+			<div class="yj6qo"></div>
+			</div>
+			<div id=":19l" class="ii gt" style="display:none">
+			<div id=":19k" class="a3s aXjCH undefined"></div>
+			</div>
+			<div class="hi"></div>
+		</div>
+  		';
 		return $htmlTemplate;
 	}
 
