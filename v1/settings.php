@@ -305,7 +305,7 @@ $settings = [
 		'SUCCESS_COMMENT_DELETE' => 'Comment deleted successfully',
 
 		//review
-		'SUCCESS_REVIEWER_ADD' => 'Reviewer added to this activity successfully',
+		'SUCCESS_REVIEWER_ADD' => 'Reviewer added to this activity successfully. We recommend to add multiple reviewer to get unbiased opinion',
 		'SUCCESS_REVIEWER_DELETE' => 'Reviewer deleted from this activity successfully',
 		'SUCCESS_REVIEW_ADD' => 'Review added successfully',
 	],
