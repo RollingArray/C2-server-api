@@ -65,7 +65,7 @@ class EmailLib
 				style="font-family:roboto,sans-serif;border:1px solid #e0e0e0;background-color:white;max-width:600px;margin:0 auto">
 				<div style="background-color:#323433;padding:24px 0"><img
 					style="margin:auto;display:block;"
-					src="https://c2.api.rollingarray.co.in/img/app_email_header.svg"
+					src="https://c2.api.rollingarray.co.in/img/app_email_header.png"
 					class="CToWUd"></div>
 				<table style="width:100%;background-color:#ffa000" cellpadding="0" cellspacing="0">
 					<tbody>
@@ -137,7 +137,7 @@ class EmailLib
 						<td>
 							<a href="https://c2.rollingarray.co.in" target="_blank">
 							<img style="height:60px; display: block; margin-left: auto; margin-right: auto;"
-							src="https://c2.api.rollingarray.co.in/img/devices.svg"
+							src="https://c2.api.rollingarray.co.in/img/devices.png"
 							class="CToWUd">
 							</a>
 						</td>
@@ -286,7 +286,7 @@ class EmailLib
 			$subject = $this->settings['email']['app_name'] . ' - Welcome';
 
 			$emailBodyMessage = '
-        Welcome to ' . $this->settings['email']['app_name'] . ' :-) Your account is active and we are waiting for you to create your first community or join a ongoing community or become a supplier to a community
+        Welcome to ' . $this->settings['email']['app_name'] . ' :-) Your account is active and we are waiting for you to create your Project or join a ongoing Project
         <br><br>
       ';
 
