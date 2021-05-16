@@ -24,7 +24,7 @@
     - [:small_blue_diamond: Calculating Activity Performance](#small_blue_diamond-calculating-activity-performance)
     - [:small_blue_diamond: Calculating Credibility](#small_blue_diamond-calculating-credibility)
     - [:small_blue_diamond: Define Equal Opportunities](#small_blue_diamond-define-equal-opportunities)
-- [:large_blue_circle: Solution](#large_blue_circle-solution)
+- [:large_blue_circle: Platform Design](#large_blue_circle-platform-design)
   - [:small_orange_diamond: C2 - Bring Equality In Diverse Workforce](#small_orange_diamond-c2---bring-equality-in-diverse-workforce)
   - [:small_orange_diamond: How It Works](#small_orange_diamond-how-it-works)
     - [:small_blue_diamond: Authenticate yourself](#small_blue_diamond-authenticate-yourself)
@@ -184,7 +184,7 @@ Over a period of `time`, `Joe` wants to do an `Equality analysis` of all his tea
 
 **[⬆ back to top](#table-of-contents)**
 
-# :large_blue_circle: Solution
+# :large_blue_circle: Platform Design
 ## :small_orange_diamond: C2 - Bring Equality In Diverse Workforce
 
 ***[`C2`](http://c2.rollingarray.co.in/)*** is a platform designed to nullify any ***bias*** in terms of ***race***, ***age***, ***gender***, ***disability*** and ***culture*** when treating a workforce and provide ***measurable matrix*** for a best fit person to grab a ***new opportunities***
