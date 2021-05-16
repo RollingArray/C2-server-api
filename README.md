@@ -37,9 +37,10 @@
     - [:small_blue_diamond: Activity Review](#small_blue_diamond-activity-review)
     - [:small_blue_diamond: Credibility Board](#small_blue_diamond-credibility-board)
 - [:large_blue_circle: Contributing](#large_blue_circle-contributing)
-- [:large_blue_circle: System Requirement](#large_blue_circle-system-requirement)
-- [:large_blue_circle: Setting Up the project locally](#large_blue_circle-setting-up-the-project-locally)
-- [:large_blue_circle: Reporting Bugs](#large_blue_circle-reporting-bugs)
+  - [:small_orange_diamond: Repository](#small_orange_diamond-repository)
+  - [:small_orange_diamond: System Requirement](#small_orange_diamond-system-requirement)
+  - [:small_orange_diamond: Setting Up the project locally](#small_orange_diamond-setting-up-the-project-locally)
+  - [:small_orange_diamond: Reporting Bugs](#small_orange_diamond-reporting-bugs)
 - [:large_blue_circle: Author](#large_blue_circle-author)
 - [:large_blue_circle: Show your support](#large_blue_circle-show-your-support)
 - [:large_blue_circle: License](#large_blue_circle-license)
@@ -295,7 +296,14 @@ Over a period of `time`, `Joe` wants to do an `Equality analysis` of all his tea
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change. Please note we have a [Check the contributing guide](https://github.com/RollingArray/C2-storyline/blob/main/CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
 
-# :large_blue_circle: System Requirement
+## :small_orange_diamond: Repository
+| Area | Repo |
+|---|---|
+| Client app | [https://github.com/RollingArray/C2-client-app](https://github.com/RollingArray/C2-client-app) |
+| Server Api | [https://github.com/RollingArray/C2-server-api](https://github.com/RollingArray/C2-server-api) |
+| Database | [https://github.com/RollingArray/C2-database](https://github.com/RollingArray/C2-database) |
+
+## :small_orange_diamond: System Requirement
 | Entity | Version |
 |---|---|
 | Browser | Chrome or any other |
@@ -304,15 +312,15 @@ When contributing to this repository, please first discuss the change you wish t
 | MySQL | 5.7 or above |
 | Web Server | Apache or Nginx |
 
-# :large_blue_circle: Setting Up the project locally
+## :small_orange_diamond: Setting Up the project locally
 
-> ## :small_orange_diamond: Database Setup
-> > ### :arrow_forward: Clone Database schema Repo
+> ### :small_red_triangle: Database Setup
+> > #### :arrow_forward: Clone Database schema Repo
 > > ```
 > > git clone https://github.com/RollingArray/C2-database
 > > ```
 > 
-> > ### :arrow_forward: Create a MySQL database and a MySQL user
+> > #### :arrow_forward: Create a MySQL database and a MySQL user
 > > ```
 > > mysql -u root -p
 > > mysql> CREATE DATABASE IF NOT EXISTS `c2_dev` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
@@ -321,35 +329,35 @@ When contributing to this repository, please first discuss the change you wish t
 > > mysql> quit
 > > ```
 > 
-> > ### :arrow_forward: Generate database `Schema`
+> > #### :arrow_forward: Generate database `Schema`
 > > ```
 > > cd /C2-database
 > > mysql -u username -p c2_dev < c2_dev_schema.sql
 > > ```
 > 
-> > ### :arrow_forward: Add database `Triggers`
+> > #### :arrow_forward: Add database `Triggers`
 > > ```
 > > cd /C2-database
 > > mysql -u username -p c2_dev < c2_dev_trigger.sql
 > > ```
 >
-> > ### :arrow_forward: Add database `Stored Procedures`
+> > #### :arrow_forward: Add database `Stored Procedures`
 > > ```
 > > cd /C2-database
 > > mysql -u username -p c2_dev < c2_dev_stored_procedure.sql
 > > ```
 >
-> > ### :arrow_forward: You should see ERD as below
+> > #### :arrow_forward: You should see ERD as below
 > >
 > > <img src="https://github.com/RollingArray/C2-storyline/blob/main/images/erd.png?raw=true"/>
 >
-> ## :small_orange_diamond: Server Setup
-> > ### :arrow_forward: Clone C2 Server Repo and place inside htdocs or www folder for you apache / nginx server 
+> ### :small_red_triangle: Server Setup
+> > #### :arrow_forward: Clone C2 Server Repo and place inside htdocs or www folder for you apache / nginx server 
 > > ```
 > > git clone https://github.com/RollingArray/C2-server-api
 > > ```
 >
-> > ### :arrow_forward: Server configuration 
+> > #### :arrow_forward: Server configuration 
 > > ```
 > > cd /htdocs/C2-server-api/v1 
 > > cp environment.example.php environment.php    
@@ -386,7 +394,7 @@ When contributing to this repository, please first discuss the change you wish t
 > > 	],
 > > ];   
 > > ```
-> > ### :arrow_forward: Test server setup
+> > #### :arrow_forward: Test server setup
 > > ```
 > 
 > > Navigate to http://localhost:<port>/C2-server-api/v1/user/test
@@ -399,34 +407,34 @@ When contributing to this repository, please first discuss the change you wish t
 > > ```
 > > <img src="https://github.com/RollingArray/C2-storyline/blob/main/images/success.png?raw=true"/>
 > 
-> ## :small_orange_diamond: Client App
+> ### :small_red_triangle: Client App
 > Follow below guidelines to setup C2 app on your Windows/Mac/Linux machine
 > 
 
-> > ### :arrow_forward: Environment Setup
+> > #### :arrow_forward: Environment Setup
 > > To get started with C2, the only requirement is a [Node.js](https://ionicframework.com/docs/reference/glossary#node) & npm environment. You may choose any code editor
 > > It is recommend selecting the LTS version of [Node.js](https://ionicframework.com/docs/reference/glossary#node) to ensure best compatibility.
 > 
 
-> > ### :arrow_forward: Install the Ionic CLI
+> > #### :arrow_forward: Install the Ionic CLI
 > > C2 client app is design using [ionic](https://ionicframework.com). Go to [Ionic CLI](https://ionicframework.com/docs/intro/cli) and install for your OS
 > 
 
-> > ### :arrow_forward: Clone Repo
+> > #### :arrow_forward: Clone Repo
 > > ```
 > > git clone https://github.com/RollingArray/C2-client-app
 > > cd C2-client-app/
 > > ```
 > 
 
-> > ### :arrow_forward: Install Dependency
+> > #### :arrow_forward: Install Dependency
 > > ```
 > > cd C2-client-app/
 > > npm install
 > > ```
 > 
 
-> > ### :arrow_forward: Setup local api
+> > #### :arrow_forward: Setup local api
 > > Go to `C2-client-app/src/environments/environment.ts` and update api endpoint to your local api endpoint
 > > ```ts
 > > export const environment = {
@@ -435,18 +443,18 @@ When contributing to this repository, please first discuss the change you wish t
 > > };
 > > ```
 
-> > ### :arrow_forward: Build and Run App
+> > #### :arrow_forward: Build and Run App
 > > ```
 > > ionic serve --o
 > > ```
-> > ### :arrow_forward: You should see the app opened up in your browser
+> > #### :arrow_forward: You should see the app opened up in your browser
 > >
 > > <img src="https://github.com/RollingArray/C2-storyline/blob/main/images/app.png?raw=true"/>
 
 
 **[⬆ back to top](#table-of-contents)**
 
-# :large_blue_circle: Reporting Bugs
+## :small_orange_diamond: Reporting Bugs
 
 Issues and feature requests are welcome.<br />
 Feel free to check [issues page](https://github.com/RollingArray/C2-storyline/blob/main/BUG_REPORT.md) if you want to contribute.<br />
@@ -465,6 +473,5 @@ Please ⭐️ this repository if this project helped you!
 
 
 # :large_blue_circle: License
-support@rollingarray.co.in
-C2 | © [rollingarray.co.in](http://rollingarray.co.in/).<br />
+support@rollingarray.co.in | C2 | © [rollingarray.co.in](http://rollingarray.co.in/).<br />
 This project is [Apache](https://github.com/RollingArray/C2-client-app/blob/main/LICENSE) licensed.
