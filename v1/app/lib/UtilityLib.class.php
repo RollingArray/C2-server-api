@@ -527,6 +527,7 @@ class UtilityLib
     public function getAllActivitiesWithoutFilter($DBAccessLib, $passedData)
     {
         $rows = array();
+        
         $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
         $rows['filter'] = false;
         
