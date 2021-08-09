@@ -787,6 +787,7 @@ class DBAccessLib extends BaseDatabaseAPI
             $passedData['user_id'],
             $passedData['project_id'],
             $passedData['goal_id'],
+            $passedData['goal_name'],
         );
 
         return parent::executeStatement($query, $data);
