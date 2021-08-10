@@ -620,6 +620,19 @@ class DBAccessLib extends BaseDatabaseAPI
 
     // sprint
     //updateSprint
+    
+    
+    function ifActiveSprintAvailable($passedData)
+    {
+        $query = "CALL sp_if_active_sprint_available(?, ?)";
+
+        $data = array(
+            $passedData['sprint_status'],
+            $passedData['project_id']
+        );
+
+        return parent::ifRecordExist($query, $data);
+    }
     function updateSprint($passedData)
     {
 

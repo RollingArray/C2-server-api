@@ -35,7 +35,7 @@ class SprintController extends BaseAPI
         $sprint_name = parent::sanitizeInput($postData->sprintName);
         $sprint_start_date = parent::sanitizeInput($postData->sprintStartDate);
         $sprint_end_date = parent::sanitizeInput($postData->sprintEndDate);
-        $sprint_status = 'ACTIVE';
+        $sprint_status = parent::sanitizeInput($postData->sprintStatus);
         
         $operation_type = parent::sanitizeInput($postData->operationType);
         $token = parent::getAuthorizationSessionObject();
@@ -119,6 +119,46 @@ class SprintController extends BaseAPI
                             $responseData = $this->MessageLib->errorMessageFormat('FAIL_SPRINT_UPDATE', $this->settings['errorMessage']['FAIL_SPRINT_UPDATE']);
                         }
 
+                    }
+
+                    //edit
+                    else if($operation_type == 'start')
+                    {
+                        $ifActiveSprintAvailable = $this->DBAccessLib->ifActiveSprintAvailable($passedData); 
+                        if($ifActiveSprintAvailable){
+                            $responseData = $this->MessageLib->errorMessageFormat('ACTIVE_SPRINT_EXIST', $this->settings['errorMessage']['ACTIVE_SPRINT_EXIST']);
+                        }
+                        else 
+                        {
+
+                            //update spint details
+                            $updateSprint = $this->DBAccessLib->updateSprint($passedData);
+                            if($updateSprint)
+                            {
+                                $message = $this->settings['successMessage']['SUCCESS_SPRINT_ACTIVE'];
+                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                            }
+                            else
+                            {
+                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_SPRINT_ACTIVE', $this->settings['errorMessage']['FAIL_SPRINT_ACTIVE']);
+                            }
+                        }
+                    }
+
+                    //edit
+                    else if($operation_type == 'stop')
+                    {
+                        //update spint details
+                        $updateSprint = $this->DBAccessLib->updateSprint($passedData);
+                        if($updateSprint)
+                        {
+                            $message = $this->settings['successMessage']['SUCCESS_SPRINT_CLOSED'];
+                            $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                        }
+                        else
+                        {
+                            $responseData = $this->MessageLib->errorMessageFormat('FAIL_SPRINT_CLOSED', $this->settings['errorMessage']['FAIL_SPRINT_CLOSED']);
+                        }
                     }
 
                     //delete

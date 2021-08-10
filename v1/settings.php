@@ -231,6 +231,9 @@ $settings = [
 		'FAIL_SPRINT_CREATE' => 'Sprint could not be created, please try again',
 		'FAIL_SPRINT_UPDATE' => 'Sprint could not be updated, please try again',
 		'FAIL_SPRINT_DELETE' => 'Sprint could not be deleted, please try again',
+		'ACTIVE_SPRINT_EXIST' => 'More than 1 active sprint will not be allowed',
+		'FAIL_SPRINT_ACTIVE' => 'Sprint could not be activated, please try again',
+		'FAIL_SPRINT_CLOSED' => 'Sprint could not be closed, please try again',
 
 		//goal
 		'GOAL_EXIST' => 'Goal already exist with same name for this project, please give a new name',
@@ -288,6 +291,8 @@ $settings = [
 		'SUCCESS_SPRINT_CREATE' => 'Sprint created successfully. You might want to you may want to attach this sprint against goal activities for a member',
 		'SUCCESS_SPRINT_UPDATE' => 'Sprint updated successfully',
 		'SUCCESS_SPRINT_DELETE' => 'Sprint deleted successfully',
+		'SUCCESS_SPRINT_ACTIVE' => 'Sprint activated successfully',
+		'SUCCESS_SPRINT_CLOSED' => 'Sprint closed successfully',
 
 		//goal
 		'SUCCESS_GOAL_CREATE' => 'Goal created successfully. You might want to attach this goal against an activity to achieve this goal for a assignee',
