@@ -5,7 +5,7 @@
 # @author code@rollingarray.co.in
 #
 # Created at     : 2021-05-26 10:42:18 
-# * Last modified  : 2021-11-01 14:12:16
+# * Last modified  : 2021-11-01 14:16:40
 #
 
 name: Deploy C2 API DEV api on DEV branch push
@@ -30,7 +30,7 @@ jobs:
       with:
         server: c2.dev.api.rollingarray.co.in
         username: C2-dev
-        password: 'xDjJ+]F)vak('
+        password: xDjJ+]F)vak(
         local-dir: ./
-        server-dir: '/home4/rolli3oh/c2.dev.api.rollingarray.co.in/'
+        server-dir: /home4/rolli3oh/c2.dev.api.rollingarray.co.in/
         dangerous-clean-slate: true
