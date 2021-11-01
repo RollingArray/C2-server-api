@@ -7,7 +7,7 @@
  * @author code@rollingarray.co.in
  *
  * Created at     : 2021-04-21 10:07:13 
- * Last modified  : 2021-11-01 11:08:11
+ * Last modified  : 2021-11-01 11:10:09
  */
 
 $environment = [
@@ -41,6 +41,6 @@ $environment = [
 		'pretty_email_name' => '', // pretty_email_name
 		'app_name' => '', // application name
 		'app_tag_line' => '', // applicaiton tag line
-		'email_track' => 'http://localhost:8888/C2/api/v1/email/track/update/' // email tracker api to track email
+		'email_track' => 'http://localhost:8888/C2/api/v1/email/track/update' // email tracker api to track email
 	],
 ];
