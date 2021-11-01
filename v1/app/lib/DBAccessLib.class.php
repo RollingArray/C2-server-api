@@ -57,17 +57,15 @@ class DBAccessLib extends BaseDatabaseAPI
     //insertNewUser
     public function insertNewUser($passedData)
     {
-        $query = "CALL sp_insert_new_user(?,?,?,?,?,?,?,?,?)";
+        //echo json_encode($passedData);
+        $query = "CALL sp_insert_new_user(?,?,?,?,?,?)";
 
         $data = array(
             $passedData['user_id'],
             $passedData['user_first_name'],
             $passedData['user_last_name'],
-            $passedData['user_password'],
             $passedData['user_email'],
             $passedData['user_status'],
-            $passedData['user_security_answer_1'],
-            $passedData['user_security_answer_2'],
             $passedData['user_verification_code']
         );
 
@@ -254,15 +252,13 @@ class DBAccessLib extends BaseDatabaseAPI
     //updatedUserProfile
     function updatedUserProfile($passedData)
     {
-        $query = "CALL sp_updated_user_profile(?,?,?,?,?,?)";
+        $query = "CALL sp_updated_user_profile(?,?,?,?)";
 
         $data = array(
             $passedData['user_id'],
-            $passedData['user_first_name'],
-            $passedData['user_last_name'],
             $passedData['user_email'],
-            $passedData['user_security_answer_1'],
-            $passedData['user_security_answer_2'],
+            $passedData['user_first_name'],
+            $passedData['user_last_name']  
         );
         //var_dump(parent::executeStatement($query, $data));
         return parent::executeStatement($query, $data);
