@@ -5,7 +5,7 @@
 # @author code@rollingarray.co.in
 #
 # Created at     : 2021-05-26 10:42:18 
-# * Last modified  : 2021-11-01 14:28:25
+# * Last modified  : 2021-11-01 14:35:00
 #
 
 name: Deploy C2 API DEV api on DEV branch push
@@ -30,7 +30,7 @@ jobs:
       with:
         server: ftp.rollingarray.co.in
         username: C2-dev@c2.dev.api.rollingarray.co.in
-        password: xDjJ+]F)vak(f
+        password: ${{ secrets.C2_API_DEV_FTP_PASSWORD }}
         local-dir: ./
         server-dir: /home4/rolli3oh/c2.dev.api.rollingarray.co.in/
         dangerous-clean-slate: true
