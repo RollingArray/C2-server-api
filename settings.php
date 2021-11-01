@@ -20,7 +20,9 @@ require_once __DIR__.'/environment.php';
 $settings = [
 
 	// environment specific configurations
-	
+	// api
+	'api' => $environment['api'],
+
 	// database
 	'db' => $environment['db'],
 
@@ -34,9 +36,6 @@ $settings = [
 	'JWT' => $environment['JWT'],
 
 	// general configurations
-
-	// error Settings
-	'displayErrorDetails' => true,
 
 	// default project Details
 	'defaultDetails' => [

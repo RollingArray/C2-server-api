@@ -165,7 +165,7 @@ class UtilityLib
     function originalString($ciphertext)
     {
         $salt = $this->settings['hashKey']['SALT'];
-
+        $tag = '';
         $cipher = "aes-128-gcm";
         if (in_array($cipher, openssl_get_cipher_methods())) {
             $ivlen = openssl_cipher_iv_length($cipher);
