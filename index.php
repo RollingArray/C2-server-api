@@ -58,161 +58,153 @@ $emailController = new C2\EmailController($settings);
 
 //route
 $requestUri = $_SERVER['REQUEST_URI'];
-$versionPrefix = $settings['api']['versionPrefix'];
-$apiVersionV1 = $versionPrefix.'/v1/';
-$apiEndpoint = substr($requestUri, strlen($apiVersionV1));
-// $str = "/C2/api/v1/user/test/";
-// $test = 'user\/test';
-// $pattern = '/\b'.$test.'\b/';
-// echo $pattern;
-// echo preg_match($pattern, $str); // Outputs 1
-
-
+$apiVersion = 'v1/';
+			
 switch (true) {
-	case strpos($requestUri, 'user/test/'): {
+	case strpos($requestUri, $apiVersion.'user/test/'): {
 			$userController->test();
 		}
 		break;
 
-	case strpos($requestUri, 'user/sign/up/'): {
+	case strpos($requestUri, $apiVersion.'user/sign/up/'): {
 			$userController->signUp();
 		}
 		break;
 
-	case strpos($requestUri, 'user/activate/code/resend/'): {
+	case strpos($requestUri, $apiVersion.'user/activate/code/resend/'): {
 			$userController->resendActivationCode();
 		}
 		break;
 
-	case strpos($requestUri, 'user/sign/in/'): {
+	case strpos($requestUri, $apiVersion.'user/sign/in/'): {
 			$userController->signIn();
 		}
 		break;
 
-	case strpos($requestUri, 'user/profile/update/'): {
+	case strpos($requestUri, $apiVersion.'user/profile/update/'): {
 			$userController->updateUserProfile();
 		}
 		break;
 
-	case strpos($requestUri, 'user/details/'): {
+	case strpos($requestUri, $apiVersion.'user/details/'): {
 			$userController->getSignedInUserDetails();
 		}
 		break;
 
-	case strpos($requestUri, 'user/search/'): {
+	case strpos($requestUri, $apiVersion.'user/search/'): {
 			$userController->searchUserDetailsBySearchText();
 		}
 		break;
 
-	case strpos($requestUri, 'user/logout/'): {
+	case strpos($requestUri, $apiVersion.'user/logout/'): {
 			$userController->logout();
 		}
 		break;
 
 		// projects
-	case strpos($requestUri, 'user/projects/'): {
+	case strpos($requestUri, $apiVersion.'user/projects/'): {
 			$projectController->userProjects();
 		}
 		break;
 
-	case strpos($requestUri, 'user/project/crud/'): {
+	case strpos($requestUri, $apiVersion.'user/project/crud/'): {
 			$projectController->userProjectCrud();
 		}
 		break;
 
-	case strpos($requestUri, 'project/members/'): {
+	case strpos($requestUri, $apiVersion.'project/members/'): {
 			$projectController->projectMembers();
 		}
 		break;
 
-	case strpos($requestUri, 'project/member/crud/'): {
+	case strpos($requestUri, $apiVersion.'project/member/crud/'): {
 			$projectController->projectMemberCrud();
 		}
 		break;
 
-	case strpos($requestUri, 'project/details/'): {
+	case strpos($requestUri, $apiVersion.'project/details/'): {
 			$projectController->projectDetails();
 		}
 		break;
-	case strpos($requestUri, 'project/raw/'): {
+	case strpos($requestUri, $apiVersion.'project/raw/'): {
 			$projectController->projectRaw();
 		}
 		break;
-	case strpos($requestUri, 'project/credibility/index/'): {
+	case strpos($requestUri, $apiVersion.'project/credibility/index/'): {
 			$projectController->projectAssigneeCredibilityIndex();
 		}
 		break;
-	case strpos($requestUri, 'assignee/credibility/index/details/'): {
+	case strpos($requestUri, $apiVersion.'assignee/credibility/index/details/'): {
 			$projectController->projectAssigneeCredibilityIndexDetails();
 		}
 		break;
 
 		//sprint
-	case strpos($requestUri, 'project/sprints/'): {
+	case strpos($requestUri, $apiVersion.'project/sprints/'): {
 			$sprintController->projectSprintAll();
 		}
 		break;
 
-	case strpos($requestUri, 'project/sprint/crud/'): {
+	case strpos($requestUri, $apiVersion.'project/sprint/crud/'): {
 			$sprintController->sprintCrud();
 		}
 		break;
 
 		//goal
-	case strpos($requestUri, 'project/goals/'): {
+	case strpos($requestUri, $apiVersion.'project/goals/'): {
 			$goalController->projectGoalAll();
 		}
 		break;
 
-	case strpos($requestUri, 'project/goal/crud/'): {
+	case strpos($requestUri, $apiVersion.'project/goal/crud/'): {
 			$goalController->goalCrud();
 		}
 		break;
 
 		//activity
-	case strpos($requestUri, 'project/my/activities/'): {
+	case strpos($requestUri, $apiVersion.'project/my/activities/'): {
 			$activityController->allMyActivities();
 		}
 		break;
 
-	case strpos($requestUri, 'project/my/reviews/'): {
+	case strpos($requestUri, $apiVersion.'project/my/reviews/'): {
 			$activityController->allMyReviews();
 		}
 		break;
 
-	case strpos($requestUri, 'goal/activities/'): {
+	case strpos($requestUri, $apiVersion.'goal/activities/'): {
 			$activityController->goalActivityAll();
 		}
 		break;
 
-	case strpos($requestUri, 'goal/activity/crud/'): {
+	case strpos($requestUri, $apiVersion.'goal/activity/crud/'): {
 			$activityController->activityCrud();
 		}
 		break;
 
 		//comment
-	case strpos($requestUri, 'activity/comment/crud/'): {
+	case strpos($requestUri, $apiVersion.'activity/comment/crud/'): {
 			$activityController->activityCommentCrud();
 		}
 		break;
 
 		//review
-	case strpos($requestUri, 'activity/reviewer/crud/'): {
+	case strpos($requestUri, $apiVersion.'activity/reviewer/crud/'): {
 			$activityController->activityReviewerCrud();
 		}
 		break;
 
-	case strpos($requestUri, 'activity/details/'): {
+	case strpos($requestUri, $apiVersion.'activity/details/'): {
 			$activityController->activityReviewDetails();
 		}
 		break;
 
-	case strpos($requestUri, 'review/update/'): {
+	case strpos($requestUri, $apiVersion.'review/update/'): {
 			$activityController->activityReviewUpdate();
 		}
 		break;
 
-	case strpos($requestUri, 'email/track/update/'): {
+	case strpos($requestUri, $apiVersion.'email/track/update/'): {
 			$emailController->emailTrackUpdate();
 		}
 		break;
