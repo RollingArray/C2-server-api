@@ -44,9 +44,6 @@ class UserController extends BaseAPI
         $user_id = $this->UtilityLib->generateId('');
         $user_first_name = parent::sanitizeInput($postData->userFirstName);
         $user_last_name = parent::sanitizeInput($postData->userLastName);
-        $user_password = parent::sanitizeInput($postData->userPassword);
-        $user_security_answer_1 = parent::sanitizeInput($postData->userSecurityAnswer1);
-        $user_security_answer_2 = parent::sanitizeInput($postData->userSecurityAnswer2);
         $user_status = "INACTIVE";
         $domain_status = "ACTIVE";//
         $user_verification_code = $this->UtilityLib->generateVerificationCode();
@@ -57,9 +54,6 @@ class UserController extends BaseAPI
                 "user_email"=>$user_email,
                 "user_first_name"=>$user_first_name, 
                 "user_last_name"=>$user_last_name,
-                "user_password"=>$user_password,
-                "user_security_answer_1"=>$user_security_answer_1,
-                "user_security_answer_2"=>$user_security_answer_2,
                 "user_status"=>$user_status,
                 "user_verification_code" => $user_verification_code
             );
@@ -77,10 +71,6 @@ class UserController extends BaseAPI
             } 
             else 
             {
-                //encript password
-                $hashPassword = $this->UtilityLib->encrypt($passedData["user_password"]);
-                $passedData["user_password"] = $hashPassword;
-
                 //insert new user
                 $userInserted = $this->DBAccessLib->insertNewUser($passedData);
                  if($userInserted)
@@ -110,68 +100,6 @@ class UserController extends BaseAPI
         echo json_encode($responseData);
     }  
 
-    //activateUserAccount
-    public function activateUserAccount()
-    {
-        //passed data
-        $responseData = null;
-    
-        //passed data
-        $postData = parent::getPostData();
-        $user_email = parent::sanitizeInput($postData->userEmail);
-        $user_verification_code = parent::sanitizeInput($postData->userActivationCode);
-
-        $passedData = array(
-            "user_email"=>$user_email,
-            "user_verification_code"=>$user_verification_code
-        );
-
-        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
-
-        //if input validated
-        if($validator['success'])
-        {
-            //if Verification Code Valid
-            $ifVerificationCodeValid = $this->DBAccessLib->ifVerificationCodeValid($passedData);
-            if ($ifVerificationCodeValid) 
-            {
-                //is User Activated
-                $isUserActivated = $this->DBAccessLib->activateUserAccount($passedData);
-                    
-                if ($isUserActivated) 
-                {
-                    $responseData = $this->MessageLib->successMessageFormat($this->settings['successMessage']['ACCOUNT_ACTIVATED']);
-
-                    //send email
-                    $getUserDetailsByEmail = $this->UtilityLib->getUserDetailsByEmail($this->DBAccessLib, $passedData); ;
-                    $user_full_name = $getUserDetailsByEmail['userFirstName']." ".$getUserDetailsByEmail['userLastName'];
-                    
-                    $passedData = array(
-                      "user_full_name"=>$user_full_name,
-                      "user_email"=>$user_email
-                    );
-
-                    //user activated email
-                    $this->EmailLib->signUpSuccess($this->DBAccessLib, $this->UtilityLib, $passedData); 
-                }
-                else
-                {
-                    $responseData = $this->MessageLib->errorMessageFormat('ACCOUNT_NOT_ACTIVATED', $this->settings['errorMessage']['ACCOUNT_NOT_ACTIVATED']);
-                }
-            }   
-            else
-            {
-                $responseData = $this->MessageLib->errorMessageFormat('VERIFICATION_CODE_NO_MATCH', $this->settings['errorMessage']['VERIFICATION_CODE_NO_MATCH']);
-            }  
-        }
-        else
-        {
-            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
-        }
-    
-        echo json_encode($responseData);
-    }
-
     //resendActivationCode
     public function resendActivationCode()
     {
@@ -197,95 +125,28 @@ class UserController extends BaseAPI
             $userPresent = $this->DBAccessLib->ifExistingUser($passedData);
             if ($userPresent) 
             {
-                //ifUserInactive
-                $ifUserInactive = $this->DBAccessLib->getIfUserInactive($passedData);
-                if($ifUserInactive)
-                {
-                    //ifUserAccountActivationCodeRegenerated
-                    $ifUserAccountActivationCodeRegenerated = $this->DBAccessLib->regenerateUserAccountActivationCode($passedData);
+                //ifUserAccountActivationCodeRegenerated
+                $ifUserAccountActivationCodeRegenerated = $this->DBAccessLib->regenerateUserAccountActivationCode($passedData);
                     
-                    if ($ifUserAccountActivationCodeRegenerated) 
-                    {
-                        $responseData = $this->MessageLib->successMessageFormat($this->settings['successMessage']['VERIFICATION_CODE_REGENERATED']);
-                        
-                        //send email
-                        //user activated email
-                        $getUserDetailsByEmail = $this->UtilityLib->getUserDetailsByEmail($this->DBAccessLib, $passedData); ;
-                        $user_full_name = $getUserDetailsByEmail['userFirstName']." ".$getUserDetailsByEmail['userLastName'];
-                        $passedData = array(
-                          "user_full_name"=>$user_full_name,
-                          "user_email"=>$user_email, 
-                          "user_verification_code"=>$user_verification_code
-                        );
-
-                        $this->EmailLib->sendSignUpVerificationCode($this->DBAccessLib, $this->UtilityLib, $passedData);                    
-                    } 
-                    else 
-                    {
-                        $responseData = $this->MessageLib->errorMessageFormat('NO_VERIFICATION_CODE', $this->settings['errorMessage']['NO_VERIFICATION_CODE']);
-                    } 
-                }
-                else
+                if ($ifUserAccountActivationCodeRegenerated) 
                 {
-                    $responseData = $this->MessageLib->errorMessageFormat('ACCOUNT_ALREADY_ACTIVE', $this->settings['errorMessage']['ACCOUNT_ALREADY_ACTIVE']);  
-                }
-            } 
-            else 
-            {
-                $responseData = $this->MessageLib->errorMessageFormat('NO_USER_FOUND', $this->settings['errorMessage']['NO_USER_FOUND']);      
-            }
-        }
-        else
-        {
-            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
-        }
-
-        echo json_encode($responseData);
-    }
-
-    //generatePasswordResetCode
-    public function generatePasswordResetCode()
-    {
-        $responseData = null;
-        //echo parent::getPostData();
-        $postData = parent::getPostData();
-        $user_email = parent::sanitizeInput($postData->userEmail);
-        $user_password_reset_code = $this->UtilityLib->generatePasswordResetCode();
-
-        $passedData = array(
-                "user_email"=>$user_email,
-                "user_password_reset_code"=>$user_password_reset_code,
-            );
-
-        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
-
-        //if input validated
-        if($validator['success'])
-        {
-            // is user present
-            $userPresent = $this->DBAccessLib->ifExistingUser($passedData);
-            if ($userPresent) 
-            {
-                $userPasswordRestCodeGenerated = $this->DBAccessLib->generateUserPasswordResetCode($passedData);
-                if ($userPasswordRestCodeGenerated) 
-                {
-                    $responseData = $this->MessageLib->successMessageFormat($this->settings['successMessage']['PASSWORD_RESET_CODE_GENERATED']);
+                    $responseData = $this->MessageLib->successMessageFormat($this->settings['successMessage']['VERIFICATION_CODE_REGENERATED']);
                     
                     //send email
-                    //send password reset code email
+                    //user activated email
                     $getUserDetailsByEmail = $this->UtilityLib->getUserDetailsByEmail($this->DBAccessLib, $passedData); ;
                     $user_full_name = $getUserDetailsByEmail['userFirstName']." ".$getUserDetailsByEmail['userLastName'];
-                    
                     $passedData = array(
                       "user_full_name"=>$user_full_name,
                       "user_email"=>$user_email, 
-                      "user_password_reset_code"=>$user_password_reset_code
+                      "user_verification_code"=>$user_verification_code
                     );
-                    $this->EmailLib->sendPasswordResetCode($this->DBAccessLib, $this->UtilityLib, $passedData);               
+
+                    $this->EmailLib->sendSignUpVerificationCode($this->DBAccessLib, $this->UtilityLib, $passedData);                    
                 } 
                 else 
                 {
-                    $responseData = $this->MessageLib->errorMessageFormat('NO_PASSWORD_RESET_CODE', $this->settings['errorMessage']['NO_PASSWORD_RESET_CODE']);  
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_VERIFICATION_CODE', $this->settings['errorMessage']['NO_VERIFICATION_CODE']);
                 } 
             } 
             else 
@@ -301,177 +162,96 @@ class UserController extends BaseAPI
         echo json_encode($responseData);
     }
 
-    //updatePassword
-    public function updatePassword()
-    {
-        $responseData = null;
-        //echo parent::getPostData();
-        $postData = parent::getPostData();
-        $user_email = parent::sanitizeInput($postData->userEmail);
-        $user_password_reset_code = parent::sanitizeInput($postData->userPasswordResetCode);
-        $user_password = parent::sanitizeInput($postData->userPassword);
-
-        $passedData = array(
-                "user_email"=>$user_email,
-                "user_password_reset_code"=>$user_password_reset_code,
-                "user_password"=>$user_password
-            );
-
-        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
-
-        //if input validated
-        if($validator['success'])
-        {
-            // is user present
-            $userPresent = $this->DBAccessLib->ifExistingUser($passedData);
-            if ($userPresent) 
-            {
-                //ifPasswordResetCodeExist
-                $ifPasswordResetCodeExist = $this->DBAccessLib->ifPasswordResetCodeExist($passedData);
-                if ($ifPasswordResetCodeExist) 
-                {
-                    //encript password
-                    $hashPassword = $this->UtilityLib->encrypt($passedData["user_password"]);
-                    $passedData["user_password"] = $hashPassword;
-
-                    //isUserPasswordUpdated
-                    $isUserPasswordUpdated = $this->DBAccessLib->updatePassword($passedData); 
-                    if($isUserPasswordUpdated)
-                    {
-                        $responseData = $this->MessageLib->successMessageFormat($this->settings['successMessage']['PASSWORD_UPDATED']);                    
-                    } 
-                    else 
-                    {
-                        $responseData = $this->MessageLib->errorMessageFormat('NO_PASSWORD_UPDATE', $this->settings['errorMessage']['NO_PASSWORD_UPDATE']);  
-                    }               
-                } 
-                else 
-                {
-                    $responseData = $this->MessageLib->errorMessageFormat('PASSWORD_RESET_CODE_NOT_FOUND', $this->settings['errorMessage']['PASSWORD_RESET_CODE_NOT_FOUND']);  
-                } 
-            } 
-            else 
-            {
-                $responseData = $this->MessageLib->errorMessageFormat('NO_USER_FOUND', $this->settings['errorMessage']['NO_USER_FOUND']);      
-            }
-        }
-        else
-        {
-            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
-        }
-
-        echo json_encode($responseData);
-    }
-    
     /**
-     * signIn
-     *
-     * @return void
-     */
-    public function signIn()
-    {
-        $responseData = array();
-        $postData = parent::getPostData();
-        $user_email = parent::sanitizeInput($postData->userEmail);
-        $user_password = parent::sanitizeInput($postData->userPassword);
-        $user_login_type = parent::sanitizeInput($postData->userLoginType);
-        $user_ip = $_SERVER['REMOTE_ADDR'];
-        $user_platform = $_SERVER['HTTP_USER_AGENT'];
+	 * signIn
+	 *
+	 * @return void
+	 */
+	public function signIn()
+	{
+		$responseData = array();
+		$postData = parent::getPostData();
+		$userEmail = parent::sanitizeInput($postData->userEmail);
+		$userVerificationCode = parent::sanitizeInput($postData->userVerificationCode);
+        $userLoginType = parent::sanitizeInput($postData->userLoginType);
+		$userIp = $_SERVER['REMOTE_ADDR'];
+		$usePlatform = $_SERVER['HTTP_USER_AGENT'];
 
-        if($user_ip == '::1')
-        {
-            $user_ip = '127.0.0.1'; //::1 is the loopback address in IPv6. Think of it as the IPv6 version of 127.0.0.1
-        }
+		if ($userIp == '::1') {
+			$userIp = '127.0.0.1'; //::1 is the loopback address in IPv6. Think of it as the IPv6 version of 127.0.0.1
+		}
 
-        $passedData = array(
-                "user_email"=>$user_email,
-                "user_password"=>$user_password,
-                "user_login_type"=>$user_login_type,
-                "user_platform" => $user_platform,
-                "user_ip" => $user_ip,
-            );
-        
-        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+		$passedData = array(
+			"user_email" => $userEmail,
+			"user_verification_code" => $userVerificationCode,
+			"user_platform" => $usePlatform,
+			"user_ip" => $userIp,
+		);
 
-        //if input validated
-        if($validator['success'])
-        {
-            // is user present
-            $userPresent = $this->DBAccessLib->ifExistingUser($passedData);
-            
-            if ($userPresent) 
-            {
-              //ifUserInactive
-              $ifUserInactive = $this->DBAccessLib->getIfUserInactive($passedData);
-              if(!$ifUserInactive)
-              {
-                $getSignInUser = $this->DBAccessLib->getSignInUser($passedData);
+		$validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
 
-                $signInUserId = $getSignInUser['userId'];
-                $signInUserPassword = $getSignInUser['userPassword'];
-                
-                $hashPassword = $this->UtilityLib->encrypt($passedData["user_password"]);
-                
-                $decriptPassword = $this->UtilityLib->decrypt($signInUserPassword);
-                
-                //var_dump($decriptPassword);
-                
-                if ($passedData["user_password"] == $decriptPassword) 
-                {
-                  
-                    //sessionServer, insert new session 
-                    $tokenId = $this->JWTLib->createNewToken($signInUserId); 
-                    //var_dump($tokenId);               
-                    if($tokenId == "NO_SESSION")
-                    {
-                        $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
-                    }
-                    else
-                    {
-                        $passedData = array(
-                            "user_id"=>$signInUserId,
-                            "user_platform"=>$user_platform,
-                            "user_login_type"=>$user_login_type,
-                            "user_ip" => $user_ip
-                        );
+		//if input validated
+		if ($validator['success']) {
+			// is user present
+			$userPresent = $this->DBAccessLib->ifExistingUser($passedData);
 
-                        $this->DBAccessLib->logUserSession($passedData);
-                        
-                        $responseData['success'] = true;
-                        if($user_login_type == 'IN_APP_LOGIN')
-                        {
-                            $responseData['message'] = $this->settings['successMessage']['SUCCESS_IN_APP_LOGIN']; 
-                        }
-                        else if($user_login_type == 'FRESH_LOGIN')
-                        {
-                            $responseData['message'] = $this->settings['successMessage']['SUCCESS_LOGIN']; 
-                        }
+			if ($userPresent) {
+				$getUserDetailsByEmail = $this->DBAccessLib->getUserDetailsByEmail($passedData); ;
+                $userId = $getUserDetailsByEmail['userId'];
+                $passedData = array(
+                    "user_email"=>$userEmail, 
+                    "user_verification_code"=>$userVerificationCode
+                );
 
-                        $responseData['userId'] = $signInUserId;
-                        $responseData['token']  = $tokenId;   
-                    }
-                } 
-                else 
-                {
-                    $responseData = $this->MessageLib->errorMessageFormat('NO_USER_FOUND', $this->settings['errorMessage']['NO_USER_FOUND']);
-                }    
-              }
-              else
-              {
-                  $responseData = $this->MessageLib->errorMessageFormat('ACCOUNT_INACTIVE', $this->settings['errorMessage']['ACCOUNT_INACTIVE']);  
-              }
-            } 
-            else 
-            {
-                $responseData = $this->MessageLib->errorMessageFormat('NO_USER_FOUND', $this->settings['errorMessage']['NO_USER_FOUND']);      
-            }
-        }
-        else
-        {
-            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
-        }
-        echo json_encode($responseData);
-    }
+				//if Verification Code Valid
+				$ifVerificationCodeValid = $this->DBAccessLib->ifVerificationCodeValid($passedData);
+				if ($ifVerificationCodeValid) {
+
+					// nullify verification code
+					$passedData = array(
+						"user_email" => $userEmail,
+						"user_verification_code" => 'VERIFIED',
+					);
+
+					$updateVerificationCode = $this->DBAccessLib->regenerateUserAccountActivationCode($passedData);
+
+					if ($updateVerificationCode) {
+						//sessionServer, insert new session 
+						$tokenId = $this->JWTLib->createNewToken($userId);
+						//var_dump($tokenId);               
+						if ($tokenId == "NO_SESSION") {
+							$responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+						} else {
+							$passedData = array(
+								"user_id"=>$userId,
+                                "user_platform"=>$usePlatform,
+                                "user_login_type"=>$userLoginType,
+                                "user_ip" => $userIp
+							);
+
+							$this->DBAccessLib->logUserSession($passedData);
+
+                            $data['userId'] = $getUserDetailsByEmail['userId'];
+                            $data['userEmail'] = $getUserDetailsByEmail['userEmail'];
+							$data['userFirstName'] = $getUserDetailsByEmail['userFirstName'];
+                            $data['userLastName'] = $getUserDetailsByEmail['userLastName'];
+							$responseData = $this->JWTLib->sendBackToClient($tokenId, $userId, 'data', $data);
+
+						}
+					} else {
+						$responseData = $this->MessageLib->errorMessageFormat('ACCOUNT_NOT_ACTIVATED', $this->settings['errorMessage']['ACCOUNT_NOT_ACTIVATED']);
+					}
+				} else {
+					$responseData = $this->MessageLib->errorMessageFormat('VERIFICATION_CODE_NO_MATCH', $this->settings['errorMessage']['VERIFICATION_CODE_NO_MATCH']);
+				}
+			} else {
+				$responseData = $this->MessageLib->errorMessageFormat('NO_USER_FOUND', $this->settings['errorMessage']['NO_USER_FOUND']);
+			}
+		} else {
+			$responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+		}
+		echo json_encode($responseData);
+	}
 
     //getSignedInUserDetails
     public function getSignedInUserDetails()
@@ -568,17 +348,13 @@ class UserController extends BaseAPI
         $user_id = parent::sanitizeInput($postData->userId);
         $user_first_name = parent::sanitizeInput($postData->userFirstName);
         $user_last_name = parent::sanitizeInput($postData->userLastName);
-        $user_security_answer_1 = parent::sanitizeInput($postData->userSecurityAnswer1);
-        $user_security_answer_2 = parent::sanitizeInput($postData->userSecurityAnswer2);
         $token = parent::getAuthorizationSessionObject();
 
         $passedData = array(
                 "user_id"=>$user_id, 
                 "user_email"=>$user_email,
                 "user_first_name"=>$user_first_name, 
-                "user_last_name"=>$user_last_name,
-                "user_security_answer_1"=>$user_security_answer_1,
-                "user_security_answer_2"=>$user_security_answer_2
+                "user_last_name"=>$user_last_name
             );
 
         $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
