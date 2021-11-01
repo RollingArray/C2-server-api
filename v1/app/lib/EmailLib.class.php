@@ -94,7 +94,7 @@ class EmailLib
 							valign="top">
 							Dear <strong
 							style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">' . $passedData['user_full_name'] . '
-							</strong>
+							</strong>,
 						</td>
 						</tr>
 						<tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
@@ -212,20 +212,21 @@ class EmailLib
 	{
 		if ($passedData['user_full_name'] && $passedData['user_verification_code'] && $passedData['user_email']) {
 			$email_track_id = $UtilityLib->generateId('EMAILTRACK_');
-			$header = 'You are just a step away from activating your account in ' . $this->settings['email']['app_name'];
+			$header = 'You are just a step away from using your account in ' . $this->settings['email']['app_name'];
 			$subject = $this->settings['email']['app_name'] . ' - Email Verification';
 			$emailBodyMessage = '
         You or someone with your email id signed up at ' . $this->settings['email']['app_name'] . '. Your account is almost ready, but before you login you need to confirm your email by applying below verification code in the app.
         <br><br>
-        <table border=0 style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px">
+		<table border=0 style="font-family:Helvetica,Arial,sans-serif;font-size:5em;vertical-align:top;margin:0;margin:0 0 20px; background: #e9e8e8;
+		border: 1px solid #d1cdcd;
+		border-radius: 10px; width: 100%; text-align: center;width: 100%;font-size: 5em;">
               <tr>
-                  <td><b>Verification code</b></td>
                   <td>' . $passedData['user_verification_code'] . '</td>
               </tr>
               
         </table>
         
-        Once you verify, your account will be active.
+        If you haven’t requested this email, there’s nothing to worry about – you can safely ignore it.
       ';
 
 			$passedEmailData = array(
@@ -246,20 +247,21 @@ class EmailLib
 	{
 		//return 'asd';
 		if ($passedData['user_full_name'] && $passedData['user_verification_code'] && $passedData['user_email'] && $passedData['email_track_id']) {
-			$header = 'You are just a step away from activating your account in ' . $this->settings['email']['app_name'];
+			$header = 'You are just a step away from using your account in ' . $this->settings['email']['app_name'];
 			$subject = $this->settings['email']['app_name'] . ' - Email Verification';
 			$emailBodyMessage = '
         You or someone with your email id signed up at ' . $this->settings['email']['app_name'] . '. Your account is almost ready, but before you login you need to confirm your email by applying below verification code in the app.
         <br><br>
-        <table border=0 style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px">
+        <table border=0 style="font-family:Helvetica,Arial,sans-serif;font-size:5em;vertical-align:top;margin:0;margin:0 0 20px; background: #e9e8e8;
+		border: 1px solid #d1cdcd;
+		border-radius: 10px; width: 100%; text-align: center;width: 100%;font-size: 5em;">
               <tr>
-                  <td><b>Verification code</b></td>
                   <td>' . $passedData['user_verification_code'] . '</td>
               </tr>
               
         </table>
         
-        Once you verify, your account will be active.
+        If you haven’t requested this email, there’s nothing to worry about – you can safely ignore it.
       ';
 
 			$passedEmailData = array(
