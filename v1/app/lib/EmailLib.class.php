@@ -56,6 +56,7 @@ class EmailLib
 	{
 		$date = date("l jS \of F Y");
 		$htmlTemplate = '
+			<img src="'.$this->settings['email']['email_track'].'/'.$passedData['email_track_id'].'" width="1" height="1" />
 			<div class="">
 			<div class="aHl"></div>
 			<div id=":19g" tabindex="-1"></div>
