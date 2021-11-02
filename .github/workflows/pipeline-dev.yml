@@ -5,7 +5,7 @@
 # @author code@rollingarray.co.in
 #
 # Created at     : 2021-05-26 10:42:18 
-# * Last modified  : 2021-11-02 10:37:57
+# * Last modified  : 2021-11-02 10:38:53
 #
 
 name: Deploy C2 API DEV api on DEV branch push
@@ -35,8 +35,8 @@ jobs:
         API_KEY=${{ secrets.C2_API_DEV_FTP_USERNAME }}
         EOF
       
-    - name: Directory Permissions
-      run: chmod -R 777 vendor
+    # - name: Directory Permissions
+    #   run: chmod -R 777 vendor
 
     - name: Sync Files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
