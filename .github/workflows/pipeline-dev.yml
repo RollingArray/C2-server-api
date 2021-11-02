@@ -5,7 +5,7 @@
 # @author code@rollingarray.co.in
 #
 # Created at     : 2021-05-26 10:42:18 
-# * Last modified  : 2021-11-01 14:51:26
+# * Last modified  : 2021-11-02 10:18:09
 #
 
 name: Deploy C2 API DEV api on DEV branch push
@@ -13,7 +13,7 @@ name: Deploy C2 API DEV api on DEV branch push
 on: 
   push:
     branches: 
-      - main
+      - dev
       
 jobs:
   web-deploy:
@@ -34,9 +34,9 @@ jobs:
     - name: Sync Files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
-        server: ftp.rollingarray.co.in
-        username: C2-dev@c2.dev.api.rollingarray.co.in
+        server: ${{ secrets.C2_API_DEV_FTP_SERVER}}
+        username: ${{ secrets.C2_API_DEV_FTP_USERNAME}}
         password: ${{ secrets.C2_API_DEV_FTP_PASSWORD }}
         local-dir: ./
-        server-dir: /
+        server-dir: ${{ secrets.C2_API_DEV_SERVER_DEPLOYMENT_PATH }}
         dangerous-clean-slate: true
