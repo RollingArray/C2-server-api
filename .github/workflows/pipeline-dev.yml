@@ -27,9 +27,9 @@ jobs:
 
     - name: Install Dependencies
       run: composer update --ignore-platform-reqs
-
+      
     - name: Directory Permissions
-      run: chmod -R 777
+      run: chmod -R 777 vendor
 
     - name: Sync Files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
