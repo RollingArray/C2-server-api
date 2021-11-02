@@ -21,9 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-//settings
-require_once __DIR__ . '/settings.php';
-
 //lib
 require_once __DIR__ . '/app/lib/BaseAPI.class.php';
 require_once __DIR__ . '/app/lib/BaseDatabaseAPI.class.php';
@@ -34,6 +31,10 @@ require_once __DIR__ . '/app/lib/MessageLib.class.php';
 require_once __DIR__ . '/app/lib/SessionLib.class.php';
 require_once __DIR__ . '/app/lib/EmailLib.class.php';
 require_once __DIR__ . '/app/lib/JWTLib.class.php';
+require_once __DIR__ . '/app/lib/DotEnvLib.class.php';
+
+//settings
+require_once __DIR__ . '/settings.php';
 
 //controllers
 require_once __DIR__ . '/app/controllers/UserController.php';
@@ -45,7 +46,7 @@ require_once __DIR__ . '/app/controllers/EmailController.php';
 
 //php error reporting, 1 to enable, 0 to disable
 error_reporting(~0);
-ini_set('display_errors', $settings['api']['displayErrorDetails']);
+ini_set('display_errors', 1);
 //error_reporting(~0); ini_set('display_errors', 1);
 
 //instances

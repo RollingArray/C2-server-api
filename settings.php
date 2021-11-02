@@ -1,6 +1,6 @@
-
-
 <?php
+
+namespace C2;
 
 /**
  * © Rolling Array https://rollingarray.co.in/
@@ -11,35 +11,63 @@
  * @author code@rollingarray.co.in
  *
  * Created at     : 2021-04-21 10:04:44 
- * Last modified  : 2021-04-22 07:29:43
+ * Last modified  : 2021-11-02 14:42:55
  */
 
+
+
 //settings
-require_once __DIR__.'/environment.php';
+// require_once __DIR__.'/environment.php';
+
+
+//require __DIR__ . '/app/lib/DotEnvLib.class.php';
+
+//php error reporting, 1 to enable, 0 to disable
+error_reporting(~0);
+ini_set('display_errors', 1);
+//error_reporting(~0); ini_set('display_errors', 1);
+
+//instances
+$dotEnvLib = new DotEnv\DotEnvLib(__DIR__.'/.env');
+$dotEnvLib->load();
 
 $settings = [
 
 	// environment specific configurations
-	// api
-	'api' => $environment['api'],
+	'api'=> [
+		'displayErrorDetails' => true,
+		'host' => 'http://localhost:8888'
+	],
+	'hashKey' => [
+		'SALT' => '1234567890123456', //key size 16,
+		'METHOD' => 'AES-256-CBC',
+		'ALGO' => 'sha256'
+	],
 
-	// database
-	'db' => $environment['db'],
+	'JWT' => [
+		'CLIENT_ID' => 'C2 V 1.0.0',
+		'SERVER_ID' => 'rollingArray.co.in',
+		'EXPIRE_IN_SECONDS' => '604800',
+	],
 
-	//email
-	'email' => $environment['email'],
+	'db' => [
+		'host' => 'localhost',
+		'username' => getenv('DB_USERNAME'),
+		'password' => getenv('DB_PASSWORD'),
+		'database' => getenv('DB_DATABASE'),
+		'port' => '8889'
+	],
 
-	//hashKey
-	'hashKey' => $environment['hashKey'],
-
-	//JWT
-	'JWT' => $environment['JWT'],
-
-	// general configurations
-
-	// default project Details
-	'defaultDetails' => [
-		//
+	'email' => [
+		'smtp_host_ip' => 'mail.rollingarray.co.in',
+		'port' => 587,
+		'smtp_username' => 'ranjoy@rollingarray.co.in',
+		'smtp_password' => 'rjoy.85@s',
+		'support_email' => 'support@rollingarray.co.in',
+		'pretty_email_name' => 'C2 noreply',
+		'app_name' => 'C2',
+		'app_tag_line' => 'Bring Equality In Diverse Workforce',
+		'email_track' => 'C2/api/v1/email/track/update'
 	],
 
 	// Monolog settings
