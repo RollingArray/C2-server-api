@@ -24,7 +24,13 @@ jobs:
     steps:
     - name: Get latest code
       uses: actions/checkout@v2.3.2
-    
+
+    - name: Install Dependencies
+      run: composer update --ignore-platform-reqs
+      
+    - name: Directory Permissions
+      run: chmod -R 777 storage bootstrap/cache
+
     - name: Sync Files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
