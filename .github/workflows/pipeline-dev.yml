@@ -5,7 +5,7 @@
 # @author code@rollingarray.co.in
 #
 # Created at     : 2021-05-26 10:42:18 
-# * Last modified  : 2021-11-02 10:38:53
+# * Last modified  : 2021-11-02 10:43:16
 #
 
 name: Deploy C2 API DEV api on DEV branch push
@@ -30,9 +30,44 @@ jobs:
 
     - name: Create env file
       run: |
-        cat << EOF > .env
-        API_ENDPOINT="https://xxx.execute-api.us-west-2.amazonaws.com"
-        API_KEY=${{ secrets.C2_API_DEV_FTP_USERNAME }}
+        cat << EOF > environment.php
+        $environment = [
+          'api'=> [
+            'displayErrorDetails' => true,
+            'host' => 'http://localhost:8888'
+          ],
+          'hashKey' => [
+            'SALT' => '1234567890123456', //key size 16,
+            'METHOD' => 'AES-256-CBC',
+            'ALGO' => 'sha256'
+          ],
+
+          'JWT' => [
+            'CLIENT_ID' => 'C2 V 1.0.0',
+            'SERVER_ID' => 'rollingArray.co.in',
+            'EXPIRE_IN_SECONDS' => '604800',
+          ],
+
+          'db' => [
+            'host' => 'localhost',
+            'username' => 'rolli3oh',
+            'password' => 'rolli3oh',
+            'database' => 'rolli3oh_c2',
+            'port' => '8889'
+          ],
+
+          'email' => [
+            'smtp_host_ip' => 'mail.rollingarray.co.in',
+            'port' => 587,
+            'smtp_username' => 'ranjoy@rollingarray.co.in',
+            'smtp_password' => 'rjoy.85@s',
+            'support_email' => 'support@rollingarray.co.in',
+            'pretty_email_name' => 'C2 noreply',
+            'app_name' => 'C2',
+            'app_tag_line' => 'Bring Equality In Diverse Workforce',
+            'email_track' => 'C2/api/v1/email/track/update'
+          ],
+        ];
         EOF
       
     # - name: Directory Permissions
