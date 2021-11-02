@@ -5,7 +5,7 @@
 # @author code@rollingarray.co.in
 #
 # Created at     : 2021-05-26 10:42:18 
-# * Last modified  : 2021-11-02 10:43:16
+# * Last modified  : 2021-11-02 10:59:40
 #
 
 name: Deploy C2 API DEV api on DEV branch push
@@ -20,6 +20,9 @@ jobs:
 
     name: Deploy C2 Api Dev
     runs-on: ubuntu-latest
+    environment:
+      name: DEV
+      url: https://c2.dev.api.rollingarray.co.in/
 
     steps:
     # - name: Get latest code
@@ -28,46 +31,10 @@ jobs:
     # - name: Install Dependencies
     #   run: composer update --ignore-platform-reqs
 
-    - name: Create env file
+    - name: Create .env file
       run: |
-        cat << EOF > environment.php
-        $environment = [
-          'api'=> [
-            'displayErrorDetails' => true,
-            'host' => 'http://localhost:8888'
-          ],
-          'hashKey' => [
-            'SALT' => '1234567890123456', //key size 16,
-            'METHOD' => 'AES-256-CBC',
-            'ALGO' => 'sha256'
-          ],
-
-          'JWT' => [
-            'CLIENT_ID' => 'C2 V 1.0.0',
-            'SERVER_ID' => 'rollingArray.co.in',
-            'EXPIRE_IN_SECONDS' => '604800',
-          ],
-
-          'db' => [
-            'host' => 'localhost',
-            'username' => 'rolli3oh',
-            'password' => 'rolli3oh',
-            'database' => 'rolli3oh_c2',
-            'port' => '8889'
-          ],
-
-          'email' => [
-            'smtp_host_ip' => 'mail.rollingarray.co.in',
-            'port' => 587,
-            'smtp_username' => 'ranjoy@rollingarray.co.in',
-            'smtp_password' => 'rjoy.85@s',
-            'support_email' => 'support@rollingarray.co.in',
-            'pretty_email_name' => 'C2 noreply',
-            'app_name' => 'C2',
-            'app_tag_line' => 'Bring Equality In Diverse Workforce',
-            'email_track' => 'C2/api/v1/email/track/update'
-          ],
-        ];
+        cat << EOF > .env
+        SECRET:${{ secrets.TEST_SEC}}
         EOF
       
     # - name: Directory Permissions
