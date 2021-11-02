@@ -5,7 +5,7 @@
 # @author code@rollingarray.co.in
 #
 # Created at     : 2021-05-26 10:42:18 
-# * Last modified  : 2021-11-02 10:18:09
+# * Last modified  : 2021-11-02 10:37:57
 #
 
 name: Deploy C2 API DEV api on DEV branch push
@@ -22,11 +22,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Get latest code
-      uses: actions/checkout@v2.3.2
+    # - name: Get latest code
+    #   uses: actions/checkout@v2.3.2
 
-    - name: Install Dependencies
-      run: composer update --ignore-platform-reqs
+    # - name: Install Dependencies
+    #   run: composer update --ignore-platform-reqs
+
+    - name: Create env file
+      run: |
+        cat << EOF > .env
+        API_ENDPOINT="https://xxx.execute-api.us-west-2.amazonaws.com"
+        API_KEY=${{ secrets.C2_API_DEV_FTP_USERNAME }}
+        EOF
       
     - name: Directory Permissions
       run: chmod -R 777 vendor
