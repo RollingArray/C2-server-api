@@ -11,7 +11,7 @@ namespace C2;
  * @author code@rollingarray.co.in
  *
  * Created at     : 2021-04-21 10:04:44 
- * Last modified  : 2021-11-02 19:50:26
+ * Last modified  : 2021-11-03 21:09:24
  */
 
 require_once __DIR__ . '/app/lib/DotEnvLib.class.php';
@@ -51,7 +51,7 @@ $settings = [
 		'port' => getenv('SMTP_PORT'),
 		'smtpUsername' => getenv('SMTP_USERNAME'),
 		'smtpPassword' => getenv('SMTP_PASSWORD'),
-		'supportEmail' => getenv('DB_PORT'),
+		'supportEmail' => getenv('SMTP_SUPPORT'),
 		'prettyEmailName' => 'C2 noreply',
 		'appName' => 'C2',
 		'appTagLine' => 'Bring Equality In Diverse Workforce',
