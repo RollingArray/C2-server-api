@@ -367,13 +367,13 @@ When contributing to this repository, please first discuss the change you wish t
 > > ```php
 > > $environment = [
 > > 	'hashKey' => [
-> > 		'SALT' => '', //key size 16,
+> > 		'salt' => '', //key size 16,
 > > 	],
 > > 
-> > 	'JWT' => [
-> > 		'CLIENT_ID' => '', // client id
-> > 		'SERVER_ID' => '', // server id www.xyz.com
-> > 		'EXPIRE_IN_SECONDS' => '', // exiporation in seconds, 60480
+> > 	'jwt' => [
+> > 		'clientId' => '', // client id
+> > 		'serverId' => '', // server id www.xyz.com
+> > 		'expireInSeconds' => '', // exiporation in seconds, 60480
 > > 	],
 > > 	
 > > 	'db' => [
@@ -385,12 +385,12 @@ When contributing to this repository, please first discuss the change you wish t
 > > 	],
 > > 
 > > 	'email' => [
-> > 		'smtp_host_ip' => '', // smtp host ip
+> > 		'smtpHostIp' => '', // smtp host ip
 > > 		'port' => 587, // smtp port
-> > 		'smtp_username' => '', // smtp_username
-> > 		'smtp_password' => '', // smtp_password
-> > 		'support_email' => '', // support_email
-> > 		'pretty_email_name' => '' // pretty_email_name
+> > 		'smtpUsername' => '', // smtp_username
+> > 		'smtpPassword' => '', // smtp_password
+> > 		'supportEmail' => '', // support_email
+> > 		'prettyEmailName' => '' // pretty_email_name
 > > 	],
 > > ];   
 > > ```

@@ -1,27 +1,27 @@
 #
 # © Rolling Array https://rollingarray.co.in/
 #
-# @summary Deploy C2 DEV api on DEV branch push 
+# @summary Deploy C2 Stage api on Stage branch push 
 # @author code@rollingarray.co.in
 #
 # Created at     : 2021-05-26 10:42:18 
-# Last modified  : 2021-11-02 18:26:06
+# Last modified  : 2021-11-02 18:26:15
 #
 
-name: Deploy C2 API DEV api on DEV branch push
+name: Deploy C2 API Stage api on Stage branch push
 
 on: 
   push:
     branches: 
-      - dev
+      - stage
       
 jobs:
   web-deploy:
 
-    name: Deploy C2 Api Dev
+    name: Deploy C2 Api Stage
     runs-on: ubuntu-latest
     environment:
-      name: dev
+      name: stage
       url: https://c2.dev.api.rollingarray.co.in/
 
     steps:

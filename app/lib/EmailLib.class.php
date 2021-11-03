@@ -16,11 +16,11 @@ class EmailLib
 	{
 		$this->settings = $settings;
 
-		$smtp_host_ip = gethostbyname($this->settings['email']['smtp_host_ip']);
+		$smtp_host_ip = gethostbyname($this->settings['email']['smtpHostIp']);
 
 		$this->transport = (new \Swift_SmtpTransport($smtp_host_ip, $this->settings['email']['port']))
-			->setUsername($this->settings['email']['smtp_username'])
-			->setPassword($this->settings['email']['smtp_password']);
+			->setUsername($this->settings['email']['smtpUsername'])
+			->setPassword($this->settings['email']['smtpPassword']);
 
 		$this->mailer = new \Swift_Mailer($this->transport);;
 	}
@@ -43,7 +43,7 @@ class EmailLib
 		$insertNewEmailTrack = $DBAccessLib->insertNewEmailTrack($passedEmailData);
 		if ($insertNewEmailTrack) {
 			$email = (new \Swift_Message($subject))
-				->setFrom(array($this->settings['email']['support_email'] => $this->settings['email']['pretty_email_name']))
+				->setFrom(array($this->settings['email']['supportEmail'] => $this->settings['email']['prettyEmailName']))
 				->setTo(array($passedData['user_email']))
 				->setBody($this->messageFormat($passedEmailData), 'text/html');
 
@@ -56,7 +56,7 @@ class EmailLib
 	{
 		$date = date("l jS \of F Y");
 		$htmlTemplate = '
-			<img src="'.$this->settings['api']['host'].'/'.$this->settings['email']['email_track'].'/'.$passedData['email_track_id'].'" width="1" height="1" />
+			<img src="'.$this->settings['api']['host'].'/'.$this->settings['email']['emailTrack'].'/'.$passedData['email_track_id'].'" width="1" height="1" />
 			<div class="">
 			<div class="aHl"></div>
 			<div id=":19g" tabindex="-1"></div>
@@ -111,14 +111,14 @@ class EmailLib
 							style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px"
 							valign="top"><b>
 							Regards<br>
-							Team ' . $this->settings['email']['app_name'] . '</b>
+							Team ' . $this->settings['email']['appName'] . '</b>
 						</td>
 						</tr>
 						<tr style="font-family:Helvetica,Arial,sans-serif;font-size:14px;margin:0;padding:0">
 						<td
 							style="font-family:Helvetica,Arial,sans-serif;font-size:14px;vertical-align:top;margin:0;padding:0 0 20px;font-style:italic"
 							valign="top">
-							' . $this->settings['email']['app_name'] . ' - ' . $this->settings['email']['app_tag_line'] . '
+							' . $this->settings['email']['appName'] . ' - ' . $this->settings['email']['appTagLine'] . '
 						</td>
 						</tr>
 					</tbody>
@@ -151,8 +151,8 @@ class EmailLib
 				<div style="background-color:#eceff1;padding:24px;font-size:12px;line-height:16px">
 					<div>You are receiving this notification because you have registered with <span style="color:#56C2E1"> <a
 					style="text-decoration:none;color:#039be5" href="https://c2.rollingarray.co.in/"
-					target="_blank">' . $this->settings['email']['app_name'] . '</a></span></div>
-					<div style="margin-top:24px">Thanks for using ' . $this->settings['email']['app_name'] . ' !</div>
+					target="_blank">' . $this->settings['email']['appName'] . '</a></span></div>
+					<div style="margin-top:24px">Thanks for using ' . $this->settings['email']['appName'] . ' !</div>
 				</div>
 				<div style="background-color:#323433;padding:34px">
 					<table style="width:100%" cellpadding="0" cellspacing="0">
@@ -213,10 +213,10 @@ class EmailLib
 	{
 		if ($passedData['user_full_name'] && $passedData['user_verification_code'] && $passedData['user_email']) {
 			$email_track_id = $UtilityLib->generateId('EMAILTRACK_');
-			$header = 'You are just a step away from using your account in ' . $this->settings['email']['app_name'];
-			$subject = $this->settings['email']['app_name'] . ' - Email Verification';
+			$header = 'You are just a step away from using your account in ' . $this->settings['email']['appName'];
+			$subject = $this->settings['email']['appName'] . ' - Email Verification';
 			$emailBodyMessage = '
-        You or someone with your email id signed up at ' . $this->settings['email']['app_name'] . '. Your account is almost ready, but before you login you need to confirm your email by applying below verification code in the app.
+        You or someone with your email id signed up at ' . $this->settings['email']['appName'] . '. Your account is almost ready, but before you login you need to confirm your email by applying below verification code in the app.
         <br><br>
 		<table border=0 style="font-family:Helvetica,Arial,sans-serif;font-size:5em;vertical-align:top;margin:0;margin:0 0 20px; background: #e9e8e8;
 		border: 1px solid #d1cdcd;
@@ -248,10 +248,10 @@ class EmailLib
 	{
 		//return 'asd';
 		if ($passedData['user_full_name'] && $passedData['user_verification_code'] && $passedData['user_email'] && $passedData['email_track_id']) {
-			$header = 'You are just a step away from using your account in ' . $this->settings['email']['app_name'];
-			$subject = $this->settings['email']['app_name'] . ' - Email Verification';
+			$header = 'You are just a step away from using your account in ' . $this->settings['email']['appName'];
+			$subject = $this->settings['email']['appName'] . ' - Email Verification';
 			$emailBodyMessage = '
-        You or someone with your email id signed up at ' . $this->settings['email']['app_name'] . '. Your account is almost ready, but before you login you need to confirm your email by applying below verification code in the app.
+        You or someone with your email id signed up at ' . $this->settings['email']['appName'] . '. Your account is almost ready, but before you login you need to confirm your email by applying below verification code in the app.
         <br><br>
         <table border=0 style="font-family:Helvetica,Arial,sans-serif;font-size:5em;vertical-align:top;margin:0;margin:0 0 20px; background: #e9e8e8;
 		border: 1px solid #d1cdcd;
@@ -285,11 +285,11 @@ class EmailLib
 	{
 		if ($passedData['user_full_name'] && $passedData['user_email']) {
 			$email_track_id = $UtilityLib->generateId('EMAILTRACK_');
-			$header = 'Welcome to ' . $this->settings['email']['app_name'];
-			$subject = $this->settings['email']['app_name'] . ' - Welcome';
+			$header = 'Welcome to ' . $this->settings['email']['appName'];
+			$subject = $this->settings['email']['appName'] . ' - Welcome';
 
 			$emailBodyMessage = '
-        Welcome to ' . $this->settings['email']['app_name'] . ' :-) Your account is active and we are waiting for you to create your Project or join a ongoing Project
+        Welcome to ' . $this->settings['email']['appName'] . ' :-) Your account is active and we are waiting for you to create your Project or join a ongoing Project
         <br><br>
       ';
 
@@ -312,7 +312,7 @@ class EmailLib
 		if ($passedData['user_full_name'] && $passedData['user_password_reset_code'] && $passedData['user_email']) {
 			$email_track_id = $UtilityLib->generateId('EMAILTRACK_');
 			$header = 'Did you forgot your password';
-			$subject = $this->settings['email']['app_name'] . ' - Reset Password';
+			$subject = $this->settings['email']['appName'] . ' - Reset Password';
 			$emailBodyMessage = '
         You told us you forgot your password. If you really did, use this code to reset your password.
         <br><br>

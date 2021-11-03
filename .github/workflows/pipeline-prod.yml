@@ -5,7 +5,7 @@
 # @author code@rollingarray.co.in
 #
 # Created at     : 2021-05-26 10:42:18 
-# Last modified  : 2021-11-02 18:26:06
+# Last modified  : 2021-11-02 18:25:57
 #
 
 name: Deploy C2 API DEV api on DEV branch push
@@ -13,7 +13,7 @@ name: Deploy C2 API DEV api on DEV branch push
 on: 
   push:
     branches: 
-      - dev
+      - main
       
 jobs:
   web-deploy:

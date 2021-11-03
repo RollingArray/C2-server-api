@@ -111,9 +111,9 @@ class UtilityLib
     public function encrypt(string $data)
     {
 
-        $salt = $this->settings['hashKey']['SALT'];
-        $algo = $this->settings['hashKey']['ALGO'];
-        $method = $this->settings['hashKey']['METHOD'];
+        $salt = $this->settings['hashKey']['salt'];
+        $algo = $this->settings['hashKey']['algo'];
+        $method = $this->settings['hashKey']['method'];
         $key = hash($algo, $salt);
 
         $ivSize = openssl_cipher_iv_length($method);
@@ -130,9 +130,9 @@ class UtilityLib
     //decrypt
     public function decrypt(string $data)
     {
-        $salt = $this->settings['hashKey']['SALT'];
-        $algo = $this->settings['hashKey']['ALGO'];
-        $method = $this->settings['hashKey']['METHOD'];
+        $salt = $this->settings['hashKey']['salt'];
+        $algo = $this->settings['hashKey']['algo'];
+        $method = $this->settings['hashKey']['method'];
         $key = hash($algo, $salt);
 
         $data = base64_decode($data);
@@ -147,7 +147,7 @@ class UtilityLib
     public function hasedString($string)
     {
         $text = $string;
-        $salt = $this->settings['hashKey']['SALT'];
+        $salt = $this->settings['hashKey']['salt'];
         //$hashedString =  trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $salt, $text, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
 
         $cipher = "aes-128-gcm";
@@ -164,7 +164,7 @@ class UtilityLib
     //originalString
     function originalString($ciphertext)
     {
-        $salt = $this->settings['hashKey']['SALT'];
+        $salt = $this->settings['hashKey']['salt'];
         $tag = '';
         $cipher = "aes-128-gcm";
         if (in_array($cipher, openssl_get_cipher_methods())) {

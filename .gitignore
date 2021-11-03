@@ -4,3 +4,6 @@
 environment.php
 /vendor
 .env
+.dev.env
+.stage.env
+.prod.env

@@ -23,6 +23,7 @@ class DotEnvLib
     public function load() :void
     {
         if (!is_readable($this->path)) {
+            
             throw new \RuntimeException(sprintf('%s file is not readable', $this->path));
         }
 
@@ -39,6 +40,7 @@ class DotEnvLib
 
             if (!array_key_exists($name, $_SERVER) && !array_key_exists($name, $_ENV)) {
                 putenv(sprintf('%s=%s', $name, $value));
+                
                 $_ENV[$name] = $value;
                 $_SERVER[$name] = $value;
             }

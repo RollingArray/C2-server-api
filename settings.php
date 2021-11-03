@@ -11,23 +11,12 @@ namespace C2;
  * @author code@rollingarray.co.in
  *
  * Created at     : 2021-04-21 10:04:44 
- * Last modified  : 2021-11-02 14:42:55
+ * Last modified  : 2021-11-02 19:50:26
  */
 
+require_once __DIR__ . '/app/lib/DotEnvLib.class.php';
 
-
-//settings
-// require_once __DIR__.'/environment.php';
-
-
-//require __DIR__ . '/app/lib/DotEnvLib.class.php';
-
-//php error reporting, 1 to enable, 0 to disable
-error_reporting(~0);
-ini_set('display_errors', 1);
-//error_reporting(~0); ini_set('display_errors', 1);
-
-//instances
+//dot env instances, load environment variables
 $dotEnvLib = new DotEnv\DotEnvLib(__DIR__.'/.env');
 $dotEnvLib->load();
 
@@ -35,39 +24,38 @@ $settings = [
 
 	// environment specific configurations
 	'api'=> [
-		'displayErrorDetails' => true,
-		'host' => 'http://localhost:8888'
+		'host' => getenv('API_HOST')
 	],
 	'hashKey' => [
-		'SALT' => '1234567890123456', //key size 16,
-		'METHOD' => 'AES-256-CBC',
-		'ALGO' => 'sha256'
+		'salt' => getenv('HASH_KEY_SALT'),
+		'method' => getenv('HASH_KEY_METHOD'),
+		'algo' => getenv('HASH_KEY_ALGO')
 	],
 
-	'JWT' => [
-		'CLIENT_ID' => 'C2 V 1.0.0',
-		'SERVER_ID' => 'rollingArray.co.in',
-		'EXPIRE_IN_SECONDS' => '604800',
+	'jwt' => [
+		'clientId' => getenv('JWT_CLIENT_ID'),
+		'serverId' => getenv('JWT_SERVER_ID'),
+		'expireInSeconds' => getenv('JWT_EXPIRE_IN_SECONDS'),
 	],
 
 	'db' => [
-		'host' => 'localhost',
+		'host' => getenv('DB_HOST'),
 		'username' => getenv('DB_USERNAME'),
 		'password' => getenv('DB_PASSWORD'),
-		'database' => getenv('DB_DATABASE'),
-		'port' => '8889'
+		'database' => getenv('DATABASE'),
+		'port' => getenv('DB_PORT'),
 	],
 
 	'email' => [
-		'smtp_host_ip' => 'mail.rollingarray.co.in',
-		'port' => 587,
-		'smtp_username' => 'ranjoy@rollingarray.co.in',
-		'smtp_password' => 'rjoy.85@s',
-		'support_email' => 'support@rollingarray.co.in',
-		'pretty_email_name' => 'C2 noreply',
-		'app_name' => 'C2',
-		'app_tag_line' => 'Bring Equality In Diverse Workforce',
-		'email_track' => 'C2/api/v1/email/track/update'
+		'smtpHostIp' => getenv('SMTP_HOST_IP'),
+		'port' => getenv('SMTP_PORT'),
+		'smtpUsername' => getenv('SMTP_USERNAME'),
+		'smtpPassword' => getenv('SMTP_PASSWORD'),
+		'supportEmail' => getenv('DB_PORT'),
+		'prettyEmailName' => 'C2 noreply',
+		'appName' => 'C2',
+		'appTagLine' => 'Bring Equality In Diverse Workforce',
+		'emailTrack' => 'C2/api/v1/email/track/update'
 	],
 
 	// Monolog settings

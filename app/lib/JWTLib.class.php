@@ -18,7 +18,7 @@
         private function jwtHeader()
         {
             $header = [
-                   'typ' => 'JWT',
+                   'typ' => 'jwt',
                    'alg' => 'HS256'
                   ];
 
@@ -33,8 +33,8 @@
         {
             $tokenId    = base64_encode(bin2hex(random_bytes(10)));
             //var_dump($tokenId);
-            $serverId = $this->settings['JWT']['SERVER_ID'];
-            $clientId = $this->settings['JWT']['CLIENT_ID'];
+            $serverId = $this->settings['jwt']['serverId'];
+            $clientId = $this->settings['jwt']['clientId'];
             $issuedAt   = time();
             //$expire     = $expireLimit;            
             
@@ -56,8 +56,8 @@
         //signature
         private function jwtSignature($header, $payload)
         {
-            $key = $this->settings['hashKey']['SALT'];
-            $algo = $this->settings['hashKey']['ALGO'];
+            $key = $this->settings['hashKey']['salt'];
+            $algo = $this->settings['hashKey']['algo'];
             
 
             $headerAndPayload = $header . '.' . $payload;
@@ -107,8 +107,8 @@
         {
             $revisedToken = null;
             $responseData = array();
-            $key = $this->settings['hashKey']['SALT'];
-            $algo = $this->settings['hashKey']['ALGO'];
+            $key = $this->settings['hashKey']['salt'];
+            $algo = $this->settings['hashKey']['algo'];
             
             $jwtValues = explode('.', $token);
 
@@ -171,7 +171,7 @@
                 {
                     //if token expired
                     $now  = time(); //86400 = 1 day
-                    $expectedExpire = $decodedToken['receavedPayLoad']['iat'] + $this->settings['JWT']['EXPIRE_IN_SECONDS'];
+                    $expectedExpire = $decodedToken['receavedPayLoad']['iat'] + $this->settings['jwt']['expireInSeconds'];
                     
                     if((int)$now < (int)$expectedExpire)
                     {

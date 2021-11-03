@@ -31,7 +31,7 @@
 			//session_start();
 		    $_SESSION["sessionID"] = uniqid('SESSION_');
 
-		    $returnSessionId;
+		    //$returnSessionId;
 
 		    $newSessionForUserInserted = $DBAccessLib->insertNewSessionInDB($user_id, $_SESSION["sessionID"]);
 		    if($newSessionForUserInserted)
