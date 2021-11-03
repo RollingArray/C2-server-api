@@ -9,7 +9,7 @@
  * @author code@rollingarray.co.in
  *
  * Created at     : 2021-04-21 10:04:44 
- * Last modified  : 2021-11-02 19:50:32
+ * Last modified  : 2021-11-03 19:49:46
  */
 
 // add CORS
@@ -71,6 +71,7 @@ $emailController = new C2\EmailController($settings);
 $requestUri = $_SERVER['REQUEST_URI'];
 $apiVersion = 'v1/';
 			
+// check each route ans pass on to the controller
 switch (true) {
 	case strpos($requestUri, $apiVersion.'user/test/'): {
 			$userController->test();
