@@ -5,7 +5,7 @@
 # @author code@rollingarray.co.in
 #
 # Created at     : 2021-05-26 10:42:18 
-# Last modified  : 2021-11-04 08:50:42
+# Last modified  : 2021-11-04 09:22:42
 #
 
 name: Deploy C2 API DEV api on DEV branch push
@@ -21,7 +21,7 @@ jobs:
     name: Deploy C2 Api Prod
     runs-on: ubuntu-latest
     environment:
-      name: dev
+      name: prod
       url: https://c2.api.rollingarray.co.in/
 
     steps:
