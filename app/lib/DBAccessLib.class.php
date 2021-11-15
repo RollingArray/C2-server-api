@@ -1087,6 +1087,32 @@ class DBAccessLib extends BaseDatabaseAPI
         return parent::getAllRecords($query, $data);
     }
 
+    //getReviewDetailsForReviewer
+    public function getReviewDetailsForReviewer($passedData)
+    {
+        $query = "CALL sp_get_activity_review_details_for_reviewer(?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_id']
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
+    //getReviewDetailsForAssignee
+    public function getReviewDetailsForAssignee($passedData)
+    {
+        $query = "CALL sp_get_activity_review_details_for_assignee(?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_id']
+        );
+
+        return parent::getAllRecords($query, $data);
+    }
+
     //ifAddedReviewerAlreadySameInActivity
     public function ifAddedReviewerAlreadySameInActivity($passedData)
     {
@@ -1158,6 +1184,34 @@ class DBAccessLib extends BaseDatabaseAPI
             $passedData['performance_value'],
             $passedData['weighted_performance_value'],
             $passedData['reviewer_comment']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //lockActivityReview
+    function lockActivityReview($passedData)
+    {
+
+        $query = "CALL sp_lock_activity_review(?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_review_id']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //unlockActivityReview
+    function unlockActivityReview($passedData)
+    {
+
+        $query = "CALL sp_unlock_activity_review(?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_review_id']
         );
 
         return parent::executeStatement($query, $data);

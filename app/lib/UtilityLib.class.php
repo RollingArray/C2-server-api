@@ -474,8 +474,22 @@ class UtilityLib
         $rows = array();
         $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
         $rows['activityDetails'] = $DBAccessLib->getActivityDetails($passedData);
-        $rows['reviewDetails'] = $this->getReviewDetails($DBAccessLib, $passedData);
-
+        $rows['userType'] = $DBAccessLib->getUserTypeForUserAndProjectId($passedData);
+        switch ($rows['userType']['userTypeId']) {
+            case 'PROJECTUSERTYPEID_0001':
+                $rows['reviewDetails'] = $this->getReviewDetails($DBAccessLib, $passedData);
+                break;
+            case 'PROJECTUSERTYPEID_0002':
+                $rows['reviewDetails'] = $this->getReviewDetailsForAssignee($DBAccessLib, $passedData);
+                break;
+            case 'PROJECTUSERTYPEID_0003':
+                $rows['reviewDetails'] = $this->getReviewDetailsForReviewer($DBAccessLib, $passedData);
+                break;
+            
+            default:
+                # code...
+                break;
+        }
         return $this->generateKeyValueStructure($rows);
     }
 
@@ -483,6 +497,36 @@ class UtilityLib
     public function getReviewDetails($DBAccessLib, $passedData)
     {
         $rows = $DBAccessLib->getReviewDetails($passedData);
+        $tempRows = array();
+
+        foreach ($rows as $eachData) {
+            $tempRows[] = $this->generateKeyValueStructure($eachData);
+        }
+
+        return $this->generateServiceReturnDataStructure($tempRows);
+    }
+
+    /**
+     * 
+     */
+    public function getReviewDetailsForReviewer($DBAccessLib, $passedData)
+    {
+        $rows = $DBAccessLib->getReviewDetailsForReviewer($passedData);
+        $tempRows = array();
+
+        foreach ($rows as $eachData) {
+            $tempRows[] = $this->generateKeyValueStructure($eachData);
+        }
+
+        return $this->generateServiceReturnDataStructure($tempRows);
+    }
+
+    /**
+     * 
+     */
+    public function getReviewDetailsForAssignee($DBAccessLib, $passedData)
+    {
+        $rows = $DBAccessLib->getReviewDetailsForAssignee($passedData);
         $tempRows = array();
 
         foreach ($rows as $eachData) {

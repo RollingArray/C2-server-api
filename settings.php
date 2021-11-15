@@ -277,7 +277,9 @@ $settings = [
 		'FAIL_REVIEWER_ADD' => 'Reviewer could not be added, please try again',
 		'FAIL_REVIEWER_DELETE' => 'Reviewer could not be deleted, please try again',
 		'REVIEWER_EXIST' => 'The reviewer is already added',
-		'FAIL_REVIEW_ADD' => 'Review could not be addedd, please try again',
+		'FAIL_REVIEW_ADD' => 'Review could not be added, please try again',
+		'FAIL_REVIEW_LOCK' => 'Review could not be locked, please try again',
+		'FAIL_REVIEW_UNLOCK' => 'Review could not be unlocked, please try again',
 	],
 	'successMessage' => [
 		//user
@@ -328,6 +330,8 @@ $settings = [
 		'SUCCESS_REVIEWER_ADD' => 'Reviewer added to this activity successfully. We recommend to add multiple reviewer to get unbiased opinion',
 		'SUCCESS_REVIEWER_DELETE' => 'Reviewer deleted from this activity successfully',
 		'SUCCESS_REVIEW_ADD' => 'Review added successfully',
+		'SUCCESS_REVIEW_LOCK' => 'Review locked successfully',
+		'SUCCESS_REVIEW_UNLOCK' => 'Review unlocked successfully',
 	],
 ];
 ?>

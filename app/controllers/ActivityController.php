@@ -700,6 +700,114 @@ class ActivityController extends BaseAPI
 
         echo json_encode($responseData);
     }
+
+    //activityReviewUpdate
+    public function lockActivityReview()
+    {
+        $responseData = null;
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $activity_review_id = parent::sanitizeInput($postData->activityReviewId);
+        $token = parent::getAuthorizationSessionObject();
+
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "activity_review_id" => $activity_review_id
+        );
+
+        //check If User Can do the operation
+        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if ($validator['success']) {
+            // is user present
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            if ($activeUser) {
+
+                //check access
+                if ($checkIfUserCanCRUD['crudReviewLock']) {
+
+                    $lockActivityReview = $this->DBAccessLib->lockActivityReview($passedData);
+                    
+                    //create new
+                    if ($lockActivityReview) {
+                        $message = $this->settings['successMessage']['SUCCESS_REVIEW_LOCK'];
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('FAIL_REVIEW_LOCK', $this->settings['errorMessage']['FAIL_REVIEW_LOCK']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        } else {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
+    }
+
+    //activityReviewUpdate
+    public function unlockActivityReview()
+    {
+        $responseData = null;
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $activity_review_id = parent::sanitizeInput($postData->activityReviewId);
+        $token = parent::getAuthorizationSessionObject();
+
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "activity_review_id" => $activity_review_id
+        );
+
+        //check If User Can do the operation
+        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if ($validator['success']) {
+            // is user present
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            if ($activeUser) {
+
+                //check access
+                if ($checkIfUserCanCRUD['crudReviewLock']) {
+
+                    $lockActivityReview = $this->DBAccessLib->unlockActivityReview($passedData);
+                    
+                    //create new
+                    if ($lockActivityReview) {
+                        $message = $this->settings['successMessage']['SUCCESS_REVIEW_UNLOCK'];
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('FAIL_REVIEW_UNLOCK', $this->settings['errorMessage']['FAIL_REVIEW_UNLOCK']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        } else {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
+    }
     
     function __destruct()
     {

@@ -215,6 +215,16 @@ switch (true) {
 			$activityController->activityReviewUpdate();
 		}
 		break;
+	
+	case strpos($requestUri, $apiVersion.'review/lock/'): {
+			$activityController->lockActivityReview();
+		}
+		break;
+
+	case strpos($requestUri, $apiVersion.'review/unlock/'): {
+			$activityController->unlockActivityReview();
+		}
+		break;
 
 	case strpos($requestUri, $apiVersion.'email/track/update/'): {
 			$emailController->emailTrackUpdate();
