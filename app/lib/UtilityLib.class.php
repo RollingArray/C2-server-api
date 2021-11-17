@@ -283,6 +283,7 @@ class UtilityLib
     {
         $rows = array();
         $rows['projectDetails'] = $DBAccessLib->getBasicProjectDetails($passedData);
+        $rows['userType'] = $DBAccessLib->getUserTypeForUserAndProjectId($passedData);
         $rows['projectAdministrator'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0001');
         $rows['projectAssignees'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0002');
         $rows['projectReviewers'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0003');
