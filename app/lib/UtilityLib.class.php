@@ -367,6 +367,12 @@ class UtilityLib
             {
                 $rows['projectReviewers'] = $this->getAllProjectUsersByType($DBAccessLib, $passedData, 'PROJECTUSERTYPEID_0003');
             }
+
+            //project user type
+            if($value == 'userType')
+            {
+                $rows['userType'] = $DBAccessLib->getUserTypeForUserAndProjectId($passedData);
+            }
         }
 
         return $this->generateKeyValueStructure($rows);
