@@ -193,6 +193,16 @@ switch (true) {
 			$activityController->activityCrud();
 		}
 		break;
+	
+	case strpos($requestUri, $apiVersion.'activity/lock/'): {
+			$activityController->lockActivity();
+		}
+		break;
+
+	case strpos($requestUri, $apiVersion.'activity/unlock/'): {
+			$activityController->unlockActivity();
+		}
+		break;
 
 		//comment
 	case strpos($requestUri, $apiVersion.'activity/comment/crud/'): {

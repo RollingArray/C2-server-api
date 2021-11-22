@@ -258,13 +258,15 @@ $settings = [
 
 		//activity
 		'ACTIVITY_EXIST' => 'Activity already exist with same name, please give a new name',
-		'ACTIVITY_LOCKED' => 'This activity is already locked',
+		'ACTIVITY_LOCKED' => 'This activity is already locked. No modification to the activity or self comment not allowed',
 		'FAIL_ACTIVITY_CREATE' => 'Activity could not be created, please try again',
 		'FAIL_ACTIVITY_UPDATE' => 'Activity could not be updated, please try again',
 		'FAIL_ACTIVITY_DELETE' => 'Activity could not be deleted, please try again',
 		'ACTIVITY_SPRINT_ASSOCIATION' => 'There are activities associated with this sprint, sprint can not be deleted',
 		'ACTIVITY_GOAL_ASSOCIATION' => 'There are activities associated with this goal, goal can not be deleted',
 		'WEIGHT_EXCEED' => 'Total activity weight for an assignee in a sprint can not exceed beyond 100%',
+		'FAIL_ACTIVITY_LOCK' => 'Activity could not be locked, please try again',
+		'FAIL_ACTIVITY_UNLOCK' => 'Activity could not be unlocked, please try again',
 
 		//goal
 		'NO_SAME_USER' => 'Comments can be submitted by only assignee',
@@ -320,6 +322,8 @@ $settings = [
 		'SUCCESS_ACTIVITY_CREATE' => 'Activity created successfully. You might want to reviews to review this',
 		'SUCCESS_ACTIVITY_UPDATE' => 'Activity updated successfully',
 		'SUCCESS_ACTIVITY_DELETE' => 'Activity deleted successfully',
+		'SUCCESS_ACTIVITY_LOCK' => 'Activity locked successfully',
+		'SUCCESS_ACTIVITY_UNLOCK' => 'Activity unlocked successfully',
 
 		//comment
 		'SUCCESS_COMMENT_ADD' => 'Comment added successfully',

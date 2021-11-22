@@ -943,12 +943,24 @@ class DBAccessLib extends BaseDatabaseAPI
     function lockActivity($passedData)
     {
 
-        $query = "CALL sp_lock_activity(?,?,?)";
+        $query = "CALL sp_lock_activity(?,?)";
 
         $data = array(
             $passedData['user_id'],
             $passedData['activity_id'],
-            $passedData['activity_locked']
+        );
+
+        return parent::executeStatement($query, $data);
+    }
+
+    //lockActivity
+    function unlockActivity($passedData)
+    {
+        $query = "CALL sp_unlock_activity(?,?)";
+
+        $data = array(
+            $passedData['user_id'],
+            $passedData['activity_id'],
         );
 
         return parent::executeStatement($query, $data);
