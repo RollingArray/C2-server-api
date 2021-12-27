@@ -193,7 +193,7 @@
             }
         }
             
-        public function sendBackToClient($token, $user_id, $keyName, $data)
+        public function sendBackToClient($token, $user_id, $keyName, $data, $crudReturn = NULL)
         {
           
             $ifValidToken = $this->checkIfSessionUserTokenExpired($token, $user_id);
@@ -207,6 +207,7 @@
                 $responseData['success'] = true;
                 $responseData['tokenUpdated'] = false;
                 $responseData[$keyName] = $data;
+                $responseData['crudReturn'] = $crudReturn;
                 $responseData['updatedLoggedInSessionId']  = $revisedToken;
             }    
             else{
@@ -215,6 +216,7 @@
               $responseData['success'] = true;
               $responseData['tokenUpdated'] = true;
               $responseData[$keyName] = $data;
+              $responseData['crudReturn'] = $crudReturn;
               $responseData['updatedLoggedInSessionId']  = $newToken;
             } 
             // make it invalid          
