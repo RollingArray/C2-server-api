@@ -89,8 +89,9 @@ class ProjectController extends BaseAPI
 
                             if($attachProjectToMember)
                             {
+
                                 $message = $this->settings['successMessage']['SUCCESS_PROJECT_CREATE'];
-                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message, $passedData);
                             }
                             else
                             {
@@ -135,7 +136,8 @@ class ProjectController extends BaseAPI
                 {
                     //check If User Can do the operation
                     $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
-        
+                    //echo $checkIfUserCanCRUD;
+
                     //check access
                     if($checkIfUserCanCRUD['crudProject'])
                     {

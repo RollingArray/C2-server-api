@@ -307,19 +307,19 @@ $settings = [
 		'SUCCESS_MEMBER_DELETE' => 'User deleted successfully form the project',
 		
 		//sprint
-		'SUCCESS_SPRINT_CREATE' => 'Sprint created successfully. You might want to you may want to attach this sprint against goal activities for a member',
+		'SUCCESS_SPRINT_CREATE' => 'Sprint created successfully. You may want to attach this sprint against goal activities for a member',
 		'SUCCESS_SPRINT_UPDATE' => 'Sprint updated successfully',
 		'SUCCESS_SPRINT_DELETE' => 'Sprint deleted successfully',
 		'SUCCESS_SPRINT_ACTIVE' => 'Sprint activated successfully',
 		'SUCCESS_SPRINT_CLOSED' => 'Sprint closed successfully',
 
 		//goal
-		'SUCCESS_GOAL_CREATE' => 'Goal created successfully. You might want to attach this goal against an activity to achieve this goal for a assignee',
+		'SUCCESS_GOAL_CREATE' => 'Goal created successfully. You may want to attach this goal against an activity to achieve this goal for a assignee',
 		'SUCCESS_GOAL_UPDATE' => 'Goal updated successfully',
 		'SUCCESS_GOAL_DELETE' => 'Goal deleted successfully',
 
 		//activity
-		'SUCCESS_ACTIVITY_CREATE' => 'Activity created successfully. You might want to reviews to review this',
+		'SUCCESS_ACTIVITY_CREATE' => 'Activity created successfully. You may want to reviews to review this',
 		'SUCCESS_ACTIVITY_UPDATE' => 'Activity updated successfully',
 		'SUCCESS_ACTIVITY_DELETE' => 'Activity deleted successfully',
 		'SUCCESS_ACTIVITY_LOCK' => 'Activity locked successfully',

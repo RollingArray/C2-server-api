@@ -210,12 +210,11 @@ class UserController extends BaseAPI
 					// nullify verification code
 					$passedData = array(
 						"user_email" => $userEmail,
-						"user_verification_code" => 'VERIFIED',
 					);
 
-					$updateVerificationCode = $this->DBAccessLib->regenerateUserAccountActivationCode($passedData);
+					$activateUserAccount = $this->DBAccessLib->activateUserAccount($passedData);
 
-					if ($updateVerificationCode) {
+					if ($activateUserAccount) {
 						//sessionServer, insert new session 
 						$tokenId = $this->JWTLib->createNewToken($userId);
 						//var_dump($tokenId);               
