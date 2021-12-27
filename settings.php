@@ -214,7 +214,7 @@ $settings = [
 		'NO_PASSWORD_UPDATE' => 'Password could not be updated, please try again',
 		'PASSWORD_RESET_CODE_NOT_FOUND' => 'Password reset code did not match, please re-check',
 		'USER_VERIFICATION_FAILED' => 'Unfortunately your answers to the security question did not match, give another try',
-		'INVALID_SESSION' => 'Oh No !! your authorization token has expired, please sign-in again',
+		'INVALID_SESSION' => 'Oh No !! it seems your authorization token is no longer valid, please sign-in again',
 		'NO_USER_UPDATE' => 'User details could not be updated',
 		'NO_USER_DEVICE' => 'Your device could not register',
 		'NO_SESSION' => 'No session user found',
@@ -258,13 +258,15 @@ $settings = [
 
 		//activity
 		'ACTIVITY_EXIST' => 'Activity already exist with same name, please give a new name',
-		'ACTIVITY_LOCKED' => 'This activity is already locked',
+		'ACTIVITY_LOCKED' => 'This activity is already locked. No modification to the activity or self comment not allowed',
 		'FAIL_ACTIVITY_CREATE' => 'Activity could not be created, please try again',
 		'FAIL_ACTIVITY_UPDATE' => 'Activity could not be updated, please try again',
 		'FAIL_ACTIVITY_DELETE' => 'Activity could not be deleted, please try again',
 		'ACTIVITY_SPRINT_ASSOCIATION' => 'There are activities associated with this sprint, sprint can not be deleted',
 		'ACTIVITY_GOAL_ASSOCIATION' => 'There are activities associated with this goal, goal can not be deleted',
 		'WEIGHT_EXCEED' => 'Total activity weight for an assignee in a sprint can not exceed beyond 100%',
+		'FAIL_ACTIVITY_LOCK' => 'Activity could not be locked, please try again',
+		'FAIL_ACTIVITY_UNLOCK' => 'Activity could not be unlocked, please try again',
 
 		//goal
 		'NO_SAME_USER' => 'Comments can be submitted by only assignee',
@@ -277,7 +279,9 @@ $settings = [
 		'FAIL_REVIEWER_ADD' => 'Reviewer could not be added, please try again',
 		'FAIL_REVIEWER_DELETE' => 'Reviewer could not be deleted, please try again',
 		'REVIEWER_EXIST' => 'The reviewer is already added',
-		'FAIL_REVIEW_ADD' => 'Review could not be addedd, please try again',
+		'FAIL_REVIEW_ADD' => 'Review could not be added, please try again',
+		'FAIL_REVIEW_LOCK' => 'Review could not be locked, please try again',
+		'FAIL_REVIEW_UNLOCK' => 'Review could not be unlocked, please try again',
 	],
 	'successMessage' => [
 		//user
@@ -318,6 +322,8 @@ $settings = [
 		'SUCCESS_ACTIVITY_CREATE' => 'Activity created successfully. You might want to reviews to review this',
 		'SUCCESS_ACTIVITY_UPDATE' => 'Activity updated successfully',
 		'SUCCESS_ACTIVITY_DELETE' => 'Activity deleted successfully',
+		'SUCCESS_ACTIVITY_LOCK' => 'Activity locked successfully',
+		'SUCCESS_ACTIVITY_UNLOCK' => 'Activity unlocked successfully',
 
 		//comment
 		'SUCCESS_COMMENT_ADD' => 'Comment added successfully',
@@ -328,6 +334,8 @@ $settings = [
 		'SUCCESS_REVIEWER_ADD' => 'Reviewer added to this activity successfully. We recommend to add multiple reviewer to get unbiased opinion',
 		'SUCCESS_REVIEWER_DELETE' => 'Reviewer deleted from this activity successfully',
 		'SUCCESS_REVIEW_ADD' => 'Review added successfully',
+		'SUCCESS_REVIEW_LOCK' => 'Review locked successfully',
+		'SUCCESS_REVIEW_UNLOCK' => 'Review unlocked successfully',
 	],
 ];
 ?>

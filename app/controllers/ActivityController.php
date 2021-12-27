@@ -188,7 +188,7 @@ class ActivityController extends BaseAPI
         $postData = parent::getPostData();
         $user_id = parent::sanitizeInput($postData->userId);
         $project_id = parent::sanitizeInput($postData->projectId);
-        
+
         $token = parent::getAuthorizationSessionObject();
 
         // if filter properties exist
@@ -204,86 +204,30 @@ class ActivityController extends BaseAPI
                 "goal_id" => $goal_id,
                 "assignee_user_id" => $assignee_user_id,
             );
-    
+
             $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
-    
+
             //if input validated
             if ($validator['success']) {
                 $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
-    
+
                 //activeUser
                 if ($activeUser) {
                     $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
-    
-                    if ($ifProjectAccessToMember) 
-                    {
-                        //check If User Can do the operation
-                        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
-                
-                        //check access
-                        if($checkIfUserCanCRUD['viewActivity'])
-                        {
-                            $tempRows = $this->UtilityLib->getAllActivities($this->DBAccessLib, $passedData);
-    
-                            //get user details
-                            $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
-                        }
-                        else
-                        {
-                            $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
-                        }
-                    } 
-                    else {
-                        $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
-                    }
-                } 
-                else {
-                    $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
-                }
-            } 
-            else {
-                $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
-            }
-    
-            echo json_encode($responseData);
 
-        } 
-
-        // if filter properties does not exist
-        else {
-            $passedData = array(
-                "user_id" => $user_id,
-                "project_id" => $project_id,
-            );
-    
-            $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
-    
-            //if input validated
-            if ($validator['success']) {
-                $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
-    
-                //activeUser
-                if ($activeUser) {
-                    $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
-    
                     if ($ifProjectAccessToMember) {
-
                         //check If User Can do the operation
                         $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
-                
-                        if($checkIfUserCanCRUD['viewActivity'])
-                        {
-                            $tempRows = $this->UtilityLib->getAllActivitiesWithoutFilter($this->DBAccessLib, $passedData);
-    
+
+                        //check access
+                        if ($checkIfUserCanCRUD['viewActivity']) {
+                            $tempRows = $this->UtilityLib->getAllActivities($this->DBAccessLib, $passedData);
+
                             //get user details
                             $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
-                        }
-                        else
-                        {
+                        } else {
                             $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
                         }
-
-                        
                     } else {
                         $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
                     }
@@ -293,7 +237,50 @@ class ActivityController extends BaseAPI
             } else {
                 $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
             }
-    
+
+            echo json_encode($responseData);
+        }
+
+        // if filter properties does not exist
+        else {
+            $passedData = array(
+                "user_id" => $user_id,
+                "project_id" => $project_id,
+            );
+
+            $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+            //if input validated
+            if ($validator['success']) {
+                $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+                //activeUser
+                if ($activeUser) {
+                    $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
+
+                    if ($ifProjectAccessToMember) {
+
+                        //check If User Can do the operation
+                        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+
+                        if ($checkIfUserCanCRUD['viewActivity']) {
+                            $tempRows = $this->UtilityLib->getAllActivitiesWithoutFilter($this->DBAccessLib, $passedData);
+
+                            //get user details
+                            $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
+                        } else {
+                            $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                        }
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+            }
+
             echo json_encode($responseData);
         }
     }
@@ -317,31 +304,31 @@ class ActivityController extends BaseAPI
         );
 
         $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
-    
-            //if input validated
-            if ($validator['success']) {
-                $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
-    
-                //activeUser
-                if ($activeUser) {
-                    $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
-    
-                    if ($ifProjectAccessToMember) {
-                        $tempRows = $this->UtilityLib->getAllMyActivities($this->DBAccessLib, $passedData);
-    
-                        //get user details
-                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
-                    } else {
-                        $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
-                    }
+
+        //if input validated
+        if ($validator['success']) {
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            //activeUser
+            if ($activeUser) {
+                $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
+
+                if ($ifProjectAccessToMember) {
+                    $tempRows = $this->UtilityLib->getAllMyActivities($this->DBAccessLib, $passedData);
+
+                    //get user details
+                    $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
                 } else {
-                    $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
                 }
             } else {
-                $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
             }
-    
-            echo json_encode($responseData);
+        } else {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
     }
 
     //allMyReviews
@@ -363,31 +350,31 @@ class ActivityController extends BaseAPI
         );
 
         $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
-    
-            //if input validated
-            if ($validator['success']) {
-                $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
-    
-                //activeUser
-                if ($activeUser) {
-                    $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
-    
-                    if ($ifProjectAccessToMember) {
-                        $tempRows = $this->UtilityLib->getAllMyReviews($this->DBAccessLib, $passedData);
-    
-                        //get user details
-                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
-                    } else {
-                        $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
-                    }
+
+        //if input validated
+        if ($validator['success']) {
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            //activeUser
+            if ($activeUser) {
+                $ifProjectAccessToMember = $this->DBAccessLib->ifProjectAccessToMember($passedData);
+
+                if ($ifProjectAccessToMember) {
+                    $tempRows = $this->UtilityLib->getAllMyReviews($this->DBAccessLib, $passedData);
+
+                    //get user details
+                    $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $tempRows);
                 } else {
-                    $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_PROJECT_ACCESS_TO_MEMBER', $this->settings['errorMessage']['NO_PROJECT_ACCESS_TO_MEMBER']);
                 }
             } else {
-                $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
             }
-    
-            echo json_encode($responseData);
+        } else {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
     }
 
     //activityCommentCrud
@@ -402,7 +389,7 @@ class ActivityController extends BaseAPI
         $assignee_user_id = parent::sanitizeInput($postData->assigneeUserId);
         $claimed_result_value = parent::sanitizeInput($postData->claimedResultValue);
         $comment_description = parent::sanitizeInput($postData->commentDescription);
-        
+
         $operation_type = parent::sanitizeInput($postData->operationType);
         $token = parent::getAuthorizationSessionObject();
 
@@ -455,14 +442,20 @@ class ActivityController extends BaseAPI
 
                         //edit
                         else if ($operation_type == 'edit') {
-                            $updateActivityComment = $this->DBAccessLib->updateActivityComment($passedData);
+                            $ifActivityAlreadyLocked = $this->DBAccessLib->ifActivityAlreadyLocked($passedData);
 
-                            //create new
-                            if ($updateActivityComment) {
-                                $message = $this->settings['successMessage']['SUCCESS_COMMENT_UPDATE'];
-                                $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                            if ($ifActivityAlreadyLocked) {
+                                $responseData = $this->MessageLib->errorMessageFormat('ACTIVITY_LOCKED', $this->settings['errorMessage']['ACTIVITY_LOCKED']);
                             } else {
-                                $responseData = $this->MessageLib->errorMessageFormat('FAIL_COMMENT_UPDATE', $this->settings['errorMessage']['FAIL_COMMENT_UPDATE']);
+                                $updateActivityComment = $this->DBAccessLib->updateActivityComment($passedData);
+
+                                //create new
+                                if ($updateActivityComment) {
+                                    $message = $this->settings['successMessage']['SUCCESS_COMMENT_UPDATE'];
+                                    $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                                } else {
+                                    $responseData = $this->MessageLib->errorMessageFormat('FAIL_COMMENT_UPDATE', $this->settings['errorMessage']['FAIL_COMMENT_UPDATE']);
+                                }
                             }
                         }
 
@@ -502,7 +495,7 @@ class ActivityController extends BaseAPI
         $project_id = parent::sanitizeInput($postData->projectId);
         $activity_id = parent::sanitizeInput($postData->activityId);
         $reviewer_user_id = parent::sanitizeInput($postData->reviewerUserId);
-        
+
         $operation_type = parent::sanitizeInput($postData->operationType);
         $token = parent::getAuthorizationSessionObject();
 
@@ -540,12 +533,9 @@ class ActivityController extends BaseAPI
                         //ifAddedReviewerAlreadySameInActivity
                         $ifAddedReviewerAlreadySameInActivity = $this->DBAccessLib->ifAddedReviewerAlreadySameInActivity($passedData);
 
-                        if($ifAddedReviewerAlreadySameInActivity)
-                        {
+                        if ($ifAddedReviewerAlreadySameInActivity) {
                             $responseData = $this->MessageLib->errorMessageFormat('REVIEWER_EXIST', $this->settings['errorMessage']['REVIEWER_EXIST']);
-                        }
-                        else
-                        {
+                        } else {
                             $insertActivityReviewer = $this->DBAccessLib->insertActivityReviewer($passedData);
 
                             //create new
@@ -562,11 +552,10 @@ class ActivityController extends BaseAPI
                     else if ($operation_type == 'delete') {
 
                         $ifReviewerAlreadyReviewedActivity = $this->DBAccessLib->ifReviewerAlreadyReviewedActivity($passedData)['achievedResultValue'];
-                        
+
                         if ($ifReviewerAlreadyReviewedActivity) {
                             $responseData = $this->MessageLib->errorMessageFormat('REVIEW_EXIST', $this->settings['errorMessage']['REVIEW_EXIST']);
-                        } 
-                        else {
+                        } else {
                             $deleteActivityReviewer = $this->DBAccessLib->deleteActivityReviewer($passedData);
 
                             //create new
@@ -636,7 +625,7 @@ class ActivityController extends BaseAPI
 
                     //create new
                     if ($updateActivityReview) {
-                        $updateActivityReviewPerformance = $this->UtilityLib->updateActivityReviewPerformance($this->DBAccessLib, $passedData); 
+                        $updateActivityReviewPerformance = $this->UtilityLib->updateActivityReviewPerformance($this->DBAccessLib, $passedData);
                         $message = $this->settings['successMessage']['SUCCESS_REVIEW_ADD'];
                         $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
                     } else {
@@ -677,30 +666,242 @@ class ActivityController extends BaseAPI
         $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
 
         //if input validated
-        if($validator['success'])
-        {
+        if ($validator['success']) {
             $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
 
             //activeUser
-            if($activeUser)
-            {
+            if ($activeUser) {
                 //get user details
                 $getAllProjectsForUser = $this->UtilityLib->getActivityReviewDetails($this->DBAccessLib, $passedData);
                 $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'data', $getAllProjectsForUser);
-            }
-            else
-            {
+            } else {
                 $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
             }
-        }
-        else
-        {
+        } else {
             $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
         }
 
         echo json_encode($responseData);
     }
-    
+
+    //activityReviewUpdate
+    public function lockActivity()
+    {
+        $responseData = null;
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $activity_id = parent::sanitizeInput($postData->activityId);
+        $token = parent::getAuthorizationSessionObject();
+
+        //
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "activity_id" => $activity_id,
+        );
+
+        //check If User Can do the operation
+        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if ($validator['success']) {
+            // is user present
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            if ($activeUser) {
+
+                //check access
+                if ($checkIfUserCanCRUD['crudActivity']) {
+
+                    $lockActivity = $this->DBAccessLib->lockActivity($passedData);
+
+                    //create new
+                    if ($lockActivity) {
+                        $message = $this->settings['successMessage']['SUCCESS_ACTIVITY_LOCK'];
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('FAIL_ACTIVITY_LOCK', $this->settings['errorMessage']['FAIL_ACTIVITY_LOCK']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        } else {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
+    }
+
+    //activityReviewUpdate
+    public function unlockActivity()
+    {
+        $responseData = null;
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $activity_id = parent::sanitizeInput($postData->activityId);
+        $token = parent::getAuthorizationSessionObject();
+
+        //
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "activity_id" => $activity_id,
+        );
+
+        //check If User Can do the operation
+        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if ($validator['success']) {
+            // is user present
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            if ($activeUser) {
+
+                //check access
+                if ($checkIfUserCanCRUD['crudActivity']) {
+
+                    $lockActivity = $this->DBAccessLib->unlockActivity($passedData);
+
+                    //create new
+                    if ($lockActivity) {
+                        $message = $this->settings['successMessage']['SUCCESS_ACTIVITY_UNLOCK'];
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('FAIL_ACTIVITY_UNLOCK', $this->settings['errorMessage']['FAIL_ACTIVITY_UNLOCK']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        } else {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
+    }
+
+    //activityReviewUpdate
+    public function lockActivityReview()
+    {
+        $responseData = null;
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $activity_review_id = parent::sanitizeInput($postData->activityReviewId);
+        $token = parent::getAuthorizationSessionObject();
+
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "activity_review_id" => $activity_review_id
+        );
+
+        //check If User Can do the operation
+        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if ($validator['success']) {
+            // is user present
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            if ($activeUser) {
+
+                //check access
+                if ($checkIfUserCanCRUD['crudReviewLock']) {
+
+                    $lockActivityReview = $this->DBAccessLib->lockActivityReview($passedData);
+
+                    //create new
+                    if ($lockActivityReview) {
+                        $message = $this->settings['successMessage']['SUCCESS_REVIEW_LOCK'];
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('FAIL_REVIEW_LOCK', $this->settings['errorMessage']['FAIL_REVIEW_LOCK']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        } else {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
+    }
+
+    //activityReviewUpdate
+    public function unlockActivityReview()
+    {
+        $responseData = null;
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $activity_review_id = parent::sanitizeInput($postData->activityReviewId);
+        $token = parent::getAuthorizationSessionObject();
+
+        $passedData = array(
+            "user_id" => $user_id,
+            "project_id" => $project_id,
+            "activity_review_id" => $activity_review_id
+        );
+
+        //check If User Can do the operation
+        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if ($validator['success']) {
+            // is user present
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            if ($activeUser) {
+
+                //check access
+                if ($checkIfUserCanCRUD['crudReviewLock']) {
+
+                    $lockActivityReview = $this->DBAccessLib->unlockActivityReview($passedData);
+
+                    //create new
+                    if ($lockActivityReview) {
+                        $message = $this->settings['successMessage']['SUCCESS_REVIEW_UNLOCK'];
+                        $responseData = $this->JWTLib->sendBackToClient($token, $user_id, 'message', $message);
+                    } else {
+                        $responseData = $this->MessageLib->errorMessageFormat('FAIL_REVIEW_UNLOCK', $this->settings['errorMessage']['FAIL_REVIEW_UNLOCK']);
+                    }
+                } else {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                }
+            } else {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        } else {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);
+    }
+
     function __destruct()
     {
         //echo 'The class "', __CLASS__, '" was destroyed.<br />';
