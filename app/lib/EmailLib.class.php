@@ -56,7 +56,7 @@ class EmailLib
 	{
 		$date = date("l jS \of F Y");
 		$htmlTemplate = '
-			<img src="'.$this->settings['api']['host'].'/'.$this->settings['email']['emailTrack'].'/'.$passedData['email_track_id'].'" width="1" height="1" />
+			<img src="' . $this->settings['api']['host'] . '/' . $this->settings['email']['emailTrack'] . '/' . $passedData['email_track_id'] . '" width="1" height="1" />
 			<div class="">
 			<div class="aHl"></div>
 			<div id=":19g" tabindex="-1"></div>
@@ -154,6 +154,79 @@ class EmailLib
 					target="_blank">' . $this->settings['email']['appName'] . '</a></span></div>
 					<div style="margin-top:24px">Thanks for using ' . $this->settings['email']['appName'] . ' !</div>
 				</div>
+				<div style="background-color: #323433; padding: 20px">
+                    <table
+                        style="width: 100%; text-align: center; color: #fff"
+                        cellpadding="0"
+                        cellspacing="0"
+                    >
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a
+                                        style="
+                                            font-size: 12px;
+                                            text-decoration: underline;
+                                            color: #fff;
+                                        "
+                                        href="https://c2.rollingarray.co.in/"
+                                        target="_blank"
+                                    >
+                                        C2
+                                    </a>
+                                    &nbsp; | &nbsp;
+                                    <a
+                                        style="
+                                            font-size: 12px;
+                                            text-decoration: underline;
+                                            color: #fff;
+                                        "
+                                        href="https://github.com/RollingArray/C2-storyline"
+                                        target="_blank"
+                                    >
+                                        Github
+                                    </a>
+                                    &nbsp; | &nbsp;
+									<a
+                                        style="
+                                            font-size: 12px;
+                                            text-decoration: underline;
+                                            color: #fff;
+                                        "
+                                        href="https://c2.doc.rollingarray.co.in/"
+                                        target="_blank"
+                                    >
+                                        Help & Doc
+                                    </a>
+									&nbsp; | &nbsp;
+                                    <a
+                                        style="
+                                            font-size: 12px;
+                                            text-decoration: underline;
+                                            color: #fff;
+                                        "
+                                        href="https://c2.doc.rollingarray.co.in/#/go/articles/terms-conditions"
+                                        target="_blank"
+                                    >
+                                        Terms
+                                    </a>
+                                    &nbsp; | &nbsp;
+                                    <a
+                                        style="
+                                            font-size: 12px;
+                                            text-decoration: underline;
+                                            color: #fff;
+                                        "
+                                        href="https://c2.doc.rollingarray.co.in/#/go/articles/privacy-policy"
+                                        target="_blank"
+                                    >
+                                        Privacy
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 				<div style="background-color:#323433;padding:34px">
 					<table style="width:100%" cellpadding="0" cellspacing="0">
 					<tbody>
@@ -167,7 +240,7 @@ class EmailLib
 							</td>
 						<td>
 							<div style="font-size:10px;line-height:14px;font-weight:400;text-align:right"><a
-								style="color:#d6dde1;text-decoration:none">&copy; ' . date("Y") . ' RollingArray<br>Bangalore, India. </a></div>
+								style="color:#d6dde1;text-decoration:none">&copy; ' . date("Y") . ' rollingarray.co.in<br>Bangalore, India. </a></div>
 						</td>
 						</tr>
 					</tbody>
