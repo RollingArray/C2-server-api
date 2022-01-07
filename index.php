@@ -133,6 +133,11 @@ switch (true) {
 			$projectController->projectMemberCrud();
 		}
 		break;
+	
+	case strpos($requestUri, $apiVersion.'project/new/member/invite/'): {
+			$projectController->projectNewMemberInvite();
+		}
+		break;
 
 	case strpos($requestUri, $apiVersion.'project/details/'): {
 			$projectController->projectDetails();
