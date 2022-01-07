@@ -44,7 +44,7 @@ class EmailLib
 		if ($insertNewEmailTrack) {
 			$email = (new \Swift_Message($subject))
 				->setFrom(array($this->settings['email']['supportEmail'] => $this->settings['email']['prettyEmailName']))
-				->setTo(array($passedData['user_email']))
+				->setTo(array($passedEmailData['user_email']))
 				->setBody($this->messageFormat($passedEmailData), 'text/html');
 
 			$this->mailer->send($email);
@@ -403,6 +403,89 @@ class EmailLib
 				"user_full_name" => $passedData['user_full_name'],
 				"email_track_id" => $email_track_id,
 				"user_email" => $passedData['user_email'],
+				"email_subject" => $subject,
+				"email_content" => $emailBodyMessage,
+				"email_header" => $header,
+			);
+
+			$this->sendEmail($DBAccessLib, $subject, $passedEmailData, $passedData);
+		}
+	}
+
+	//send new user invitation
+	function sendNewUserInvitation($DBAccessLib, $UtilityLib, $passedData)
+	{
+
+		if ($passedData['invite_user_email'] && $passedData['user_first_name'] && $passedData['user_last_name']) {
+			$email_track_id = $UtilityLib->generateId('EMAILTRACK_');
+			$header = 'You have been invited to join <b>' . $passedData['project_name'] . '</b> project team !!!';
+			$subject = $this->settings['email']['appName'] . ' - You have been invited to join';
+			$emailBodyMessage = '
+			<tr
+				style="
+					font-family: Helvetica, Arial, sans-serif;
+					font-size: 14px;
+					margin: 0;
+					padding: 0;
+				"
+			>
+				<td
+					style="
+						font-family: Helvetica, Arial,
+							sans-serif;
+						font-size: 14px;
+						vertical-align: top;
+						margin: 0;
+						padding: 0 0 20px;
+					"
+					valign="top"
+				>
+					<b>
+					' . $passedData['user_first_name'] . ' ' . $passedData['user_last_name'] . '
+					</b> has invited you to collaborate in <b>' . $passedData['project_name'] . '</b> project. Use the button below to set up your account and get started !!
+					<br /><br />
+				</td>
+			</tr>
+
+			<tr>
+				<td style="text-align: center;">
+					<a
+						style="background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;border-radius: 8px;font-size: 16px;"
+						href="https://c2.rollingarray.co.in/"
+						target="_blank" 
+					>Set up my account</a>
+					<br />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<br />
+					Feel free to ignore this email if you do not wish to accept the invitation.
+					<br />
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<br />
+					Alternatively, Here are few links make you up and running !!
+					<ul>
+					<li>
+						<a target="_blank" href="https://c2.doc.rollingarray.co.in/">C2 in Help & Documentation center</a>
+					</li>
+					<li>
+						<a target="_blank" href="https://c2.doc.rollingarray.co.in/#/go/articles/authentication-&-authorization">User Authentication & Authorization</a>
+					</li>
+					</ul>
+					<br />
+				</td>
+			</tr>
+      ';
+
+			$passedEmailData = array(
+				"user_full_name" => 'Patron',
+				"email_track_id" => $email_track_id,
+				"user_email" => $passedData['invite_user_email'],
 				"email_subject" => $subject,
 				"email_content" => $emailBodyMessage,
 				"email_header" => $header,

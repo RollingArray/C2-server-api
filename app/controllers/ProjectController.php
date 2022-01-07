@@ -632,6 +632,64 @@ class ProjectController extends BaseAPI
         echo json_encode($responseData);
     }
 
+    /** */
+    function projectNewMemberInvite(){
+        $responseData = null;
+
+        $postData = parent::getPostData();
+        $user_id = parent::sanitizeInput($postData->userId);
+        $project_id = parent::sanitizeInput($postData->projectId);
+        $project_name = parent::sanitizeInput($postData->projectName);
+        $user_first_name = parent::sanitizeInput($postData->userFirstName);
+        $user_last_name = parent::sanitizeInput($postData->userLastName);
+        $invite_user_email = parent::sanitizeInput($postData->inviteUserEmail);
+        
+        $token = parent::getAuthorizationSessionObject();
+
+        $passedData = array(
+                "project_id"=>$project_id,
+                "user_id"=>$user_id,
+                "project_name"=>$project_name,
+                "user_first_name"=>$user_first_name,
+                "user_last_name"=>$user_last_name,
+                "invite_user_email"=>$invite_user_email,
+            );
+
+        //check If User Can do the operation
+        $checkIfUserCanCRUD = $this->UtilityLib->checkIfUserCanCRUD($this->DBAccessLib, $passedData);
+        $validator = $this->UtilityLib->dataValidator($this->ValidationLib, $this->MessageLib, $passedData);
+
+        //if input validated
+        if($validator['success'])
+        {
+            // is user present
+            $activeUser = $this->JWTLib->checkSessionUser($token, $user_id);
+
+            if ($activeUser)
+            {
+                if($checkIfUserCanCRUD['crudMember'])
+                {
+                    $this->EmailLib->sendNewUserInvitation($this->DBAccessLib, $this->UtilityLib, $passedData);
+                    $responseData = $this->MessageLib->successMessageFormat($this->settings['successMessage']['SUCCESS_NEW_MEMBER_INVITE']);
+                }
+                else
+                {
+                    $responseData = $this->MessageLib->errorMessageFormat('NO_ACCESS', $this->settings['errorMessage']['NO_ACCESS']);
+                }
+            }
+            else
+            {
+                $responseData = $this->MessageLib->errorMessageFormat('INVALID_SESSION', $this->settings['errorMessage']['INVALID_SESSION']);
+            }
+        }
+        else
+        {
+            $responseData = $this->MessageLib->errorMessageFormat('INVALID_INPUT', $validator['error']);
+        }
+
+        echo json_encode($responseData);   
+    }
+
     function __destruct() {
         //echo 'The class "', __CLASS__, '" was destroyed.<br />';
         parent::__destruct();

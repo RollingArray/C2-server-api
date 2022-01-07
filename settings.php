@@ -73,6 +73,7 @@ $settings = [
 		'filter_user_id' => '/^[a-zA-Z0-9]{10,50}/',
 		'searchable_user_id' => '/^[a-zA-Z0-9]{30,50}/',
 		'user_email' => '/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/',
+		'invite_user_email' => '/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/',
 		'user_first_name' => '/^[a-zA-Z]{3,200}$/',
 		'user_last_name' => '/^[a-zA-Z]{3,200}$/',
 		'user_security_answer_1' => '/^[a-zA-Z ]{3,200}$/',
@@ -141,6 +142,7 @@ $settings = [
 		'filter_user_id' => 'Invalid filter user id',
 		'searchable_user_id' => 'Invalid searchable user id',
 		'user_email' => 'Invalid user email',
+		'invite_user_email' => 'Invalid user email',
 		'user_first_name' => 'Invalid user first name',
 		'user_last_name' => 'Invalid user last name',
 		'user_security_answer_1' => 'Invalid security answer 1',
@@ -297,6 +299,8 @@ $settings = [
 		'SUCCESS_IN_APP_LOGIN' => 'Delighted to get you back, you can proceed with your context now !',
 		'SUCCESS_LOGIN' => 'Welcome to C2',
 		'SUCCESS_USER_UPDATE' => 'User details updated',
+		'SUCCESS_NEW_MEMBER_INVITE' => 'Invitation email has been send successfully',
+		
 		
 		//project
 		'SUCCESS_PROJECT_CREATE' => 'Project created successfully',
